@@ -1,0 +1,40 @@
+import React, { FC, useState } from 'react';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+
+import styles from './styles';
+
+interface Props {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (text: string) => void;
+}
+
+const CustomPassInput: FC<Props> = ({ label, placeholder, value, onChange }) => {
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.inputLabel}>{label}</Text>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder={placeholder}
+          placeholderTextColor="#6E7981"
+          secureTextEntry={secureTextEntry}
+          autoComplete="current-password"
+          autoCapitalize="none"
+          value={value}
+          onChangeText={onChange}
+        />
+        <TouchableOpacity
+          style={styles.iconContainer}
+          onPress={() => setSecureTextEntry(!secureTextEntry)}>
+          <View style={styles.icon} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+export default CustomPassInput;

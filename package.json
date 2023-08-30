@@ -36,6 +36,7 @@
     "extends": "universe/native"
   },
   "lint-staged": {
-    "{*.ts,*.tsx}": "eslint --fix"
+    "{*.ts,*.tsx}": "eslint --fix",
+    "{*.svg,*.html}": "prettier --write"
   }
 }

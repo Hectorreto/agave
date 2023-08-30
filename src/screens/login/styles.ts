@@ -1,0 +1,52 @@
+import { StyleSheet } from 'react-native';
+
+import { colors } from '../../themes/theme';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+    gap: 16,
+  },
+  logo: {
+    height: 90,
+    position: 'relative',
+    width: 193,
+  },
+  title: {
+    color: colors.primary,
+    fontSize: 48,
+    fontWeight: '700',
+  },
+  form: {
+    gap: 8,
+    width: '100%',
+  },
+  recoverPass: {
+    color: colors.secondary,
+    fontWeight: '600',
+  },
+  button: {
+    backgroundColor: colors.primary,
+    paddingVertical: 10,
+    paddingHorizontal: 32,
+    borderRadius: 8,
+    color: colors.neutral,
+    fontWeight: '600',
+  },
+  poweredContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 32,
+  },
+  powered: {
+    color: '#777777',
+  },
+});
+
+export default styles;
