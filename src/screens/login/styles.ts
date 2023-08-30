@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 48,
     fontWeight: '700',
+    textAlign: 'center',
   },
   form: {
     gap: 8,
@@ -38,14 +39,9 @@ const styles = StyleSheet.create({
     color: colors.neutral,
     fontWeight: '600',
   },
-  poweredContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 32,
-  },
-  powered: {
-    color: '#777777',
+  text: {
+    color: '#555',
+    textAlign: 'center',
   },
 });
 

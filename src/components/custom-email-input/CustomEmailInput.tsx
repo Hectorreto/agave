@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Text, TextInput, View } from 'react-native';
 
 import styles from './styles';
@@ -10,7 +10,7 @@ interface Props {
   onChange: (text: string) => void;
 }
 
-const CustomEmailInput: FC<Props> = ({ label, placeholder, value, onChange }) => {
+const CustomEmailInput = ({ label, placeholder, value, onChange }: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.inputLabel}>{label}</Text>

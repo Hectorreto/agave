@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
@@ -8,9 +8,10 @@ interface Props {
   placeholder: string;
   value: string;
   onChange: (text: string) => void;
+  info?: string;
 }
 
-const CustomPassInput: FC<Props> = ({ label, placeholder, value, onChange }) => {
+const CustomPassInput = ({ label, placeholder, value, onChange, info }: Props) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   return (
@@ -33,6 +34,12 @@ const CustomPassInput: FC<Props> = ({ label, placeholder, value, onChange }) => 
           <View style={styles.icon} />
         </TouchableOpacity>
       </View>
+      {Boolean(info) && (
+        <View style={styles.informationContainer}>
+          <Text style={styles.helperText}>{info}</Text>
+          <View style={styles.infoIcon} />
+        </View>
+      )}
     </View>
   );
 };

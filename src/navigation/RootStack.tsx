@@ -1,9 +1,18 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomeScreen from '../screens/home/HomeScreen';
+import ChangePassScreen from '../screens/login/ChangePassScreen';
 import LoginScreen from '../screens/login/LoginScreen';
+import RecoverPassScreen from '../screens/login/RecoverPassScreen';
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Home: undefined;
+  Login: undefined;
+  RecoverPass: undefined;
+  ChangePass: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStack = () => {
   const loggedIn = false;
@@ -21,6 +30,8 @@ const RootStack = () => {
           headerShown: false,
         }}>
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="RecoverPass" component={RecoverPassScreen} />
+        <Stack.Screen name="ChangePass" component={ChangePassScreen} />
       </Stack.Navigator>
     );
   }
