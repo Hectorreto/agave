@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
+import Info from '../../../assets/svg/info.svg';
+import Visibility from '../../../assets/svg/visibility.svg';
 
 interface Props {
   label: string;
@@ -31,13 +33,13 @@ const CustomPassInput = ({ label, placeholder, value, onChange, info }: Props) =
         <TouchableOpacity
           style={styles.iconContainer}
           onPress={() => setSecureTextEntry(!secureTextEntry)}>
-          <View style={styles.icon} />
+          <Visibility width={24} height={24} />
         </TouchableOpacity>
       </View>
       {Boolean(info) && (
         <View style={styles.informationContainer}>
           <Text style={styles.helperText}>{info}</Text>
-          <View style={styles.infoIcon} />
+          <Info width={16} height={16} />
         </View>
       )}
     </View>

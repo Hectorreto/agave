@@ -1,7 +1,5 @@
 import { StyleSheet } from 'react-native';
 
-import { colors } from '../../themes/theme';
-
 const styles = StyleSheet.create({
   container: {
     gap: 4,
@@ -31,11 +29,6 @@ const styles = StyleSheet.create({
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  icon: {
-    width: 24,
-    height: 24,
-    backgroundColor: colors.primary,
   },
   informationContainer: {
     flexDirection: 'row',
