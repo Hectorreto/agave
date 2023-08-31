@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Dimensions, Image, Text, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
+import BlueButton from '../../components/blue-button/BlueButton';
 import CustomPassInput from '../../components/custom-pass-input/CustomPassInput';
 import Versioning from '../../components/versioning/Versioning';
 import { RootStackParamList } from '../../navigation/RootStack';
@@ -12,7 +13,6 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ChangePass'>;
 const ChangePassScreen = ({ navigation }: Props) => {
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
-  const windowHeight = Dimensions.get('window').height;
 
   return (
     <View style={styles.container}>
@@ -35,9 +35,7 @@ const ChangePassScreen = ({ navigation }: Props) => {
           onChange={setPassword2}
         />
       </View>
-      <TouchableOpacity>
-        <Text style={styles.button}>Enviar correo</Text>
-      </TouchableOpacity>
+      <BlueButton text="Cambiar contraseña" onPress={() => {}} />
       <Versioning />
     </View>
   );

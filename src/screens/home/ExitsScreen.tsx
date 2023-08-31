@@ -2,12 +2,12 @@ import { Text, View } from 'react-native';
 
 import styles from './styles';
 
-const HomeScreen = () => {
+const ExitsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>HomeScreen!</Text>
+      <Text>Exits!</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default ExitsScreen;

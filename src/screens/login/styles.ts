@@ -31,14 +31,6 @@ const styles = StyleSheet.create({
     color: colors.secondary,
     fontWeight: '600',
   },
-  button: {
-    backgroundColor: colors.primary,
-    paddingVertical: 10,
-    paddingHorizontal: 32,
-    borderRadius: 8,
-    color: colors.neutral,
-    fontWeight: '600',
-  },
   text: {
     color: '#555',
     textAlign: 'center',

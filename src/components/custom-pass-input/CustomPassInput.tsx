@@ -33,13 +33,13 @@ const CustomPassInput = ({ label, placeholder, value, onChange, info }: Props) =
         <TouchableOpacity
           style={styles.iconContainer}
           onPress={() => setSecureTextEntry(!secureTextEntry)}>
-          <Visibility width={24} height={24} />
+          <Visibility />
         </TouchableOpacity>
       </View>
       {Boolean(info) && (
         <View style={styles.informationContainer}>
           <Text style={styles.helperText}>{info}</Text>
-          <Info width={16} height={16} />
+          <Info />
         </View>
       )}
     </View>
