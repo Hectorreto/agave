@@ -43,7 +43,7 @@ const LoginScreen = ({ navigation }: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <BlueButton text="Iniciar sesión" onPress={() => navigation.navigate('Home')} />
+      <BlueButton text="Iniciar sesión" onPress={() => navigation.navigate('HomeDrawer')} />
       <Versioning />
     </View>
   );

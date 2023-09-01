@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import HomeTabs from './HomeTabs';
+import HomeDrawer from './HomeDrawer';
 import ChangePassScreen from '../screens/login/ChangePassScreen';
 import LoginScreen from '../screens/login/LoginScreen';
 import RecoverPassScreen from '../screens/login/RecoverPassScreen';
 
 export type RootStackParamList = {
-  Home: undefined;
+  HomeDrawer: undefined;
   Login: undefined;
   RecoverPass: undefined;
   ChangePass: undefined;
@@ -23,7 +23,7 @@ const RootStack = () => {
         <Stack.Screen name="ChangePass" component={ChangePassScreen} />
       </Stack.Group>
       <Stack.Group>
-        <Stack.Screen name="Home" component={HomeTabs} />
+        <Stack.Screen name="HomeDrawer" component={HomeDrawer} />
       </Stack.Group>
     </Stack.Navigator>
   );
