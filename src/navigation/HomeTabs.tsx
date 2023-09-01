@@ -1,28 +1,32 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { JSX } from 'react';
-import { Text, View } from 'react-native';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import { TouchableOpacity, View } from 'react-native';
 
+import ApplicationsStack from './ApplicationsStack';
+import ExitsStack from './ExitsStack';
+import { HomeDrawerParamList } from './HomeDrawer';
+import MonitoringStack from './MonitoringStack';
+import PropertiesStack from './PropertiesStack';
 import styles from './styles';
+import Menu from '../../assets/svg/header/menu.svg';
 import Applications from '../../assets/svg/tabs/applications.svg';
 import Exits from '../../assets/svg/tabs/exits.svg';
 import Monitoring from '../../assets/svg/tabs/monitoring.svg';
 import Property from '../../assets/svg/tabs/property.svg';
-import ApplicationsScreen from '../screens/home/ApplicationsScreen';
-import ExitsScreen from '../screens/home/ExitsScreen';
-import MonitoringScreen from '../screens/home/MonitoringScreen';
-import PropertyScreen from '../screens/home/PropertyScreen';
 import { colors } from '../themes/theme';
 
-export type RootStackParamList = {
-  Property: undefined;
-  Exits: undefined;
-  Monitoring: undefined;
-  Applications: undefined;
+export type HomeTabsParamList = {
+  PropertiesStack: undefined;
+  ExitsStack: undefined;
+  MonitoringStack: undefined;
+  ApplicationsStack: undefined;
 };
 
-const Tab = createBottomTabNavigator();
+type Props = DrawerScreenProps<HomeDrawerParamList, 'HomeTabs'>;
 
-const HomeTabs = () => {
+const Tab = createBottomTabNavigator<HomeTabsParamList>();
+
+const HomeTabs = ({ navigation }: Props) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -30,57 +34,74 @@ const HomeTabs = () => {
           height: 80,
         },
         tabBarItemStyle: {
-          paddingVertical: 10,
+          marginTop: 5,
         },
         tabBarLabelStyle: {
           color: colors.primary700,
+          marginBottom: 15,
         },
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: '700',
+          color: colors.primary700,
+        },
+        headerShadowVisible: true,
+        headerLeft: () => (
+          <TouchableOpacity style={styles.drawerIcon} onPressOut={() => navigation.openDrawer()}>
+            <Menu />
+          </TouchableOpacity>
+        ),
+        headerTitleAlign: 'center',
       }}>
       <Tab.Screen
-        name="Property"
-        component={PropertyScreen}
+        name="PropertiesStack"
+        component={PropertiesStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={focused ? styles.iconFocused : styles.iconDefault}>
               <Property fill={focused ? colors.neutral : colors.primary700} />
             </View>
           ),
+          title: 'Predio',
           tabBarLabel: 'Predio',
         }}
       />
       <Tab.Screen
-        name="Exits"
-        component={ExitsScreen}
+        name="ExitsStack"
+        component={ExitsStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={focused ? styles.iconFocused : styles.iconDefault}>
               <Exits fill={focused ? colors.neutral : colors.primary700} />
             </View>
           ),
+          title: 'Salidas',
           tabBarLabel: 'Salidas',
         }}
       />
       <Tab.Screen
-        name="Monitoring"
-        component={MonitoringScreen}
+        name="MonitoringStack"
+        component={MonitoringStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={focused ? styles.iconFocused : styles.iconDefault}>
               <Monitoring fill={focused ? colors.neutral : colors.primary700} />
             </View>
           ),
+          title: 'Monitoreo',
           tabBarLabel: 'Monitoreo',
         }}
       />
       <Tab.Screen
-        name="Applications"
-        component={ApplicationsScreen}
+        name="ApplicationsStack"
+        component={ApplicationsStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={focused ? styles.iconFocused : styles.iconDefault}>
               <Applications fill={focused ? colors.neutral : colors.primary700} />
             </View>
           ),
+          title: 'Aplicaciones',
           tabBarLabel: 'Aplicaciones',
         }}
       />

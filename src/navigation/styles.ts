@@ -21,6 +21,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 16,
   },
+  drawerIcon: {
+    width: 72,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default styles;
