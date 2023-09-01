@@ -37,11 +37,6 @@ const styles = StyleSheet.create({
     color: '#555',
     flex: 1,
   },
-  infoIcon: {
-    backgroundColor: 'blue',
-    width: 16,
-    height: 16,
-  },
 });
 
 export default styles;
