@@ -25,17 +25,32 @@ const CustomDrawerContent = ({ navigation }: Props) => {
         <Item
           Icon={Agriculture}
           label="Agregar nueva salida"
-          onPress={() => navigation.navigate('ExitsStack', { screen: 'CreateExit' })}
+          onPress={() =>
+            navigation.navigate('ExitsStack', {
+              screen: 'CreateExit',
+              initial: false,
+            })
+          }
         />
         <Item
           Icon={Grass}
           label="Agregar nuevo monitoreo"
-          onPress={() => navigation.navigate('MonitoringStack', { screen: 'CreateMonitoring' })}
+          onPress={() =>
+            navigation.navigate('MonitoringStack', {
+              screen: 'CreateMonitoring',
+              initial: false,
+            })
+          }
         />
         <Item
           Icon={Science}
           label="Agregar nueva aplicación"
-          onPress={() => navigation.navigate('ApplicationsStack', { screen: 'CreateApplication' })}
+          onPress={() =>
+            navigation.navigate('ApplicationsStack', {
+              screen: 'CreateApplication',
+              initial: false,
+            })
+          }
         />
       </View>
       <View style={styles.secondaryContainer}>
