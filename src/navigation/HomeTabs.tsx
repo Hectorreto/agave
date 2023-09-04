@@ -6,7 +6,7 @@ import ExitsStack from './ExitsStack';
 import { HomeDrawerParamList } from './HomeDrawer';
 import MonitoringStack from './MonitoringStack';
 import PropertiesStack from './PropertiesStack';
-import { options, screenOptions } from './util/HomeTabsUtils';
+import { options, screenOptions } from './utils/HomeTabsUtils';
 import Applications from '../../assets/svg/tabs/applications.svg';
 import Exits from '../../assets/svg/tabs/exits.svg';
 import Monitoring from '../../assets/svg/tabs/monitoring.svg';
