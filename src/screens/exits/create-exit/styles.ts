@@ -5,6 +5,9 @@ const styles = StyleSheet.create({
     padding: 24,
     gap: 16,
   },
+  form: {
+    gap: 4,
+  },
 });
 
 export default styles;

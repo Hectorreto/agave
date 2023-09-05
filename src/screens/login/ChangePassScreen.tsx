@@ -4,7 +4,7 @@ import { Image, Text, View } from 'react-native';
 
 import styles from './styles';
 import BlueButton from '../../components/blue-button/BlueButton';
-import CustomPassInput from '../../components/custom-pass-input/CustomPassInput';
+import InputPassword from '../../components/input-password/InputPassword';
 import Versioning from '../../components/versioning/Versioning';
 import { RootStackParamList } from '../../navigation/RootStack';
 
@@ -20,7 +20,7 @@ const ChangePassScreen = ({ navigation }: Props) => {
       <Text style={styles.title}>Cambio de contraseña</Text>
       <Text style={styles.text}>Por favor, ingresa tu nueva contraseña</Text>
       <View style={styles.form}>
-        <CustomPassInput
+        <InputPassword
           label="Contraseña"
           placeholder="Contraseña"
           value={password1}
@@ -28,7 +28,7 @@ const ChangePassScreen = ({ navigation }: Props) => {
           info="Debe contener al menos un número, una letra mayúscula, una minúscula y un mínimo de 8
             caracteres"
         />
-        <CustomPassInput
+        <InputPassword
           label="Confirmar contraseña"
           placeholder="Contraseña"
           value={password2}

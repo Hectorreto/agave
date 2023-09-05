@@ -4,7 +4,7 @@ import { Image, Text, View } from 'react-native';
 
 import styles from './styles';
 import BlueButton from '../../components/blue-button/BlueButton';
-import CustomEmailInput from '../../components/custom-email-input/CustomEmailInput';
+import InputEmail from '../../components/input-email/InputEmail';
 import Versioning from '../../components/versioning/Versioning';
 import { RootStackParamList } from '../../navigation/RootStack';
 
@@ -22,7 +22,7 @@ const RecoverPassScreen = ({ navigation }: Props) => {
         tu contraseña.
       </Text>
       <View style={styles.form}>
-        <CustomEmailInput
+        <InputEmail
           label="Correo electrónico"
           placeholder="Correo electrónico"
           value={email}

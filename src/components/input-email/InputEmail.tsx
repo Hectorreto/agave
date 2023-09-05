@@ -1,6 +1,7 @@
 import { Text, TextInput, View } from 'react-native';
 
 import styles from './styles';
+import { Colors } from '../../themes/theme';
 
 type Props = {
   label: string;
@@ -9,14 +10,14 @@ type Props = {
   onChange: (text: string) => void;
 };
 
-const CustomEmailInput = ({ label, placeholder, value, onChange }: Props) => {
+const InputEmail = ({ label, placeholder, value, onChange }: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.inputLabel}>{label}</Text>
       <TextInput
         style={styles.textInput}
         placeholder={placeholder}
-        placeholderTextColor="#6E7981"
+        placeholderTextColor={Colors.NEUTRAL_600}
         autoCapitalize="none"
         autoComplete="email"
         keyboardType="email-address"
@@ -27,4 +28,4 @@ const CustomEmailInput = ({ label, placeholder, value, onChange }: Props) => {
   );
 };
 
-export default CustomEmailInput;
+export default InputEmail;

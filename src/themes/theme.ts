@@ -11,6 +11,7 @@ export const Colors = {
   PRIMARY: '#33B3E8',
   PRIMARY_100: '#CAEDFC',
   PRIMARY_700: '#054B67',
+  PRIMARY_800: '#001C27',
   SECONDARY: '#65B22E',
 };
 

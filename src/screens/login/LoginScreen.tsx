@@ -4,9 +4,9 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
 import BlueButton from '../../components/blue-button/BlueButton';
-import CustomEmailInput from '../../components/custom-email-input/CustomEmailInput';
-import CustomPassInput from '../../components/custom-pass-input/CustomPassInput';
 import Divider from '../../components/divider/Divider';
+import InputEmail from '../../components/input-email/InputEmail';
+import InputPassword from '../../components/input-password/InputPassword';
 import Versioning from '../../components/versioning/Versioning';
 import { RootStackParamList } from '../../navigation/RootStack';
 
@@ -23,13 +23,13 @@ const LoginScreen = ({ navigation }: Props) => {
         ¡Bienvenido!
       </Text>
       <View style={styles.form}>
-        <CustomEmailInput
+        <InputEmail
           label="Correo electrónico"
           placeholder="Correo electrónico"
           value={email}
           onChange={setEmail}
         />
-        <CustomPassInput
+        <InputPassword
           label="Contraseña"
           placeholder="Contraseña"
           value={password}

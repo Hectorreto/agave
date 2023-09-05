@@ -4,6 +4,7 @@ import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import styles from './styles';
 import Info from '../../../assets/svg/info.svg';
 import Visibility from '../../../assets/svg/visibility.svg';
+import { Colors } from '../../themes/theme';
 
 type Props = {
   label: string;
@@ -13,7 +14,7 @@ type Props = {
   info?: string;
 };
 
-const CustomPassInput = ({ label, placeholder, value, onChange, info }: Props) => {
+const InputPassword = ({ label, placeholder, value, onChange, info }: Props) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   return (
@@ -23,7 +24,7 @@ const CustomPassInput = ({ label, placeholder, value, onChange, info }: Props) =
         <TextInput
           style={styles.textInput}
           placeholder={placeholder}
-          placeholderTextColor="#6E7981"
+          placeholderTextColor={Colors.NEUTRAL_600}
           secureTextEntry={secureTextEntry}
           autoComplete="current-password"
           autoCapitalize="none"
@@ -46,4 +47,4 @@ const CustomPassInput = ({ label, placeholder, value, onChange, info }: Props) =
   );
 };
 
-export default CustomPassInput;
+export default InputPassword;

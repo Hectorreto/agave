@@ -13,7 +13,7 @@ import Science from '../../../assets/svg/header/science.svg';
 
 type Props = DrawerContentComponentProps;
 
-const CustomDrawerContent = ({ navigation }: Props) => {
+const DrawerContent = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -71,4 +71,4 @@ const CustomDrawerContent = ({ navigation }: Props) => {
   );
 };
 
-export default CustomDrawerContent;
+export default DrawerContent;
