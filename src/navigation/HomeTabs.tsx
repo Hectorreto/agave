@@ -9,7 +9,7 @@ import Exits from '../../assets/svg/tabs/exits.svg';
 import Monitoring from '../../assets/svg/tabs/monitoring.svg';
 import Property from '../../assets/svg/tabs/property.svg';
 import TabBarIcon from '../components/tab-bar-icon/TabBarIcon';
-import { colors } from '../themes/theme';
+import { Colors } from '../themes/theme';
 
 export type HomeTabsParamList = {
   PropertiesStack: undefined;
@@ -27,7 +27,10 @@ const HomeTabs = () => {
         headerShown: false,
         tabBarStyle: { height: 80 },
         tabBarItemStyle: { marginTop: 5 },
-        tabBarLabelStyle: { marginBottom: 15, color: colors.primary700 },
+        tabBarLabelStyle: {
+          marginBottom: 15,
+          color: Colors.PRIMARY_700,
+        },
       }}>
       <Tab.Screen
         name="PropertiesStack"

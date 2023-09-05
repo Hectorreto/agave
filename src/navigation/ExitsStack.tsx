@@ -3,10 +3,10 @@ import React from 'react';
 
 import HeaderBackButton from '../components/header-back-button/HeaderBackButton';
 import HeaderOpenDrawerButton from '../components/header-open-drawer-button/HeaderOpenDrawerButton';
-import CreateExitScreen from '../screens/exits/CreateExitScreen';
-import ExitsScreen from '../screens/exits/ExitsScreen';
-import SeeExitScreen from '../screens/exits/SeeExitScreen';
-import { colors } from '../themes/theme';
+import CreateExitScreen from '../screens/exits/create-exit/CreateExitScreen';
+import ExitsScreen from '../screens/exits/exits/ExitsScreen';
+import SeeExitScreen from '../screens/exits/see-exits/SeeExitScreen';
+import { Colors } from '../themes/theme';
 
 export type ExitsStackParamList = {
   Exits: undefined;
@@ -23,7 +23,7 @@ const ExitsStack = () => {
         headerTitleStyle: {
           fontSize: 18,
           fontWeight: '600',
-          color: colors.primary700,
+          color: Colors.PRIMARY_700,
         },
         headerLeft: () => <HeaderBackButton />,
       }}>
@@ -36,7 +36,7 @@ const ExitsStack = () => {
           headerTitleStyle: {
             fontSize: 24,
             fontWeight: '700',
-            color: colors.primary700,
+            color: Colors.PRIMARY_700,
           },
           headerLeft: () => <HeaderOpenDrawerButton />,
         }}

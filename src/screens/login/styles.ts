@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { colors } from '../../themes/theme';
+import { Colors } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     width: 193,
   },
   title: {
-    color: colors.primary,
+    color: Colors.PRIMARY,
     fontSize: 48,
     fontWeight: '700',
     textAlign: 'center',
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   recoverPass: {
-    color: colors.secondary,
+    color: Colors.SECONDARY,
     fontWeight: '600',
   },
   text: {

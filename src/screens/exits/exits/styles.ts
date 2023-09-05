@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { colors } from '../../themes/theme';
+import { Colors } from '../../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,12 +13,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.neutral400,
+    borderColor: Colors.NEUTRAL_400,
     borderRadius: 4,
   },
   filterText: {
     flex: 1,
-    color: colors.neutral600,
+    color: Colors.NEUTRAL_600,
   },
   filterLeftIcon: {
     marginHorizontal: 4,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     width: 260,
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: colors.neutral400,
+    borderColor: Colors.NEUTRAL_400,
     paddingVertical: 10,
     gap: 8,
     paddingLeft: 16,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   searchText: {
     flex: 1,
-    color: colors.neutral600,
+    color: Colors.NEUTRAL_600,
   },
   dataText: {
     marginHorizontal: 16,
@@ -67,10 +67,10 @@ const styles = StyleSheet.create({
     width: 32,
     borderWidth: 2,
     borderRadius: 8,
-    borderColor: colors.primary,
+    borderColor: Colors.PRIMARY,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.neutral,
+    backgroundColor: Colors.NEUTRAL,
     marginHorizontal: 8,
   },
 });

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { colors } from '../../themes/theme';
+import { Colors } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,10 +14,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.neutral,
+    backgroundColor: Colors.NEUTRAL,
   },
   footerText: {
-    color: colors.neutral700,
+    color: Colors.NEUTRAL_700,
   },
   footerFrame2: {
     gap: 8,
@@ -45,31 +45,31 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontWeight: '600',
-    color: colors.primary700,
+    color: Colors.PRIMARY_700,
     fontSize: 16,
     marginHorizontal: 16,
   },
   titleContainer: {
     justifyContent: 'center',
     borderRightWidth: 1,
-    borderRightColor: colors.neutral200,
-    backgroundColor: colors.neutral,
+    borderRightColor: Colors.NEUTRAL_200,
+    backgroundColor: Colors.NEUTRAL,
     maxWidth: 150,
     height: 52,
   },
   dataEvenContainer: {
     justifyContent: 'center',
     borderRightWidth: 1,
-    borderRightColor: colors.neutral200,
-    backgroundColor: colors.neutral100,
+    borderRightColor: Colors.NEUTRAL_200,
+    backgroundColor: Colors.NEUTRAL_100,
     maxWidth: 150,
     height: 52,
   },
   dataOddContainer: {
     justifyContent: 'center',
     borderRightWidth: 1,
-    borderRightColor: colors.neutral200,
-    backgroundColor: colors.neutral,
+    borderRightColor: Colors.NEUTRAL_200,
+    backgroundColor: Colors.NEUTRAL,
     maxWidth: 150,
     height: 52,
   },

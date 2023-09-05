@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { colors } from '../../themes/theme';
+import { Colors } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   itemText: {
-    color: colors.primary700,
+    color: Colors.PRIMARY_700,
   },
 });
 

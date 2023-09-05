@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import CreateExitScreen from '../screens/exits/CreateExitScreen';
+import CreateExitScreen from '../screens/exits/create-exit/CreateExitScreen';
 import ListPropertiesScreen from '../screens/property/ListPropertiesScreen';
 import PropertyDetailsScreens from '../screens/property/PropertyDetailsScreen';
 

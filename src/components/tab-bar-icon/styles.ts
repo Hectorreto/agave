@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 
-import { colors } from '../../themes/theme';
+import { Colors } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   iconDefault: {
-    backgroundColor: colors.neutral,
+    backgroundColor: Colors.NEUTRAL,
     width: 64,
     paddingVertical: 4,
     paddingHorizontal: 16,
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   iconFocused: {
-    backgroundColor: colors.primary,
+    backgroundColor: Colors.PRIMARY,
     width: 64,
     paddingVertical: 4,
     paddingHorizontal: 16,

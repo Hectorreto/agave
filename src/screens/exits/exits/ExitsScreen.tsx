@@ -2,15 +2,15 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
-import ArrowDropDown from '../../../assets/svg/arrow_drop_down.svg';
-import FilterAlt from '../../../assets/svg/filter_alt.svg';
-import Search from '../../../assets/svg/search.svg';
-import MoreVert from '../../../assets/svg/table/more_vert.svg';
-import BlueButton from '../../components/blue-button/BlueButton';
-import Divider from '../../components/divider/Divider';
-import PaginatedTable from '../../components/paginated-table/PaginatedTable';
-import { ExitsStackParamList } from '../../navigation/ExitsStack';
-import { formatDateTime } from '../../utils/dateUtils';
+import ArrowDropDown from '../../../../assets/svg/arrow_drop_down.svg';
+import FilterAlt from '../../../../assets/svg/filter_alt.svg';
+import Search from '../../../../assets/svg/search.svg';
+import MoreVert from '../../../../assets/svg/table/more_vert.svg';
+import BlueButton from '../../../components/blue-button/BlueButton';
+import Divider from '../../../components/divider/Divider';
+import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
+import { ExitsStackParamList } from '../../../navigation/ExitsStack';
+import { formatDateTime } from '../../../utils/dateUtils';
 
 type Props = NativeStackScreenProps<ExitsStackParamList, 'Exits'>;
 

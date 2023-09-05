@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Text, View } from 'react-native';
 
-import Divider from '../../components/divider/Divider';
-import { ExitsStackParamList } from '../../navigation/ExitsStack';
+import Divider from '../../../components/divider/Divider';
+import { ExitsStackParamList } from '../../../navigation/ExitsStack';
 
 type Props = NativeStackScreenProps<ExitsStackParamList, 'SeeExit'>;
 

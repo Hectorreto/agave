@@ -3,7 +3,7 @@ import { Pressable, Text } from 'react-native';
 import { SvgProps } from 'react-native-svg';
 
 import styles from './styles';
-import { colors } from '../../themes/theme';
+import { Colors } from '../../themes/theme';
 
 type Props = {
   label: string;
@@ -16,7 +16,7 @@ const Item = ({ Icon, label, onPress }: Props) => {
     <Pressable
       style={({ pressed }) => [
         {
-          backgroundColor: pressed ? colors.primary100 : colors.neutral,
+          backgroundColor: pressed ? Colors.PRIMARY_100 : Colors.NEUTRAL_50,
         },
         styles.itemContainer,
       ]}

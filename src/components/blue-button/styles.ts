@@ -1,14 +1,14 @@
 import { StyleSheet } from 'react-native';
 
-import { colors } from '../../themes/theme';
+import { Colors } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: colors.primary,
+    backgroundColor: Colors.PRIMARY,
     paddingVertical: 10,
     paddingHorizontal: 32,
     borderRadius: 8,
-    color: colors.neutral,
+    color: Colors.NEUTRAL,
     fontWeight: '600',
   },
 });
