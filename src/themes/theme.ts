@@ -6,6 +6,7 @@ export const colors = {
   neutral600: '#6E7981',
   neutral700: '#545D63',
   primary: '#33B3E8',
+  primary100: '#CAEDFC',
   primary700: '#054B67',
   secondary: '#65B22E',
 };

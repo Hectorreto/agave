@@ -5,13 +5,13 @@ import styles from './styles';
 import Info from '../../../assets/svg/info.svg';
 import Visibility from '../../../assets/svg/visibility.svg';
 
-interface Props {
+type Props = {
   label: string;
   placeholder: string;
   value: string;
   onChange: (text: string) => void;
   info?: string;
-}
+};
 
 const CustomPassInput = ({ label, placeholder, value, onChange, info }: Props) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);

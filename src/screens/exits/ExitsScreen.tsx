@@ -10,7 +10,6 @@ import BlueButton from '../../components/blue-button/BlueButton';
 import Divider from '../../components/divider/Divider';
 import PaginatedTable from '../../components/paginated-table/PaginatedTable';
 import { ExitsStackParamList } from '../../navigation/ExitsStack';
-import { colors } from '../../themes/theme';
 import { formatDateTime } from '../../utils/dateUtils';
 
 type Props = NativeStackScreenProps<ExitsStackParamList, 'Exits'>;
@@ -64,7 +63,9 @@ const ExitsScreen = ({ navigation }: Props) => {
             <Text style={styles.dataText}>{value.type}</Text>,
             <Text style={styles.dataText}>{value.plants}</Text>,
             <Text style={styles.formattedDate}>{formatDateTime(value.date)}</Text>,
-            <TouchableOpacity style={styles.moreButton}>
+            <TouchableOpacity
+              style={styles.moreButton}
+              onPress={() => navigation.navigate('SeeExit')}>
               <MoreVert />
             </TouchableOpacity>,
           ],

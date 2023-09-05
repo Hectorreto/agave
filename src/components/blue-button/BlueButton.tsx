@@ -2,10 +2,10 @@ import { Text, TouchableOpacity } from 'react-native';
 
 import styles from './styles';
 
-interface Props {
+type Props = {
   text: string;
   onPress: () => void;
-}
+};
 
 const BlueButton = ({ text, onPress }: Props) => {
   return (

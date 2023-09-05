@@ -1,21 +1,29 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import { SvgProps } from 'react-native-svg';
 
 import styles from './styles';
+import { colors } from '../../themes/theme';
 
-interface Props {
+type Props = {
   label: string;
   Icon: React.FC<SvgProps>;
   onPress: () => void;
-}
+};
 
 const Item = ({ Icon, label, onPress }: Props) => {
   return (
-    <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
+    <Pressable
+      style={({ pressed }) => [
+        {
+          backgroundColor: pressed ? colors.primary100 : colors.neutral,
+        },
+        styles.itemContainer,
+      ]}
+      onPress={onPress}>
       <Icon />
       <Text style={styles.itemText}>{label}</Text>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
 

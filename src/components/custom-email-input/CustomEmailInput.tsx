@@ -2,12 +2,12 @@ import { Text, TextInput, View } from 'react-native';
 
 import styles from './styles';
 
-interface Props {
+type Props = {
   label: string;
   placeholder: string;
   value: string;
   onChange: (text: string) => void;
-}
+};
 
 const CustomEmailInput = ({ label, placeholder, value, onChange }: Props) => {
   return (

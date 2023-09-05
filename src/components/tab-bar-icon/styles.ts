@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { colors } from '../themes/theme';
+import { colors } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   iconDefault: {
@@ -20,12 +20,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 16,
-  },
-  drawerIcon: {
-    width: 72,
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

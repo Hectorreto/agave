@@ -4,13 +4,13 @@ import { ScrollView, Text, View } from 'react-native';
 import Footer from './Footer';
 import styles from './styles';
 
-interface Props {
+type Props = {
   titles: string[];
   rows: {
     id: string;
     values: ReactElement[];
   }[];
-}
+};
 
 const PaginatedTable = ({ titles, rows }: Props) => {
   return (

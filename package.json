@@ -40,6 +40,9 @@
   "private": true,
   "eslintConfig": {
     "extends": "universe/native",
+    "rules": {
+      "no-unused-vars": "error"
+    },
     "globals": {
       "__dirname": true
     }

@@ -1,14 +1,28 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Text, View } from 'react-native';
 
-import { PropertiesStackParamList } from '../../navigation/PropertiesStack';
-
-type Props = NativeStackScreenProps<PropertiesStackParamList, 'CreateExit'>;
-
-const CreateExitScreen = ({ navigation }: Props) => {
+const CreateExitScreen = () => {
   return (
     <View>
-      <Text>Create exit</Text>
+      <Text>Llena el formulario para crear una nueva salida</Text>
+      <Text>Predio</Text>
+      <Text>Nombre del predio seleccionado</Text>
+      <View>
+        <Text>Tipo de salida</Text>
+        <Text>Cosecha</Text>
+        <Text>Número de plantas</Text>
+        <Text>###</Text>
+        <Text>Notas</Text>
+        <Text>
+          Estas plantas fueron cosechadas por orden de Fulanito Cosme, notamos que a simple vista
+          son plantas sanas y con la madurez apropiada.
+        </Text>
+        <Text>Subir foto</Text>
+      </View>
+      <Text>Agregar más salidas</Text>
+      <View style={{ flexDirection: 'row' }}>
+        <Text>Cancelar</Text>
+        <Text>Guardar</Text>
+      </View>
     </View>
   );
 };
