@@ -1,13 +1,16 @@
 import { StyleSheet } from 'react-native';
 
-import { Colors } from '../../themes/theme';
+import { Colors, shadowStyle } from '../../themes/theme';
 
 const styles = StyleSheet.create({
-  button: {
+  container: {
+    ...shadowStyle,
     backgroundColor: Colors.PRIMARY,
     paddingVertical: 10,
     paddingHorizontal: 32,
     borderRadius: 8,
+  },
+  text: {
     color: Colors.NEUTRAL,
     fontWeight: '600',
   },

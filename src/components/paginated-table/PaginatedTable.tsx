@@ -15,23 +15,25 @@ type Props = {
 const PaginatedTable = ({ titles, rows }: Props) => {
   return (
     <View style={styles.container}>
-      <ScrollView horizontal style={styles.content}>
-        {titles.map((title, index) => (
-          <View key={title}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.titleText}>{title}</Text>
-            </View>
-            {rows.map((row, i) => (
-              <View
-                key={row.id}
-                style={i % 2 === 0 ? styles.dataEvenContainer : styles.dataOddContainer}>
-                {row.values[index]}
+      <View style={styles.innerContainer}>
+        <ScrollView horizontal style={styles.content}>
+          {titles.map((title, index) => (
+            <View key={title}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>{title}</Text>
               </View>
-            ))}
-          </View>
-        ))}
-      </ScrollView>
-      <Footer />
+              {rows.map((row, i) => (
+                <View
+                  key={row.id}
+                  style={i % 2 === 0 ? styles.dataEvenContainer : styles.dataOddContainer}>
+                  {row.values[index]}
+                </View>
+              ))}
+            </View>
+          ))}
+        </ScrollView>
+        <Footer />
+      </View>
     </View>
   );
 };

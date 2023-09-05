@@ -13,7 +13,7 @@ type Props = {
 const TabBarIcon = ({ focused, Icon }: Props) => {
   return (
     <View style={focused ? styles.iconFocused : styles.iconDefault}>
-      <Icon fill={focused ? Colors.NEUTRAL : Colors.PRIMARY_700} />
+      <Icon fill={focused ? Colors.NEUTRAL_50 : Colors.PRIMARY_700} />
     </View>
   );
 };

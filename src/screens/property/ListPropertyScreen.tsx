@@ -1,11 +1,11 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, View } from 'react-native';
 
-import { PropertiesStackParamList } from '../../navigation/PropertiesStack';
+import { PropertyStackParamList } from '../../navigation/PropertyStack';
 
-type Props = NativeStackScreenProps<PropertiesStackParamList, 'ListProperties'>;
+type Props = NativeStackScreenProps<PropertyStackParamList, 'ListProperties'>;
 
-const ListPropertiesScreen = ({ navigation }: Props) => {
+const ListPropertyScreen = ({ navigation }: Props) => {
   return (
     <View>
       <Button title="property" onPress={() => navigation.navigate('PropertyDetails')} />
@@ -13,4 +13,4 @@ const ListPropertiesScreen = ({ navigation }: Props) => {
   );
 };
 
-export default ListPropertiesScreen;
+export default ListPropertyScreen;

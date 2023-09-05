@@ -9,10 +9,10 @@ import MoreVert from '../../../../assets/svg/table/more_vert.svg';
 import BlueButton from '../../../components/blue-button/BlueButton';
 import Divider from '../../../components/divider/Divider';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
-import { ExitsStackParamList } from '../../../navigation/ExitsStack';
+import { ExitStackParamList } from '../../../navigation/ExitStack';
 import { formatDateTime } from '../../../utils/dateUtils';
 
-type Props = NativeStackScreenProps<ExitsStackParamList, 'Exits'>;
+type Props = NativeStackScreenProps<ExitStackParamList, 'ListExits'>;
 
 const data = [
   {
@@ -35,7 +35,7 @@ const data = [
   },
 ];
 
-const ExitsScreen = ({ navigation }: Props) => {
+const ListExitScreen = ({ navigation }: Props) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.filterContainer}>
@@ -75,4 +75,4 @@ const ExitsScreen = ({ navigation }: Props) => {
   );
 };
 
-export default ExitsScreen;
+export default ListExitScreen;

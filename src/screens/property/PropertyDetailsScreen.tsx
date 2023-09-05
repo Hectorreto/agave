@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, View } from 'react-native';
 
-import { PropertiesStackParamList } from '../../navigation/PropertiesStack';
+import { PropertyStackParamList } from '../../navigation/PropertyStack';
 
-type Props = NativeStackScreenProps<PropertiesStackParamList, 'PropertyDetails'>;
+type Props = NativeStackScreenProps<PropertyStackParamList, 'PropertyDetails'>;
 
 const PropertyDetailsScreen = ({ navigation }: Props) => {
   return (

@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
   },
   form: {
     gap: 4,
+    zIndex: 1,
   },
 });
 

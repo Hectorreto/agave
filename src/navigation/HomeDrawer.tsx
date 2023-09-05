@@ -12,7 +12,7 @@ const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 export default function HomeDrawer() {
   return (
     <Drawer.Navigator
-      drawerContent={(props) => <DrawerContent {...props} />}
+      drawerContent={({ navigation }) => <DrawerContent navigation={navigation} />}
       screenOptions={{ headerShown: false }}>
       <Drawer.Screen name="HomeTabs" component={HomeTabs} />
     </Drawer.Navigator>

@@ -4,19 +4,19 @@ import React from 'react';
 import HeaderBackButton from '../components/header-back-button/HeaderBackButton';
 import HeaderOpenDrawerButton from '../components/header-open-drawer-button/HeaderOpenDrawerButton';
 import CreateExitScreen from '../screens/exits/create-exit/CreateExitScreen';
-import ExitsScreen from '../screens/exits/exits/ExitsScreen';
+import ListExitScreen from '../screens/exits/list-exits/ListExitScreen';
 import SeeExitScreen from '../screens/exits/see-exits/SeeExitScreen';
 import { Colors } from '../themes/theme';
 
-export type ExitsStackParamList = {
-  Exits: undefined;
+export type ExitStackParamList = {
+  ListExits: undefined;
   CreateExit: undefined;
   SeeExit: undefined;
 };
 
-const Stack = createNativeStackNavigator<ExitsStackParamList>();
+const Stack = createNativeStackNavigator<ExitStackParamList>();
 
-const ExitsStack = () => {
+const ExitStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -28,8 +28,8 @@ const ExitsStack = () => {
         headerLeft: () => <HeaderBackButton />,
       }}>
       <Stack.Screen
-        name="Exits"
-        component={ExitsScreen}
+        name="ListExits"
+        component={ListExitScreen}
         options={{
           title: 'Salidas',
           headerTitleAlign: 'center',
@@ -59,4 +59,4 @@ const ExitsStack = () => {
   );
 };
 
-export default ExitsStack;
+export default ExitStack;

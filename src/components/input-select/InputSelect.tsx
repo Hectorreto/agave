@@ -21,7 +21,7 @@ const InputSelect = ({ label, placeholder, value, onPress, items }: Props) => {
   const text = items.find((item) => item.value === value)?.label;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isOpen && { zIndex: 1 }]}>
       <Text style={styles.inputLabel}>{label}</Text>
       <View>
         <TouchableOpacity style={styles.inputContainer} onPress={() => setIsOpen(!isOpen)}>

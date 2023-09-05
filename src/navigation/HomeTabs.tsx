@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import ApplicationsStack from './ApplicationsStack';
-import ExitsStack from './ExitsStack';
+import ApplicationStack from './ApplicationStack';
+import ExitStack from './ExitStack';
 import MonitoringStack from './MonitoringStack';
-import PropertiesStack from './PropertiesStack';
+import PropertyStack from './PropertyStack';
 import Applications from '../../assets/svg/tabs/applications.svg';
 import Exits from '../../assets/svg/tabs/exits.svg';
 import Monitoring from '../../assets/svg/tabs/monitoring.svg';
@@ -12,10 +12,10 @@ import TabBarIcon from '../components/tab-bar-icon/TabBarIcon';
 import { Colors } from '../themes/theme';
 
 export type HomeTabsParamList = {
-  PropertiesStack: undefined;
-  ExitsStack: undefined;
+  PropertyStack: undefined;
+  ExitStack: undefined;
   MonitoringStack: undefined;
-  ApplicationsStack: undefined;
+  ApplicationStack: undefined;
 };
 
 const Tab = createBottomTabNavigator<HomeTabsParamList>();
@@ -26,23 +26,23 @@ const HomeTabs = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: { height: 80 },
-        tabBarItemStyle: { marginTop: 5 },
+        tabBarItemStyle: { height: 80 },
         tabBarLabelStyle: {
-          marginBottom: 15,
+          marginBottom: 16,
           color: Colors.PRIMARY_700,
         },
       }}>
       <Tab.Screen
-        name="PropertiesStack"
-        component={PropertiesStack}
+        name="PropertyStack"
+        component={PropertyStack}
         options={{
           tabBarLabel: 'Predio',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={Property} />,
         }}
       />
       <Tab.Screen
-        name="ExitsStack"
-        component={ExitsStack}
+        name="ExitStack"
+        component={ExitStack}
         options={{
           tabBarLabel: 'Salidas',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={Exits} />,
@@ -57,8 +57,8 @@ const HomeTabs = () => {
         }}
       />
       <Tab.Screen
-        name="ApplicationsStack"
-        component={ApplicationsStack}
+        name="ApplicationStack"
+        component={ApplicationStack}
         options={{
           tabBarLabel: 'Aplicaciones',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={Applications} />,

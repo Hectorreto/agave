@@ -1,11 +1,11 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button, View } from 'react-native';
 
-import { ApplicationsStackParamList } from '../../navigation/ApplicationsStack';
+import { ApplicationStackParamList } from '../../navigation/ApplicationStack';
 
-type Props = NativeStackScreenProps<ApplicationsStackParamList, 'Applications'>;
+type Props = NativeStackScreenProps<ApplicationStackParamList, 'ListApplications'>;
 
-const ApplicationsScreen = ({ navigation }: Props) => {
+const ListApplicationScreen = ({ navigation }: Props) => {
   return (
     <View>
       <Button title="Nueva aplicación" onPress={() => navigation.navigate('CreateApplication')} />
@@ -13,4 +13,4 @@ const ApplicationsScreen = ({ navigation }: Props) => {
   );
 };
 
-export default ApplicationsScreen;
+export default ListApplicationScreen;

@@ -3,9 +3,9 @@ import { Button, View } from 'react-native';
 
 import { MonitoringStackParamList } from '../../navigation/MonitoringStack';
 
-type Props = NativeStackScreenProps<MonitoringStackParamList, 'Monitoring'>;
+type Props = NativeStackScreenProps<MonitoringStackParamList, 'ListMonitoring'>;
 
-const MonitoringScreen = ({ navigation }: Props) => {
+const ListMonitoringScreen = ({ navigation }: Props) => {
   return (
     <View>
       <Button title="Nuevo monitoreo" onPress={() => navigation.navigate('CreateMonitoring')} />
@@ -13,4 +13,4 @@ const MonitoringScreen = ({ navigation }: Props) => {
   );
 };
 
-export default MonitoringScreen;
+export default ListMonitoringScreen;

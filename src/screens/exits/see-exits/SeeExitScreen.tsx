@@ -2,11 +2,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Text, View } from 'react-native';
 
 import Divider from '../../../components/divider/Divider';
-import { ExitsStackParamList } from '../../../navigation/ExitsStack';
+import { ExitStackParamList } from '../../../navigation/ExitStack';
 
-type Props = NativeStackScreenProps<ExitsStackParamList, 'SeeExit'>;
+type Props = NativeStackScreenProps<ExitStackParamList, 'SeeExit'>;
 
-const SeeExitScreen = ({ navigation }: Props) => {
+const SeeExitScreen = ({}: Props) => {
   return (
     <View>
       <Text>Este formulario sólo es de consulta, no se puede editar</Text>

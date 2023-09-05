@@ -1,13 +1,15 @@
 import { StyleSheet } from 'react-native';
 
-import { Colors } from '../../themes/theme';
+import { Colors, shadowStyle } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
+    ...shadowStyle,
+    borderRadius: 8,
+  },
+  innerContainer: {
     borderRadius: 8,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#A6B1B9',
   },
   footer: {
     height: 58,

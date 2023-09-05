@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { Colors } from '../../../themes/theme';
+import { Colors, shadowStyle } from '../../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   moreButton: {
+    ...shadowStyle,
     height: 32,
     width: 32,
     borderWidth: 2,

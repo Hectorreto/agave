@@ -1,4 +1,4 @@
-import { DrawerContentComponentProps } from '@react-navigation/drawer';
+import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types';
 import { TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -11,7 +11,9 @@ import Logout from '../../../assets/svg/header/logout.svg';
 import MenuOpen from '../../../assets/svg/header/menu_open.svg';
 import Science from '../../../assets/svg/header/science.svg';
 
-type Props = DrawerContentComponentProps;
+type Props = {
+  navigation: DrawerNavigationHelpers;
+};
 
 const DrawerContent = ({ navigation }: Props) => {
   return (
@@ -26,7 +28,7 @@ const DrawerContent = ({ navigation }: Props) => {
           Icon={Agriculture}
           label="Agregar nueva salida"
           onPress={() =>
-            navigation.navigate('ExitsStack', {
+            navigation.navigate('ExitStack', {
               screen: 'CreateExit',
               initial: false,
             })
@@ -46,7 +48,7 @@ const DrawerContent = ({ navigation }: Props) => {
           Icon={Science}
           label="Agregar nueva aplicación"
           onPress={() =>
-            navigation.navigate('ApplicationsStack', {
+            navigation.navigate('ApplicationStack', {
               screen: 'CreateApplication',
               initial: false,
             })

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { Colors } from '../../themes/theme';
+import { Colors, shadowStyle } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,12 +29,9 @@ const styles = StyleSheet.create({
     color: Colors.NEUTRAL_600,
   },
   dropdown: {
-    borderWidth: 1,
-    borderColor: '#A6B1B9',
+    ...shadowStyle,
     borderRadius: 4,
-    overflow: 'hidden',
     position: 'absolute',
-    zIndex: 1,
     backgroundColor: Colors.NEUTRAL,
     width: '100%',
   },

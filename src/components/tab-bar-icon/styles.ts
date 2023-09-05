@@ -4,7 +4,7 @@ import { Colors } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   iconDefault: {
-    backgroundColor: Colors.NEUTRAL,
+    backgroundColor: Colors.NEUTRAL_50,
     width: 64,
     paddingVertical: 4,
     paddingHorizontal: 16,
