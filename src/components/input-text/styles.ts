@@ -17,6 +17,16 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#FEFEFE',
   },
+  textInputMultiline: {
+    height: 88,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: '#A6B1B9',
+    borderRadius: 4,
+    backgroundColor: '#FEFEFE',
+    textAlignVertical: 'top',
+  },
 });
 
 export default styles;

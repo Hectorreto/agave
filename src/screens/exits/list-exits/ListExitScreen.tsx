@@ -1,12 +1,12 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import ArrowDropDown from '../../../../assets/svg/arrow_drop_down.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
 import MoreVert from '../../../../assets/svg/table/more_vert.svg';
-import BlueButton from '../../../components/blue-button/BlueButton';
+import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
@@ -45,7 +45,11 @@ const ListExitScreen = ({ navigation }: Props) => {
       </View>
       <View style={styles.map} />
       <View style={styles.newExitContainer}>
-        <BlueButton text="Nueva salida" onPress={() => navigation.navigate('CreateExit')} />
+        <CustomButton
+          color="blue"
+          text="Nueva salida"
+          onPress={() => navigation.navigate('CreateExit')}
+        />
       </View>
       <Divider />
       <View style={styles.filterAndSearchContainer}>
@@ -63,11 +67,11 @@ const ListExitScreen = ({ navigation }: Props) => {
             <Text style={styles.dataText}>{value.type}</Text>,
             <Text style={styles.dataText}>{value.plants}</Text>,
             <Text style={styles.formattedDate}>{formatDateTime(value.date)}</Text>,
-            <TouchableOpacity
-              style={styles.moreButton}
+            <Pressable
+              style={({ pressed }) => [styles.moreButton, pressed && styles.moreButtonPressed]}
               onPress={() => navigation.navigate('SeeExit')}>
               <MoreVert />
-            </TouchableOpacity>,
+            </Pressable>,
           ],
         }))}
       />

@@ -8,18 +8,20 @@ type Props = {
   placeholder: string;
   value: string;
   onChange: (text: string) => void;
+  multiline?: boolean;
 };
 
-const InputText = ({ label, placeholder, value, onChange }: Props) => {
+const InputText = ({ label, placeholder, value, onChange, multiline }: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.inputLabel}>{label}</Text>
       <TextInput
-        style={styles.textInput}
+        style={multiline ? styles.textInputMultiline : styles.textInput}
         placeholder={placeholder}
         placeholderTextColor={Colors.NEUTRAL_600}
         value={value}
         onChangeText={onChange}
+        multiline={multiline}
       />
     </View>
   );

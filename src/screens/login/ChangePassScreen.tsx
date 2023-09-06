@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Image, Text, View } from 'react-native';
 
 import styles from './styles';
-import BlueButton from '../../components/blue-button/BlueButton';
+import CustomButton from '../../components/custom-button/CustomButton';
 import InputPassword from '../../components/input-password/InputPassword';
 import Versioning from '../../components/versioning/Versioning';
 import { RootStackParamList } from '../../navigation/RootStack';
@@ -35,7 +35,7 @@ const ChangePassScreen = ({ navigation }: Props) => {
           onChange={setPassword2}
         />
       </View>
-      <BlueButton text="Cambiar contraseña" onPress={() => {}} />
+      <CustomButton color="blue" text="Cambiar contraseña" onPress={() => {}} />
       <Versioning />
     </View>
   );

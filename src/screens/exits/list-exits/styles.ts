@@ -74,6 +74,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.NEUTRAL,
     marginHorizontal: 8,
   },
+  moreButtonPressed: {
+    backgroundColor: Colors.PRIMARY_100,
+    borderColor: Colors.PRIMARY_100,
+  },
 });
 
 export default styles;

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
-import BlueButton from '../../components/blue-button/BlueButton';
+import CustomButton from '../../components/custom-button/CustomButton';
 import Divider from '../../components/divider/Divider';
 import InputEmail from '../../components/input-email/InputEmail';
 import InputPassword from '../../components/input-password/InputPassword';
@@ -43,7 +43,11 @@ const LoginScreen = ({ navigation }: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <BlueButton text="Iniciar sesión" onPress={() => navigation.navigate('HomeDrawer')} />
+      <CustomButton
+        color="blue"
+        text="Iniciar sesión"
+        onPress={() => navigation.navigate('HomeDrawer')}
+      />
       <Versioning />
     </View>
   );

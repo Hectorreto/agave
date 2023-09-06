@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Image, Text, View } from 'react-native';
 
 import styles from './styles';
-import BlueButton from '../../components/blue-button/BlueButton';
+import CustomButton from '../../components/custom-button/CustomButton';
 import InputEmail from '../../components/input-email/InputEmail';
 import Versioning from '../../components/versioning/Versioning';
 import { RootStackParamList } from '../../navigation/RootStack';
@@ -29,7 +29,11 @@ const RecoverPassScreen = ({ navigation }: Props) => {
           onChange={setEmail}
         />
       </View>
-      <BlueButton text="Enviar correo" onPress={() => navigation.navigate('ChangePass')} />
+      <CustomButton
+        color="blue"
+        text="Enviar correo"
+        onPress={() => navigation.navigate('ChangePass')}
+      />
       <Versioning />
     </View>
   );
