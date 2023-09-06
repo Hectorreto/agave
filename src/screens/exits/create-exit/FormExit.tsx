@@ -74,7 +74,7 @@ const FormExit = ({ showTitle, exit, onPressDelete, onChange }: Props) => {
               <CustomButton
                 color="blue"
                 text="Subir foto"
-                iconLeft={<CameraAlt />}
+                IconLeft={CameraAlt}
                 onPress={() => {}}
               />
             </View>

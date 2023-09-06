@@ -1,10 +1,9 @@
 import { StyleSheet } from 'react-native';
 
-import { Colors, shadowStyle } from '../../themes/theme';
+import { Colors } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
-    ...shadowStyle,
     borderRadius: 8,
     flexDirection: 'row',
     gap: 8,
@@ -18,6 +17,13 @@ const styles = StyleSheet.create({
   },
   text: {
     fontWeight: '600',
+  },
+  disabled: {
+    backgroundColor: Colors.NEUTRAL_200,
+    borderColor: Colors.NEUTRAL_200,
+  },
+  textDisabled: {
+    color: Colors.NEUTRAL_500,
   },
 });
 

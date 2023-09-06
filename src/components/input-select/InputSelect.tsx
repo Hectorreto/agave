@@ -9,7 +9,7 @@ type Props = {
   label: string;
   placeholder: string;
   value: string;
-  onPress: (text: string) => void;
+  onPress?: (text: string) => void;
   items: {
     label: string;
     value: string;
@@ -19,14 +19,20 @@ type Props = {
 const InputSelect = ({ label, placeholder, value, onPress, items }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const text = items.find((item) => item.value === value)?.label;
+  const disabled = !onPress;
 
   return (
     <View style={[styles.container, isOpen && { zIndex: 1 }]}>
       <Text style={styles.inputLabel}>{label}</Text>
       <View>
-        <TouchableOpacity style={styles.inputContainer} onPress={() => setIsOpen(!isOpen)}>
+        <TouchableOpacity
+          style={[styles.inputContainer, disabled && styles.inputContainerDisabled]}
+          onPress={() => setIsOpen(!isOpen)}
+          disabled={disabled}>
           {text ? (
-            <Text style={styles.inputValue} numberOfLines={1}>
+            <Text
+              style={[styles.inputValue, disabled && styles.inputValueDisabled]}
+              numberOfLines={1}>
               {text}
             </Text>
           ) : (
@@ -37,7 +43,7 @@ const InputSelect = ({ label, placeholder, value, onPress, items }: Props) => {
           <ArrowDropDown />
         </TouchableOpacity>
         <View>
-          {isOpen && (
+          {isOpen && onPress && (
             <View style={styles.dropdown}>
               {items.map((item) => (
                 <Pressable

@@ -21,8 +21,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FEFEFE',
     flexDirection: 'row',
   },
+  inputContainerDisabled: {
+    backgroundColor: Colors.NEUTRAL_200,
+  },
   inputValue: {
     flex: 1,
+  },
+  inputValueDisabled: {
+    color: Colors.NEUTRAL_700,
   },
   inputPlaceholder: {
     flex: 1,

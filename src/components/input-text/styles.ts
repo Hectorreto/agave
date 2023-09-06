@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { Colors } from '../../themes/theme';
+
 const styles = StyleSheet.create({
   container: {
     gap: 4,
@@ -26,6 +28,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#FEFEFE',
     textAlignVertical: 'top',
+  },
+  disabled: {
+    backgroundColor: Colors.NEUTRAL_200,
+    borderColor: Colors.NEUTRAL_400,
+    color: Colors.NEUTRAL_700,
   },
 });
 

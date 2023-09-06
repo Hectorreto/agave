@@ -78,7 +78,7 @@ const CreateExitScreen = ({ navigation }: Props) => {
         <CustomButton
           color="white"
           text="Agregar más salidas"
-          iconLeft={<AddCircle />}
+          IconLeft={AddCircle}
           onPress={() => {
             const lastCnt = Math.max(...exits.map((e) => e.cnt));
             setExits([...exits, newExit(lastCnt + 1)]);
