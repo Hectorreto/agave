@@ -24,9 +24,13 @@ const styles = StyleSheet.create({
 export const blueStyles = StyleSheet.create({
   container: {
     backgroundColor: Colors.PRIMARY,
+    borderColor: Colors.PRIMARY,
+    borderWidth: 2,
   },
   pressed: {
     backgroundColor: Colors.PRIMARY_300,
+    borderColor: Colors.PRIMARY_300,
+    borderWidth: 2,
   },
   text: {
     color: Colors.NEUTRAL,
@@ -62,6 +66,22 @@ export const lightBlueStyles = StyleSheet.create({
   },
   text: {
     color: Colors.PRIMARY,
+  },
+});
+
+export const redStyles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.ALERT_RED,
+    borderColor: Colors.ALERT_RED,
+    borderWidth: 2,
+  },
+  pressed: {
+    backgroundColor: Colors.ALERT_RED_2,
+    borderColor: Colors.ALERT_RED_2,
+    borderWidth: 2,
+  },
+  text: {
+    color: Colors.NEUTRAL,
   },
 });
 

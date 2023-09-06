@@ -58,6 +58,12 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
   },
+  modalText: {
+    textAlign: 'center',
+  },
+  modalTextBold: {
+    fontWeight: 'bold',
+  },
 });
 
 export default styles;

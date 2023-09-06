@@ -1,25 +1,31 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import uuid from 'react-native-uuid';
 
+import FormExit from './FormExit';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
-import CameraAlt from '../../../../assets/svg/camera_alt.svg';
-import Delete from '../../../../assets/svg/delete.svg';
-import ExpandMore from '../../../../assets/svg/expand_more.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
-import Divider from '../../../components/divider/Divider';
 import InputSelect from '../../../components/input-select/InputSelect';
-import InputText from '../../../components/input-text/InputText';
+import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
-import { Colors } from '../../../themes/theme';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'CreateExit'>;
 
-const newExit = () => {
+export type Exit = {
+  id: string;
+  cnt: number;
+  type: string;
+  notes: string;
+  image: string;
+  visible: boolean;
+};
+
+const newExit = (cnt: number): Exit => {
   return {
     id: uuid.v4() as string,
+    cnt,
     type: '',
     notes: '',
     image: '',
@@ -29,7 +35,9 @@ const newExit = () => {
 
 const CreateExitScreen = ({ navigation }: Props) => {
   const [property, setProperty] = useState('');
-  const [exits, setExits] = useState([newExit()]);
+  const [exits, setExits] = useState<Exit[]>([newExit(1)]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedExit, setSelectedExit] = useState<Exit>();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -48,92 +56,33 @@ const CreateExitScreen = ({ navigation }: Props) => {
           ]}
         />
       </View>
+
       {exits.map((exit, index) => (
-        <View key={exit.id}>
-          <View style={styles.formContainer}>
-            {exits.length > 1 && (
-              <View
-                style={[
-                  styles.exitTitleContainer,
-                  !exit.visible && styles.exitTitleContainerHidden,
-                ]}>
-                <TouchableOpacity
-                  style={styles.colapseButtonContainer}
-                  onPress={() => {
-                    const copyExits = [...exits];
-                    copyExits[index] = { ...exit, visible: !exit.visible };
-                    setExits(copyExits);
-                  }}>
-                  <Text style={styles.exitTitle}>Salida {index + 1}</Text>
-                  <ExpandMore />
-                </TouchableOpacity>
-                <Pressable
-                  style={({ pressed }) => [
-                    styles.deleteButtonContainer,
-                    pressed && styles.deleteButtonContainerPressed,
-                  ]}
-                  onPress={() => {
-                    const copyExits = exits.filter((value) => value !== exit);
-                    if (copyExits.length === 1) {
-                      copyExits[0] = { ...copyExits[0], visible: true };
-                    }
-                    setExits(copyExits);
-                  }}>
-                  {({ pressed }) => <Delete fill={pressed ? Colors.NEUTRAL : Colors.ALERT_RED} />}
-                </Pressable>
-              </View>
-            )}
-            {exit.visible && (
-              <>
-                <View style={styles.form}>
-                  <InputSelect
-                    label="Tipo de salida"
-                    placeholder="Selecciona"
-                    value={exit.type}
-                    onPress={(type) => {
-                      const copyExits = [...exits];
-                      copyExits[index] = { ...exit, type };
-                      setExits(copyExits);
-                    }}
-                    items={[
-                      { label: 'Cosecha', value: '1' },
-                      { label: 'Fitosanitaria', value: '2' },
-                      { label: 'Para monitoreo', value: '3' },
-                      { label: 'Otros', value: '4' },
-                    ]}
-                  />
-                  <InputText
-                    multiline
-                    label="Notas"
-                    placeholder="Notas"
-                    value={exit.notes}
-                    onChange={(notes) => {
-                      const copyExits = [...exits];
-                      copyExits[index] = { ...exit, notes };
-                      setExits(copyExits);
-                    }}
-                  />
-                </View>
-                <View style={styles.extraActions}>
-                  <CustomButton
-                    color="blue"
-                    text="Subir foto"
-                    iconLeft={<CameraAlt />}
-                    onPress={() => {}}
-                  />
-                </View>
-              </>
-            )}
-          </View>
-          <Divider />
-        </View>
+        <FormExit
+          key={exit.id}
+          exit={exit}
+          showTitle={exits.length > 1}
+          onPressDelete={() => {
+            setIsModalVisible(true);
+            setSelectedExit(exit);
+          }}
+          onChange={(exit) => {
+            const copyExits = [...exits];
+            copyExits[index] = exit;
+            setExits(copyExits);
+          }}
+        />
       ))}
+
       <View style={styles.extraActions}>
         <CustomButton
           color="white"
           text="Agregar más salidas"
           iconLeft={<AddCircle />}
-          onPress={() => setExits([...exits, newExit()])}
+          onPress={() => {
+            const lastCnt = Math.max(...exits.map((e) => e.cnt));
+            setExits([...exits, newExit(lastCnt + 1)]);
+          }}
         />
       </View>
 
@@ -145,6 +94,31 @@ const CreateExitScreen = ({ navigation }: Props) => {
           onPress={() => navigation.goBack()}
         />
       </View>
+
+      <ModalDelete
+        visible={isModalVisible}
+        title="Eliminar salida"
+        message={
+          <Text style={styles.modalText}>
+            ¿Estás seguro de que deseas
+            <Text style={styles.modalTextBold}> eliminar </Text>
+            la Salida {selectedExit?.cnt}? Esta acción no se puede deshacer.
+          </Text>
+        }
+        onCancel={() => setIsModalVisible(false)}
+        onConfirm={() => {
+          const copyExits = exits.filter((value) => value !== selectedExit);
+          if (copyExits.length === 1) {
+            copyExits[0] = {
+              ...copyExits[0],
+              visible: true,
+              cnt: 1,
+            };
+          }
+          setExits(copyExits);
+          setIsModalVisible(false);
+        }}
+      />
     </ScrollView>
   );
 };

@@ -5,7 +5,7 @@ import HeaderBackButton from '../components/header-back-button/HeaderBackButton'
 import HeaderOpenDrawerButton from '../components/header-open-drawer-button/HeaderOpenDrawerButton';
 import CreateExitScreen from '../screens/exits/create-exit/CreateExitScreen';
 import ListExitScreen from '../screens/exits/list-exits/ListExitScreen';
-import SeeExitScreen from '../screens/exits/see-exits/SeeExitScreen';
+import SeeExitScreen from '../screens/exits/see-exit/SeeExitScreen';
 import { Colors } from '../themes/theme';
 
 export type ExitStackParamList = {

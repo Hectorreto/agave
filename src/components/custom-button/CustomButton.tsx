@@ -1,13 +1,13 @@
 import { ReactElement } from 'react';
 import { Pressable, Text } from 'react-native';
 
-import styles, { blueStyles, lightBlueStyles, whiteStyles } from './styles';
+import styles, { blueStyles, lightBlueStyles, redStyles, whiteStyles } from './styles';
 
 type Props = {
   text: string;
   onPress: () => void;
   iconLeft?: ReactElement;
-  color: 'blue' | 'white' | 'lightBlue';
+  color: 'blue' | 'white' | 'lightBlue' | 'red';
 };
 
 const CustomButton = ({ text, onPress, iconLeft, color }: Props) => {
@@ -22,6 +22,8 @@ const CustomButton = ({ text, onPress, iconLeft, color }: Props) => {
         color === 'white' && pressed && whiteStyles.pressed,
         color === 'lightBlue' && !pressed && lightBlueStyles.container,
         color === 'lightBlue' && pressed && lightBlueStyles.pressed,
+        color === 'red' && !pressed && redStyles.container,
+        color === 'red' && pressed && redStyles.pressed,
       ]}
       onPress={onPress}>
       {iconLeft}
@@ -31,6 +33,7 @@ const CustomButton = ({ text, onPress, iconLeft, color }: Props) => {
           color === 'blue' && blueStyles.text,
           color === 'white' && whiteStyles.text,
           color === 'lightBlue' && lightBlueStyles.text,
+          color === 'red' && redStyles.text,
         ]}>
         {text}
       </Text>

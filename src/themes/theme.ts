@@ -18,6 +18,7 @@ export const Colors = {
   PRIMARY_800: '#001C27',
   SECONDARY: '#65B22E',
   ALERT_RED: '#EB5E55',
+  ALERT_RED_2: '#F8746B',
 };
 
 export const NavigationTheme: Theme = {
