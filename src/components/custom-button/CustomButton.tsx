@@ -33,7 +33,18 @@ const CustomButton = ({ text, onPress, IconLeft, color }: Props) => {
         disabled && styles.disabled,
       ]}
       onPress={onPress}>
-      {IconLeft && (disabled ? <IconLeft fill={Colors.NEUTRAL_500} /> : <IconLeft />)}
+      {IconLeft &&
+        (disabled ? (
+          <IconLeft fill={Colors.NEUTRAL_500} />
+        ) : color === 'blue' ? (
+          <IconLeft fill={Colors.NEUTRAL} />
+        ) : color === 'white' ? (
+          <IconLeft fill={Colors.PRIMARY} />
+        ) : color === 'lightBlue' ? (
+          <IconLeft fill={Colors.PRIMARY} />
+        ) : color === 'red' ? (
+          <IconLeft fill={Colors.NEUTRAL} />
+        ) : undefined)}
 
       <Text
         style={[

@@ -86,7 +86,7 @@ const CreateExitScreen = ({ navigation }: Props) => {
         />
       </View>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 8 }}>
+      <View style={styles.saveCancelButtons}>
         <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
         <CustomButton
           color="blue"

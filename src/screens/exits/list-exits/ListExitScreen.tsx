@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
+import AddCircle from '../../../../assets/svg/add_circle.svg';
 import ArrowDropDown from '../../../../assets/svg/arrow_drop_down.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
@@ -44,10 +45,11 @@ const ListExitScreen = ({ navigation }: Props) => {
         <ArrowDropDown style={styles.filterRightIcon} />
       </View>
       <View style={styles.map} />
-      <View style={styles.newExitContainer}>
+      <View style={styles.newItemContainer}>
         <CustomButton
           color="blue"
           text="Nueva salida"
+          IconLeft={AddCircle}
           onPress={() => navigation.navigate('CreateExit')}
         />
       </View>

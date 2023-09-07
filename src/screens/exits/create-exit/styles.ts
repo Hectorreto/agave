@@ -64,6 +64,11 @@ const styles = StyleSheet.create({
   modalTextBold: {
     fontWeight: 'bold',
   },
+  saveCancelButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 8,
+  },
 });
 
 export default styles;
