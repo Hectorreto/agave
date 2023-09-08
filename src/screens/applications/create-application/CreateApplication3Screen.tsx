@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView, Text, View } from 'react-native';
 
+import CreateApplicationTabs from './CreateApplicationTabs';
 import styles from './style';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
@@ -44,6 +45,8 @@ const data = [
 const CreateApplication3Screen = ({ navigation }: Props) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <CreateApplicationTabs index={3} />
+
       <PaginatedTable
         titles={['Producto', 'Cantidad total']}
         rows={data.map((value) => ({

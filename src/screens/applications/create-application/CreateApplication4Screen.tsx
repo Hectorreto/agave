@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView, Text, View } from 'react-native';
 
+import CreateApplicationTabs from './CreateApplicationTabs';
 import styles from './style';
 import CameraAlt from '../../../../assets/svg/camera_alt.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
@@ -14,6 +15,8 @@ const CreateApplication4Screen = ({ navigation }: Props) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <CreateApplicationTabs index={4} />
+
       <Text>¿Deseas iniciar esta aplicación?</Text>
 
       <CustomButton

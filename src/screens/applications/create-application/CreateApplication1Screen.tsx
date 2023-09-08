@@ -2,9 +2,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
+import CreateApplicationTabs from './CreateApplicationTabs';
 import styles from './style';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputSelect from '../../../components/input-select/InputSelect';
+import InputText from '../../../components/input-text/InputText';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication1'>;
@@ -14,6 +16,8 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <CreateApplicationTabs index={1} />
+
       <InputSelect
         label="Predio"
         placeholder="Selecciona"
@@ -50,17 +54,11 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
           { label: 'D', value: 'd' },
         ]}
       />
-      <InputSelect
+      <InputText
         label="Fecha programada"
         placeholder="dd/mm/aaaa"
         value={property}
-        onPress={setProperty}
-        items={[
-          { label: 'A', value: 'a' },
-          { label: 'B', value: 'b' },
-          { label: 'C', value: 'c' },
-          { label: 'D', value: 'd' },
-        ]}
+        onChange={setProperty}
       />
       <View style={styles.saveCancelButtons}>
         <CustomButton

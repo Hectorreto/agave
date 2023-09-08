@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
+import CreateApplicationTabs from './CreateApplicationTabs';
 import styles from './style';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputSelect from '../../../components/input-select/InputSelect';
@@ -16,6 +17,8 @@ const CreateApplication2Screen = ({ navigation }: Props) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <CreateApplicationTabs index={2} />
+
       <InputSelect
         label="No. de tambos a aplicar"
         placeholder="Selecciona"
