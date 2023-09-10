@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   inputLabel: {
-    color: '#545d63',
+    color: Colors.NEUTRAL_700,
     fontWeight: '600',
   },
   inputContainer: {
@@ -16,10 +16,11 @@ const styles = StyleSheet.create({
     paddingRight: 8,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: '#A6B1B9',
+    borderColor: Colors.NEUTRAL_400,
     borderRadius: 4,
-    backgroundColor: '#FEFEFE',
+    backgroundColor: Colors.NEUTRAL,
     flexDirection: 'row',
+    alignItems: 'center',
   },
   inputContainerDisabled: {
     backgroundColor: Colors.NEUTRAL_200,
@@ -48,6 +49,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     color: Colors.PRIMARY_800,
+  },
+  inputWithValue: {
+    borderColor: Colors.PRIMARY_400,
   },
 });
 

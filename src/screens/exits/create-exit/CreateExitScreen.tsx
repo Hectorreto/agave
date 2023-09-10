@@ -9,6 +9,7 @@ import AddCircle from '../../../../assets/svg/add_circle.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputSelect from '../../../components/input-select/InputSelect';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
+import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'CreateExit'>;
@@ -34,6 +35,7 @@ const newExit = (cnt: number): Exit => {
 };
 
 const CreateExitScreen = ({ navigation }: Props) => {
+  const { showNotification } = useNotification();
   const [property, setProperty] = useState('');
   const [exits, setExits] = useState<Exit[]>([newExit(1)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -88,11 +90,25 @@ const CreateExitScreen = ({ navigation }: Props) => {
 
       <View style={styles.saveCancelButtons}>
         <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
-        <CustomButton
-          color="blue"
-          text={exits.length > 1 ? 'Guardar todas' : 'Guardar'}
-          onPress={() => navigation.goBack()}
-        />
+        {exits.length > 1 ? (
+          <CustomButton
+            color="blue"
+            text="Guardar todas"
+            onPress={() => {
+              navigation.navigate('ListExits');
+              showNotification('Las salidas han sido creadas con éxito');
+            }}
+          />
+        ) : (
+          <CustomButton
+            color="blue"
+            text="Guardar"
+            onPress={() => {
+              navigation.navigate('ListExits');
+              showNotification('La salida ha sido creada con éxito');
+            }}
+          />
+        )}
       </View>
 
       <ModalDelete

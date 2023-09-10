@@ -22,6 +22,7 @@ const InputText = ({ label, placeholder, value, onChange, multiline }: Props) =>
         style={[
           multiline ? styles.textInputMultiline : styles.textInput,
           disabled && styles.disabled,
+          !disabled && value !== '' && styles.inputWithValue,
         ]}
         placeholder={placeholder}
         placeholderTextColor={Colors.NEUTRAL_600}

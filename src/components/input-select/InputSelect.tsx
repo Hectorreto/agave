@@ -26,7 +26,11 @@ const InputSelect = ({ label, placeholder, value, onPress, items }: Props) => {
       <Text style={styles.inputLabel}>{label}</Text>
       <View>
         <TouchableOpacity
-          style={[styles.inputContainer, disabled && styles.inputContainerDisabled]}
+          style={[
+            styles.inputContainer,
+            disabled && styles.inputContainerDisabled,
+            !disabled && value !== '' && styles.inputWithValue,
+          ]}
           onPress={() => setIsOpen(!isOpen)}
           disabled={disabled}>
           {text ? (

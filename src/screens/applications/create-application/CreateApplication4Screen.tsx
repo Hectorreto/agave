@@ -37,7 +37,7 @@ const CreateApplication4Screen = ({ navigation }: Props) => {
           text="Crear"
           onPress={() => {
             navigation.navigate('ListApplications');
-            showNotification('La aplicación ha sido finalizada con éxito');
+            showNotification('La aplicación ha sido creada con éxito');
           }}
         />
       </View>

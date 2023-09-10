@@ -1,17 +1,19 @@
 import { StyleSheet } from 'react-native';
 
+import { Colors } from '../../themes/theme';
+
 const styles = StyleSheet.create({
   container: {
     gap: 4,
   },
   inputLabel: {
-    color: '#545d63',
+    color: Colors.NEUTRAL_700,
     fontWeight: '600',
   },
   inputContainer: {
     flexDirection: 'row',
     borderWidth: 1,
-    borderColor: '#A6B1B9',
+    borderColor: Colors.NEUTRAL_400,
     borderRadius: 4,
     height: 44,
     justifyContent: 'space-between',

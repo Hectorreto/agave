@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   inputLabel: {
-    color: '#545d63',
+    color: Colors.NEUTRAL_700,
     fontWeight: '600',
   },
   textInput: {
@@ -15,24 +15,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: '#A6B1B9',
+    borderColor: Colors.NEUTRAL_400,
     borderRadius: 4,
-    backgroundColor: '#FEFEFE',
+    backgroundColor: Colors.NEUTRAL,
   },
   textInputMultiline: {
     height: 88,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: '#A6B1B9',
+    borderColor: Colors.NEUTRAL_400,
     borderRadius: 4,
-    backgroundColor: '#FEFEFE',
+    backgroundColor: Colors.NEUTRAL,
     textAlignVertical: 'top',
   },
   disabled: {
     backgroundColor: Colors.NEUTRAL_200,
     borderColor: Colors.NEUTRAL_400,
     color: Colors.NEUTRAL_700,
+  },
+  inputWithValue: {
+    borderColor: Colors.PRIMARY_400,
   },
 });
 

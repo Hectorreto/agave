@@ -5,14 +5,15 @@ import { ScrollView, View } from 'react-native';
 import CreateApplicationTabs from './CreateApplicationTabs';
 import styles from './style';
 import CustomButton from '../../../components/custom-button/CustomButton';
+import InputDate from '../../../components/input-date/InputDate';
 import InputSelect from '../../../components/input-select/InputSelect';
-import InputText from '../../../components/input-text/InputText';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication1'>;
 
 const CreateApplication1Screen = ({ navigation }: Props) => {
   const [property, setProperty] = useState('');
+  const [date, setDate] = useState<Date>();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -54,12 +55,7 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
           { label: 'D', value: 'd' },
         ]}
       />
-      <InputText
-        label="Fecha programada"
-        placeholder="dd/mm/aaaa"
-        value={property}
-        onChange={setProperty}
-      />
+      <InputDate label="Fecha programada" date={date} onChange={setDate} />
       <View style={styles.saveCancelButtons}>
         <CustomButton
           color="lightBlue"
