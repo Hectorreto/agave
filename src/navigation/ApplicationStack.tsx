@@ -7,6 +7,8 @@ import CreateApplication1Screen from '../screens/applications/create-application
 import CreateApplication2Screen from '../screens/applications/create-application/CreateApplication2Screen';
 import CreateApplication3Screen from '../screens/applications/create-application/CreateApplication3Screen';
 import CreateApplication4Screen from '../screens/applications/create-application/CreateApplication4Screen';
+import FinaliceApplication1 from '../screens/applications/finalice-application/FinaliceApplication1';
+import FinaliceApplication2 from '../screens/applications/finalice-application/FinaliceApplication2';
 import ListApplicationScreen from '../screens/applications/list-application/ListApplicationScreen';
 import { Colors } from '../themes/theme';
 
@@ -16,6 +18,8 @@ export type ApplicationStackParamList = {
   CreateApplication2: undefined;
   CreateApplication3: undefined;
   CreateApplication4: undefined;
+  FinaliceApplication1: undefined;
+  FinaliceApplication2: undefined;
 };
 
 const Stack = createNativeStackNavigator<ApplicationStackParamList>();
@@ -43,6 +47,20 @@ const ApplicationStack = () => {
             color: Colors.PRIMARY_700,
           },
           headerLeft: () => <HeaderOpenDrawerButton />,
+        }}
+      />
+      <Stack.Screen
+        name="FinaliceApplication1"
+        component={FinaliceApplication1}
+        options={{
+          title: 'Finalizar aplicación',
+        }}
+      />
+      <Stack.Screen
+        name="FinaliceApplication2"
+        component={FinaliceApplication2}
+        options={{
+          title: 'Finalizar aplicación',
         }}
       />
       <Stack.Screen

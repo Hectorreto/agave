@@ -4,7 +4,7 @@ import styles from './styles';
 import { Colors } from '../../themes/theme';
 
 type Props = {
-  label: string;
+  label?: string;
   placeholder: string;
   value: string;
   onChange?: (text: string) => void;
@@ -16,7 +16,7 @@ const InputText = ({ label, placeholder, value, onChange, multiline }: Props) =>
 
   return (
     <View style={styles.container}>
-      <Text style={styles.inputLabel}>{label}</Text>
+      {Boolean(label) && <Text style={styles.inputLabel}>{label}</Text>}
       <TextInput
         editable={!disabled}
         style={[

@@ -19,6 +19,7 @@ export const Colors = {
   PRIMARY_700: '#054B67',
   PRIMARY_800: '#001C27',
   SECONDARY: '#65B22E',
+  SECONDARY_50: '#E8FCD9',
   ALERT_RED: '#EB5E55',
   ALERT_RED_2: '#F8746B',
 };

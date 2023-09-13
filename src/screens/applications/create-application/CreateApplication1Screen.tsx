@@ -2,11 +2,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
-import CreateApplicationTabs from './CreateApplicationTabs';
-import styles from './style';
+import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputDate from '../../../components/input-date/InputDate';
 import InputSelect from '../../../components/input-select/InputSelect';
+import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication1'>;
@@ -19,7 +19,7 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <CreateApplicationTabs index={1} />
+      <TabIndicator titles={['General', '', '', '']} current={1} />
 
       <InputSelect
         label="Predio"

@@ -3,9 +3,9 @@ import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
+import Create from '../../../../assets/svg/create.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
-import MoreVert from '../../../../assets/svg/table/more_vert.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
@@ -68,13 +68,21 @@ const ListApplicationScreen = ({ navigation }: Props) => {
           values: [
             <Text style={styles.dataText}>{value.property}</Text>,
             <Text style={styles.dataText}>{value.month}</Text>,
-            <Text style={styles.dataText}>{value.state}</Text>,
+            <View style={styles.statusContainer}>
+              {value.state === 'inProcess' && (
+                <Text style={styles.statusInProcess}>En proceso</Text>
+              )}
+              {value.state === 'finalized' && <Text style={styles.statusText}>Finalizado</Text>}
+            </View>,
             <View style={styles.moreButton}>
-              <CustomButton
-                color="white"
-                Icon={MoreVert}
-                onPress={() => navigation.navigate('CreateApplication1')}
-              />
+              {value.state === 'inProcess' && (
+                <CustomButton
+                  color="white"
+                  Icon={Create}
+                  onPress={() => navigation.navigate('FinaliceApplication1')}
+                />
+              )}
+              {value.state === 'finalized' && <CustomButton color="white" Icon={Create} />}
             </View>,
           ],
         }))}

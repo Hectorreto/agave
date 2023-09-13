@@ -44,6 +44,7 @@ const CustomButton = ({ text, onPress, Icon, color }: Props) => {
         color === 'redWhite' && !pressed && redWhiteStyles.container,
         color === 'redWhite' && pressed && redWhiteStyles.pressed,
         disabled && styles.disabled,
+        disabled && !text && Icon && styles.disabledOnlyIcon,
       ]}
       onPress={onPress}>
       {({ pressed }) => (

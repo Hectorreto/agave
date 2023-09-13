@@ -8,19 +8,23 @@ import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
-type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication4'>;
+type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplication2'>;
 
-const CreateApplication4Screen = ({ navigation }: Props) => {
+const FinaliceApplication2 = ({ navigation }: Props) => {
   const { showNotification } = useNotification();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TabIndicator titles={['', '', '', 'Iniciar aplicación']} current={4} />
-
-      <Text style={styles.helper}>¿Deseas iniciar esta aplicación?</Text>
+      <TabIndicator titles={['Ticket', 'Finalizar aplicación']} current={2} />
+      <Text style={styles.helper}>¿Deseas finalizar esta aplicación?</Text>
 
       <View style={styles.helperButton}>
-        <CustomButton color="blue" text="Iniciar aplicación" Icon={CameraAlt} onPress={() => {}} />
+        <CustomButton
+          color="blue"
+          text="Finalizar aplicación"
+          Icon={CameraAlt}
+          onPress={() => {}}
+        />
       </View>
 
       <View style={styles.saveCancelButtons}>
@@ -34,7 +38,7 @@ const CreateApplication4Screen = ({ navigation }: Props) => {
           text="Crear"
           onPress={() => {
             navigation.navigate('ListApplications');
-            showNotification('La aplicación ha sido creada con éxito');
+            showNotification('La aplicación ha sido finalizada con éxito');
           }}
         />
       </View>
@@ -42,4 +46,4 @@ const CreateApplication4Screen = ({ navigation }: Props) => {
   );
 };
 
-export default CreateApplication4Screen;
+export default FinaliceApplication2;

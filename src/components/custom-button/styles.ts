@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
   textDisabled: {
     color: Colors.NEUTRAL_500,
   },
+  disabledOnlyIcon: {
+    backgroundColor: Colors.NEUTRAL,
+  },
 });
 
 export const blueStyles = StyleSheet.create({

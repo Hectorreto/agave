@@ -35,6 +35,25 @@ const styles = StyleSheet.create({
   dataText: {
     marginHorizontal: 16,
   },
+  statusContainer: {
+    marginHorizontal: 16,
+    alignItems: 'center',
+  },
+  statusText: {
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: Colors.NEUTRAL_500,
+  },
+  statusInProcess: {
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: Colors.SECONDARY,
+    backgroundColor: Colors.SECONDARY_50,
+  },
   formattedDate: {
     textAlign: 'center',
     alignItems: 'center',

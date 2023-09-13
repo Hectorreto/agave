@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import uuid from 'react-native-uuid';
 
-import CreateApplicationTabs from './CreateApplicationTabs';
 import FormProduct from './FormProduct';
-import styles from './style';
+import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
+import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication2'>;
@@ -36,7 +36,7 @@ const CreateApplication2Screen = ({ navigation }: Props) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <CreateApplicationTabs index={2} />
+      <TabIndicator titles={['', 'Receta', '', '']} current={2} />
 
       <InputText
         label="No. de tambos a aplicar"
