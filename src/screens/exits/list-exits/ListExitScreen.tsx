@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
@@ -49,7 +49,7 @@ const ListExitScreen = ({ navigation }: Props) => {
         <CustomButton
           color="blue"
           text="Nueva salida"
-          IconLeft={AddCircle}
+          Icon={AddCircle}
           onPress={() => navigation.navigate('CreateExit')}
         />
       </View>
@@ -69,11 +69,13 @@ const ListExitScreen = ({ navigation }: Props) => {
             <Text style={styles.dataText}>{value.type}</Text>,
             <Text style={styles.dataText}>{value.plants}</Text>,
             <Text style={styles.formattedDate}>{formatDateTime(value.date)}</Text>,
-            <Pressable
-              style={({ pressed }) => [styles.moreButton, pressed && styles.moreButtonPressed]}
-              onPress={() => navigation.navigate('SeeExit')}>
-              <MoreVert />
-            </Pressable>,
+            <View style={styles.moreButton}>
+              <CustomButton
+                color="blueWhite"
+                Icon={MoreVert}
+                onPress={() => navigation.navigate('SeeExit')}
+              />
+            </View>,
           ],
         }))}
       />

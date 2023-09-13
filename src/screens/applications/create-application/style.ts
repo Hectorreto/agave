@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     gap: 16,
+    flexGrow: 1,
   },
   saveCancelButtons: {
     flexDirection: 'row',
@@ -52,6 +53,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: Colors.PRIMARY_800,
+  },
+  formContainer: {
+    gap: 4,
+  },
+  formTopContainer: {
+    gap: 16,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  formTopInputContainer: {
+    flex: 1,
+  },
+  formTopButtonContainer: {
+    paddingVertical: 6,
+  },
+  formBottomContainer: {
+    marginLeft: 24,
+  },
+  modalText: {
+    textAlign: 'center',
+  },
+  modalTextBold: {
+    fontWeight: 'bold',
+  },
+  pdfButton: {
+    alignItems: 'flex-end',
   },
 });
 

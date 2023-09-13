@@ -44,7 +44,7 @@ const SeeExitScreen = () => {
       <InputText label="Notas" placeholder="Notas" value={exit.plants} />
       <InputText multiline label="Notas" placeholder="Notas" value={exit.notes} />
       <View style={styles.uploadImage}>
-        <CustomButton color="blue" text="Cambiar foto" IconLeft={CameraAlt} />
+        <CustomButton color="blue" text="Cambiar foto" Icon={CameraAlt} />
       </View>
       <Divider />
       <View style={styles.infoContainer}>

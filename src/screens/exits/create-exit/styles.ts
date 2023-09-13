@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     gap: 16,
+    flexGrow: 1,
   },
   helper: {
     color: Colors.NEUTRAL_700,
@@ -39,18 +40,6 @@ const styles = StyleSheet.create({
   },
   propertyContainer: {
     zIndex: 2,
-  },
-  deleteButtonContainer: {
-    width: 32,
-    height: 32,
-    borderWidth: 2,
-    borderColor: Colors.ALERT_RED,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  deleteButtonContainerPressed: {
-    backgroundColor: Colors.ALERT_RED,
   },
   colapseButtonContainer: {
     flex: 1,

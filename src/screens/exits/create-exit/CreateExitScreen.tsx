@@ -37,7 +37,7 @@ const newExit = (cnt: number): Exit => {
 const CreateExitScreen = ({ navigation }: Props) => {
   const { showNotification } = useNotification();
   const [property, setProperty] = useState('');
-  const [exits, setExits] = useState<Exit[]>([newExit(1)]);
+  const [exits, setExits] = useState([newExit(1)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedExit, setSelectedExit] = useState<Exit>();
 
@@ -80,7 +80,7 @@ const CreateExitScreen = ({ navigation }: Props) => {
         <CustomButton
           color="white"
           text="Agregar más salidas"
-          IconLeft={AddCircle}
+          Icon={AddCircle}
           onPress={() => {
             const lastCnt = Math.max(...exits.map((e) => e.cnt));
             setExits([...exits, newExit(lastCnt + 1)]);

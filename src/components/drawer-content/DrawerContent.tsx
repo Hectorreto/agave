@@ -2,7 +2,7 @@ import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript
 import { TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Item from './Item';
+import DrawerItem from './DrawerItem';
 import styles from './styles';
 import Agriculture from '../../../assets/svg/header/agriculture.svg';
 import Grass from '../../../assets/svg/header/grass.svg';
@@ -24,7 +24,7 @@ const DrawerContent = ({ navigation }: Props) => {
         </TouchableOpacity>
       </View>
       <View style={styles.primaryContainer}>
-        <Item
+        <DrawerItem
           Icon={Agriculture}
           label="Agregar nueva salida"
           onPress={() =>
@@ -34,7 +34,7 @@ const DrawerContent = ({ navigation }: Props) => {
             })
           }
         />
-        <Item
+        <DrawerItem
           Icon={Grass}
           label="Agregar nuevo monitoreo"
           onPress={() =>
@@ -44,7 +44,7 @@ const DrawerContent = ({ navigation }: Props) => {
             })
           }
         />
-        <Item
+        <DrawerItem
           Icon={Science}
           label="Agregar nueva aplicación"
           onPress={() =>
@@ -56,12 +56,12 @@ const DrawerContent = ({ navigation }: Props) => {
         />
       </View>
       <View style={styles.secondaryContainer}>
-        <Item
+        <DrawerItem
           Icon={Lock}
           label="Cambiar contraseña"
           onPress={() => navigation.navigate('ChangePass')}
         />
-        <Item
+        <DrawerItem
           Icon={Logout}
           label="Cerrar sesión"
           onPress={() => {

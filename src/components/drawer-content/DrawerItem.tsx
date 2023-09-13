@@ -11,7 +11,7 @@ type Props = {
   onPress: () => void;
 };
 
-const Item = ({ Icon, label, onPress }: Props) => {
+const DrawerItem = ({ Icon, label, onPress }: Props) => {
   return (
     <Pressable
       style={({ pressed }) => [
@@ -27,4 +27,4 @@ const Item = ({ Icon, label, onPress }: Props) => {
   );
 };
 
-export default Item;
+export default DrawerItem;

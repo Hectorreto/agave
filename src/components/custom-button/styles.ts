@@ -8,12 +8,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     alignItems: 'center',
+  },
+  containerWithText: {
     paddingVertical: 10,
     paddingHorizontal: 32,
   },
-  containerWithIconLeft: {
+  containerWithIcon: {
+    paddingVertical: 10,
     paddingLeft: 16,
     paddingRight: 20,
+  },
+  containerOnlyIcon: {
+    height: 32,
+    width: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     fontWeight: '600',
@@ -36,6 +45,22 @@ export const blueStyles = StyleSheet.create({
   pressed: {
     backgroundColor: Colors.PRIMARY_300,
     borderColor: Colors.PRIMARY_300,
+    borderWidth: 2,
+  },
+  text: {
+    color: Colors.NEUTRAL,
+  },
+});
+
+export const blueWhiteStyles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.NEUTRAL,
+    borderColor: Colors.PRIMARY,
+    borderWidth: 2,
+  },
+  pressed: {
+    backgroundColor: Colors.PRIMARY_100,
+    borderColor: Colors.PRIMARY_100,
     borderWidth: 2,
   },
   text: {
@@ -78,6 +103,22 @@ export const lightBlueStyles = StyleSheet.create({
 export const redStyles = StyleSheet.create({
   container: {
     backgroundColor: Colors.ALERT_RED,
+    borderColor: Colors.ALERT_RED,
+    borderWidth: 2,
+  },
+  pressed: {
+    backgroundColor: Colors.ALERT_RED_2,
+    borderColor: Colors.ALERT_RED_2,
+    borderWidth: 2,
+  },
+  text: {
+    color: Colors.NEUTRAL,
+  },
+});
+
+export const redWhiteStyles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.NEUTRAL,
     borderColor: Colors.ALERT_RED,
     borderWidth: 2,
   },

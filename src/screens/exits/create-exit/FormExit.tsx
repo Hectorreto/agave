@@ -1,4 +1,4 @@
-import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 import { Exit } from './CreateExitScreen';
 import styles from './styles';
@@ -9,7 +9,6 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
-import { Colors } from '../../../themes/theme';
 
 type Props = {
   exit: Exit;
@@ -33,14 +32,7 @@ const FormExit = ({ showTitle, exit, onPressDelete, onChange }: Props) => {
               <Text style={styles.exitTitle}>Salida {exit.cnt}</Text>
               <ExpandMore />
             </TouchableOpacity>
-            <Pressable
-              style={({ pressed }) => [
-                styles.deleteButtonContainer,
-                pressed && styles.deleteButtonContainerPressed,
-              ]}
-              onPress={onPressDelete}>
-              {({ pressed }) => <Delete fill={pressed ? Colors.NEUTRAL : Colors.ALERT_RED} />}
-            </Pressable>
+            <CustomButton color="redWhite" Icon={Delete} onPress={onPressDelete} />
           </View>
         )}
         {exit.visible && (
@@ -71,12 +63,7 @@ const FormExit = ({ showTitle, exit, onPressDelete, onChange }: Props) => {
               />
             </View>
             <View style={styles.extraActions}>
-              <CustomButton
-                color="blue"
-                text="Subir foto"
-                IconLeft={CameraAlt}
-                onPress={() => {}}
-              />
+              <CustomButton color="blue" text="Subir foto" Icon={CameraAlt} onPress={() => {}} />
             </View>
           </>
         )}

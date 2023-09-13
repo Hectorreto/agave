@@ -13,6 +13,8 @@ type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplicatio
 
 const CreateApplication1Screen = ({ navigation }: Props) => {
   const [property, setProperty] = useState('');
+  const [concept, setConcept] = useState('');
+  const [month, setMonth] = useState('');
   const [date, setDate] = useState<Date>();
 
   return (
@@ -34,8 +36,8 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
       <InputSelect
         label="Concepto"
         placeholder="Selecciona"
-        value={property}
-        onPress={setProperty}
+        value={concept}
+        onPress={setConcept}
         items={[
           { label: 'A', value: 'a' },
           { label: 'B', value: 'b' },
@@ -46,13 +48,21 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
       <InputSelect
         label="Mes de aplicación"
         placeholder="Selecciona"
-        value={property}
-        onPress={setProperty}
+        value={month}
+        onPress={setMonth}
         items={[
-          { label: 'A', value: 'a' },
-          { label: 'B', value: 'b' },
-          { label: 'C', value: 'c' },
-          { label: 'D', value: 'd' },
+          { label: 'Enero', value: '0' },
+          { label: 'Febrero', value: '1' },
+          { label: 'Marzo', value: '2' },
+          { label: 'Abril', value: '3' },
+          { label: 'Mayo', value: '4' },
+          { label: 'Junio', value: '5' },
+          { label: 'Julio', value: '6' },
+          { label: 'Agosto', value: '7' },
+          { label: 'Septiembre', value: '8' },
+          { label: 'Octubre', value: '9' },
+          { label: 'Noviembre', value: '10' },
+          { label: 'Diciembre', value: '11' },
         ]}
       />
       <InputDate label="Fecha programada" date={date} onChange={setDate} />

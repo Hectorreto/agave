@@ -4,6 +4,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
 import Today from '../../../assets/svg/today.svg';
+import { formatDate } from '../../utils/dateUtils';
 
 type Props = {
   label: string;
@@ -27,7 +28,7 @@ const InputDate = ({ label, date, onChange }: Props) => {
           ]}
           onPress={() => setIsOpen(true)}>
           {date ? (
-            <Text style={styles.inputValue}>{date.toDateString()}</Text>
+            <Text style={styles.inputValue}>{formatDate(date)}</Text>
           ) : (
             <Text style={styles.inputPlaceholder}>dd/mm/aaaa</Text>
           )}

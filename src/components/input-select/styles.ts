@@ -41,9 +41,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: Colors.NEUTRAL,
     width: '100%',
+    maxHeight: 44 * 4,
   },
   listItemContainer: {
     borderRadius: 4,
+    height: 44,
+    backgroundColor: Colors.NEUTRAL,
   },
   listItem: {
     paddingHorizontal: 16,

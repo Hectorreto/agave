@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
@@ -69,11 +69,13 @@ const ListApplicationScreen = ({ navigation }: Props) => {
             <Text style={styles.dataText}>{value.property}</Text>,
             <Text style={styles.dataText}>{value.month}</Text>,
             <Text style={styles.dataText}>{value.state}</Text>,
-            <Pressable
-              style={({ pressed }) => [styles.moreButton, pressed && styles.moreButtonPressed]}
-              onPress={() => navigation.navigate('CreateApplication1')}>
-              <MoreVert />
-            </Pressable>,
+            <View style={styles.moreButton}>
+              <CustomButton
+                color="white"
+                Icon={MoreVert}
+                onPress={() => navigation.navigate('CreateApplication1')}
+              />
+            </View>,
           ],
         }))}
       />
@@ -81,7 +83,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
         <CustomButton
           text="Nueva aplicación"
           color="blue"
-          IconLeft={AddCircle}
+          Icon={AddCircle}
           onPress={() => navigation.navigate('CreateApplication1')}
         />
       </View>

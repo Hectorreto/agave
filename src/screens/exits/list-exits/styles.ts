@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-import { Colors, shadowStyle } from '../../../themes/theme';
+import { Colors } from '../../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
     padding: 24,
     gap: 16,
+    flexGrow: 1,
   },
   filterContainer: {
     width: 200,
@@ -63,20 +64,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   moreButton: {
-    ...shadowStyle,
-    height: 32,
-    width: 32,
-    borderWidth: 2,
-    borderRadius: 8,
-    borderColor: Colors.PRIMARY,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.NEUTRAL,
     marginHorizontal: 8,
-  },
-  moreButtonPressed: {
-    backgroundColor: Colors.PRIMARY_100,
-    borderColor: Colors.PRIMARY_100,
   },
 });
 

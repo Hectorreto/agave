@@ -58,7 +58,9 @@ const CreateApplication3Screen = ({ navigation }: Props) => {
         }))}
       />
 
-      <CustomButton color="white" text="Ver receta en PDF" onPress={() => {}} />
+      <View style={styles.pdfButton}>
+        <CustomButton color="white" text="Ver receta en PDF" onPress={() => {}} />
+      </View>
 
       <View style={styles.saveCancelButtons}>
         <CustomButton

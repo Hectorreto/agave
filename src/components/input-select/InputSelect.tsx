@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 import styles from './styles';
 import ArrowDropDown from '../../../assets/svg/arrow_drop_down.svg';
@@ -21,8 +22,18 @@ const InputSelect = ({ label, placeholder, value, onPress, items }: Props) => {
   const text = items.find((item) => item.value === value)?.label;
   const disabled = !onPress;
 
+  const ref = useRef<View>(null);
+  const [pageY, setPageY] = useState(0);
+
   return (
-    <View style={[styles.container, isOpen && { zIndex: 1 }]}>
+    <View
+      style={[styles.container, isOpen && { zIndex: (1000 * 1000 * 1000) / (pageY || 1) }]}
+      ref={ref}
+      onLayout={() => {
+        ref.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
+          setPageY(pageY);
+        });
+      }}>
       <Text style={styles.inputLabel}>{label}</Text>
       <View>
         <TouchableOpacity
@@ -48,7 +59,7 @@ const InputSelect = ({ label, placeholder, value, onPress, items }: Props) => {
         </TouchableOpacity>
         <View>
           {isOpen && onPress && (
-            <View style={styles.dropdown}>
+            <ScrollView style={styles.dropdown}>
               {items.map((item) => (
                 <Pressable
                   key={item.value}
@@ -57,15 +68,13 @@ const InputSelect = ({ label, placeholder, value, onPress, items }: Props) => {
                     setIsOpen(false);
                   }}
                   style={({ pressed }) => [
-                    pressed
-                      ? { backgroundColor: Colors.PRIMARY_100 }
-                      : { backgroundColor: Colors.NEUTRAL },
                     styles.listItemContainer,
+                    pressed && { backgroundColor: Colors.PRIMARY_100 },
                   ]}>
                   <Text style={styles.listItem}>{item.label}</Text>
                 </Pressable>
               ))}
-            </View>
+            </ScrollView>
           )}
         </View>
       </View>

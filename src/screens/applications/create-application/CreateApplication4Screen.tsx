@@ -19,12 +19,7 @@ const CreateApplication4Screen = ({ navigation }: Props) => {
 
       <Text>¿Deseas iniciar esta aplicación?</Text>
 
-      <CustomButton
-        color="blue"
-        text="Iniciar aplicación"
-        IconLeft={CameraAlt}
-        onPress={() => {}}
-      />
+      <CustomButton color="blue" text="Iniciar aplicación" Icon={CameraAlt} onPress={() => {}} />
 
       <View style={styles.saveCancelButtons}>
         <CustomButton

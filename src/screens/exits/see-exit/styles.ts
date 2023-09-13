@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 24,
     gap: 16,
+    flexGrow: 1,
   },
   helper: {
     color: Colors.NEUTRAL_700,
