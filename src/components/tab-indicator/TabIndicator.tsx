@@ -34,12 +34,21 @@ type Props = {
 const TabIndicator = ({ current, titles }: Props) => {
   return (
     <View style={styles.container}>
-      {titles.map((label, index) => (
-        <>
-          {index > 0 && <View style={styles.divider} />}
-          <Item value={index + 1} current={current} label={label} />
-        </>
-      ))}
+      {titles
+        .reduce<string[]>((array, value, index) => {
+          if (index > 0) {
+            array.push('');
+          }
+          array.push(value);
+          return array;
+        }, [])
+        .map((label, index) =>
+          index % 2 === 0 ? (
+            <Item key={index} value={index / 2 + 1} current={current} label={label} />
+          ) : (
+            <View key={index} style={styles.divider} />
+          )
+        )}
     </View>
   );
 };
