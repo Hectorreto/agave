@@ -41,7 +41,7 @@ const ListPropertyScreen = ({ navigation }: Props) => {
               <CustomButton
                 color="blueWhite"
                 Icon={Visibility}
-                onPress={() => navigation.navigate('PropertyBoard')}
+                onPress={() => navigation.navigate('PropertyTabs')}
               />
             </View>,
           ],

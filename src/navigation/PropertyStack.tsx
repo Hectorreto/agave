@@ -1,19 +1,15 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
+import PropertyTabs from './PropertyTabs';
 import HeaderBackButton from '../components/header-back-button/HeaderBackButton';
 import HeaderOpenDrawerButton from '../components/header-open-drawer-button/HeaderOpenDrawerButton';
-import PropertyGeneralInfoScreen from '../screens/property/general-info/PropertyGeneralInfoScreen';
 import ListPropertyScreen from '../screens/property/list-property/ListPropertyScreen';
-import PropertyPlantExitsScreen from '../screens/property/plant-exits/PropertyPlantExitsScreen';
-import PropertyBoardScreen from '../screens/property/property-board/PropertyBoardScreen';
 import { Colors } from '../themes/theme';
 
 export type PropertyStackParamList = {
   ListProperties: undefined;
-  PropertyBoard: undefined;
-  PropertyGeneralInfo: undefined;
-  PropertyPlantExits: undefined;
+  PropertyTabs: undefined;
 };
 
 const Stack = createNativeStackNavigator<PropertyStackParamList>();
@@ -44,18 +40,8 @@ const PropertyStack = () => {
         }}
       />
       <Stack.Screen
-        name="PropertyBoard"
-        component={PropertyBoardScreen}
-        options={{ title: 'Ver predio' }}
-      />
-      <Stack.Screen
-        name="PropertyGeneralInfo"
-        component={PropertyGeneralInfoScreen}
-        options={{ title: 'Ver predio' }}
-      />
-      <Stack.Screen
-        name="PropertyPlantExits"
-        component={PropertyPlantExitsScreen}
+        name="PropertyTabs"
+        component={PropertyTabs}
         options={{ title: 'Ver predio' }}
       />
     </Stack.Navigator>

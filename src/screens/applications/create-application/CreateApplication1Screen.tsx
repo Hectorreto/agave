@@ -25,7 +25,7 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
         label="Predio"
         placeholder="Selecciona"
         value={property}
-        onPress={setProperty}
+        onChange={setProperty}
         items={[
           { label: 'A', value: 'a' },
           { label: 'B', value: 'b' },
@@ -37,7 +37,7 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
         label="Concepto"
         placeholder="Selecciona"
         value={concept}
-        onPress={setConcept}
+        onChange={setConcept}
         items={[
           { label: 'A', value: 'a' },
           { label: 'B', value: 'b' },
@@ -49,7 +49,7 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
         label="Mes de aplicación"
         placeholder="Selecciona"
         value={month}
-        onPress={setMonth}
+        onChange={setMonth}
         items={[
           { label: 'Enero', value: '0' },
           { label: 'Febrero', value: '1' },

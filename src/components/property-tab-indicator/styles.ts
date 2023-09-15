@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
   tabActive: {
     borderBottomWidth: 2,
     borderColor: Colors.PRIMARY,
+    backgroundColor: Colors.PRIMARY_100,
+  },
+  tabPressed: {
+    backgroundColor: Colors.PRIMARY_50,
   },
   text: {
     textAlign: 'center',

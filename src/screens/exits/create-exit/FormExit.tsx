@@ -42,7 +42,7 @@ const FormExit = ({ showTitle, exit, onPressDelete, onChange }: Props) => {
                 label="Tipo de salida"
                 placeholder="Selecciona"
                 value={exit.type}
-                onPress={(type) => {
+                onChange={(type) => {
                   onChange({ ...exit, type });
                 }}
                 items={[

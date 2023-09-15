@@ -49,7 +49,7 @@ const CreateExitScreen = ({ navigation }: Props) => {
           label="Predio"
           placeholder="Selecciona"
           value={property}
-          onPress={setProperty}
+          onChange={setProperty}
           items={[
             { label: 'A', value: 'a' },
             { label: 'B', value: 'b' },

@@ -68,11 +68,13 @@ const ListApplicationScreen = ({ navigation }: Props) => {
           values: [
             <Text style={styles.dataText}>{value.property}</Text>,
             <Text style={styles.dataText}>{value.month}</Text>,
-            <View style={styles.statusContainer}>
-              {value.state === 'inProcess' && (
-                <Text style={styles.statusInProcess}>En proceso</Text>
-              )}
-              {value.state === 'finalized' && <Text style={styles.statusText}>Finalizado</Text>}
+            <View
+              style={[
+                styles.statusContainer,
+                value.state === 'inProcess' && styles.statusInProcess,
+              ]}>
+              {value.state === 'inProcess' && <Text>En proceso</Text>}
+              {value.state === 'finalized' && <Text>Finalizado</Text>}
             </View>,
             <View style={styles.moreButton}>
               {value.state === 'inProcess' && (

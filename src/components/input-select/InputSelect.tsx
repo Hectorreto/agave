@@ -10,17 +10,17 @@ type Props = {
   label: string;
   placeholder: string;
   value: string;
-  onPress?: (text: string) => void;
+  onChange?: (text: string) => void;
   items: {
     label: string;
     value: string;
   }[];
 };
 
-const InputSelect = ({ label, placeholder, value, onPress, items }: Props) => {
+const InputSelect = ({ label, placeholder, value, onChange, items }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const text = items.find((item) => item.value === value)?.label;
-  const disabled = !onPress;
+  const disabled = !onChange;
 
   const ref = useRef<View>(null);
   const [pageY, setPageY] = useState(0);
@@ -58,13 +58,13 @@ const InputSelect = ({ label, placeholder, value, onPress, items }: Props) => {
           <ArrowDropDown />
         </TouchableOpacity>
         <View>
-          {isOpen && onPress && (
+          {isOpen && onChange && (
             <ScrollView style={styles.dropdown}>
               {items.map((item) => (
                 <Pressable
                   key={item.value}
                   onPress={() => {
-                    onPress(item.value);
+                    onChange(item.value);
                     setIsOpen(false);
                   }}
                   style={({ pressed }) => [
