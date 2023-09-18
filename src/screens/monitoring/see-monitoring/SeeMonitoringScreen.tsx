@@ -1,6 +1,6 @@
 import { Text, View } from 'react-native';
 
-const CreateMonitoringScreen = () => {
+const SeeMonitoringScreen = () => {
   return (
     <View>
       <Text>Monitoring!</Text>
@@ -8,4 +8,4 @@ const CreateMonitoringScreen = () => {
   );
 };
 
-export default CreateMonitoringScreen;
+export default SeeMonitoringScreen;
