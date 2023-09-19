@@ -23,6 +23,32 @@ const styles = StyleSheet.create({
   modalForm: {
     gap: 16,
   },
+  saveCancelButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 8,
+  },
+  bottomFormContainer: {
+    gap: 16,
+  },
+  bottomFormInputsContainer: {
+    gap: 4,
+  },
+  bottomFormTitle: {
+    color: Colors.PRIMARY_600,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  bottomFormDoubleInput: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+  bottomFormDoubleInputItem: {
+    flex: 1,
+  },
+  bottomFormUploadImageButton: {
+    alignItems: 'center',
+  },
 });
 
 export default styles;

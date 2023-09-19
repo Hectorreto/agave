@@ -4,6 +4,7 @@ import { Exit } from './CreateExitScreen';
 import styles from './styles';
 import CameraAlt from '../../../../assets/svg/camera_alt.svg';
 import Delete from '../../../../assets/svg/delete.svg';
+import ExpandLess from '../../../../assets/svg/expand_less.svg';
 import ExpandMore from '../../../../assets/svg/expand_more.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
@@ -30,7 +31,7 @@ const FormExit = ({ showTitle, exit, onPressDelete, onChange }: Props) => {
                 onChange({ ...exit, visible: !exit.visible });
               }}>
               <Text style={styles.exitTitle}>Salida {exit.cnt}</Text>
-              <ExpandMore />
+              {exit.visible ? <ExpandLess /> : <ExpandMore />}
             </TouchableOpacity>
             <CustomButton color="redWhite" Icon={Delete} onPress={onPressDelete} />
           </View>

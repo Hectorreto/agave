@@ -9,12 +9,12 @@ import CheckBoxOnPressed from '../../../assets/svg/check_box_pressed.svg';
 type Props = {
   label: string;
   value: boolean;
-  onPress: () => void;
+  onChange: (value: boolean) => void;
 };
 
-const Checkbox = ({ label, value, onPress }: Props) => {
+const Checkbox = ({ label, value, onChange }: Props) => {
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <Pressable style={styles.container} onPress={() => onChange(!value)}>
       {({ pressed }) => (
         <>
           {!value && !pressed && <CheckBoxOff />}
