@@ -6,7 +6,9 @@ import uuid from 'react-native-uuid';
 import FormExit from './FormExit';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
+import Delete from '../../../../assets/svg/delete.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
+import Expandable from '../../../components/expandable/Expandable';
 import InputSelect from '../../../components/input-select/InputSelect';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
@@ -20,7 +22,6 @@ export type Exit = {
   type: string;
   notes: string;
   image: string;
-  visible: boolean;
 };
 
 const newExit = (cnt: number): Exit => {
@@ -30,7 +31,6 @@ const newExit = (cnt: number): Exit => {
     type: '',
     notes: '',
     image: '',
-    visible: true,
   };
 };
 
@@ -60,20 +60,35 @@ const CreateExitScreen = ({ navigation }: Props) => {
       </View>
 
       {exits.map((exit, index) => (
-        <FormExit
+        <Expandable
           key={exit.id}
-          exit={exit}
-          showTitle={exits.length > 1}
-          onPressDelete={() => {
-            setIsModalVisible(true);
-            setSelectedExit(exit);
-          }}
-          onChange={(exit) => {
-            const copyExits = [...exits];
-            copyExits[index] = exit;
-            setExits(copyExits);
-          }}
-        />
+          label={`Salida ${exit.cnt}`}
+          hideLabelAndShowContent={exits.length === 1}
+          right={
+            <CustomButton
+              color="redWhite"
+              Icon={Delete}
+              onPress={() => {
+                setIsModalVisible(true);
+                setSelectedExit(exit);
+              }}
+            />
+          }>
+          <FormExit
+            key={exit.id}
+            exit={exit}
+            showTitle={exits.length > 1}
+            onPressDelete={() => {
+              setIsModalVisible(true);
+              setSelectedExit(exit);
+            }}
+            onChange={(exit) => {
+              const copyExits = [...exits];
+              copyExits[index] = exit;
+              setExits(copyExits);
+            }}
+          />
+        </Expandable>
       ))}
 
       <View style={styles.extraActions}>
@@ -127,7 +142,6 @@ const CreateExitScreen = ({ navigation }: Props) => {
           if (copyExits.length === 1) {
             copyExits[0] = {
               ...copyExits[0],
-              visible: true,
               cnt: 1,
             };
           }

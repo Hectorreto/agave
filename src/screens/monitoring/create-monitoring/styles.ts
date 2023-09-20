@@ -49,6 +49,28 @@ const styles = StyleSheet.create({
   bottomFormUploadImageButton: {
     alignItems: 'center',
   },
+  radioContainer: {
+    gap: 4,
+  },
+  radioLabel: {
+    color: Colors.NEUTRAL_700,
+    fontWeight: '600',
+  },
+  radioInnerContainer: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  radioTitle: {
+    color: Colors.PRIMARY_700,
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  modalDeleteText: {
+    textAlign: 'center',
+  },
+  modalDeleteTextBold: {
+    fontWeight: 'bold',
+  },
 });
 
 export default styles;

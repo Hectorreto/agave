@@ -10,9 +10,10 @@ type Props = {
   label: string;
   hideLabelAndShowContent?: boolean;
   children: ReactNode;
+  right?: ReactNode;
 };
 
-const Expandable = ({ label, children, hideLabelAndShowContent }: Props) => {
+const Expandable = ({ label, children, hideLabelAndShowContent, right }: Props) => {
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const Expandable = ({ label, children, hideLabelAndShowContent }: Props) => {
           <Text style={styles.title}>{label}</Text>
           {isOpen ? <ExpandLess /> : <ExpandMore />}
         </TouchableOpacity>
-        <View style={styles.icon} />
+        <View style={styles.icon}>{right}</View>
       </View>
       {isOpen && children}
       <Divider />
