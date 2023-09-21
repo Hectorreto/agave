@@ -1,0 +1,41 @@
+import { StyleSheet } from 'react-native';
+
+import { Colors } from '../../../themes/theme';
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 24,
+    gap: 16,
+    flexGrow: 1,
+  },
+  radioContainer: {
+    gap: 4,
+  },
+  radioLabel: {
+    color: Colors.NEUTRAL_700,
+    fontWeight: '600',
+  },
+  radioInnerContainer: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  radioTitle: {
+    color: Colors.PRIMARY_700,
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  helper2: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: Colors.NEUTRAL_700,
+    fontWeight: '600',
+  },
+  newItemContainer: {
+    alignItems: 'center',
+  },
+  bottomFormUploadImageButton: {
+    alignItems: 'flex-start',
+  },
+});
+
+export default styles;

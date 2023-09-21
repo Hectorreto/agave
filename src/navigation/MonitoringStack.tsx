@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
+import MonitoringTabs from './MonitoringTabs';
 import HeaderBackButton from '../components/header-back-button/HeaderBackButton';
 import HeaderOpenDrawerButton from '../components/header-open-drawer-button/HeaderOpenDrawerButton';
 import CreateMonitoringScreen from '../screens/monitoring/create-monitoring/CreateMonitoringScreen';
 import ListMonitoringScreen from '../screens/monitoring/list-monitoring/ListMonitoringScreen';
-import SeeMonitoringScreen from '../screens/monitoring/see-monitoring/SeeMonitoringScreen';
 import { Colors } from '../themes/theme';
 
 export type MonitoringStackParamList = {
@@ -48,7 +48,7 @@ const MonitoringStack = () => {
       />
       <Stack.Screen
         name="SeeMonitoring"
-        component={SeeMonitoringScreen}
+        component={MonitoringTabs}
         options={{ title: 'Ver monitoreo' }}
       />
     </Stack.Navigator>

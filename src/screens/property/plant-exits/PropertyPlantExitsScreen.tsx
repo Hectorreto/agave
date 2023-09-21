@@ -7,8 +7,8 @@ import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import MoreVert from '../../../../assets/svg/table/more_vert.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
+import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
-import PropertyTabIndicator from '../../../components/property-tab-indicator/PropertyTabIndicator';
 import { formatDateTime } from '../../../utils/dateUtils';
 
 const data = [
@@ -35,7 +35,14 @@ const data = [
 const PropertyPlantExitsScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <PropertyTabIndicator active={3} />
+      <HeaderTabIndicator
+        items={[
+          { label: 'Tablero', screen: 'PropertyBoard' },
+          { label: 'Información general', screen: 'PropertyGeneralInfo' },
+          { label: 'Salidas de plantas', screen: 'PropertyPlantExits' },
+        ]}
+        active="PropertyPlantExits"
+      />
       <View style={styles.filterContainer}>
         <FilterAlt style={styles.filterLeftIcon} />
         <Text style={styles.filterText}>Fecha de monitoreo</Text>

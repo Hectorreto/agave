@@ -77,11 +77,6 @@ const CreateExitScreen = ({ navigation }: Props) => {
           <FormExit
             key={exit.id}
             exit={exit}
-            showTitle={exits.length > 1}
-            onPressDelete={() => {
-              setIsModalVisible(true);
-              setSelectedExit(exit);
-            }}
             onChange={(exit) => {
               const copyExits = [...exits];
               copyExits[index] = exit;

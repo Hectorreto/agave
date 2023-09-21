@@ -3,12 +3,19 @@ import { ScrollView, Text, View } from 'react-native';
 import styles from './styles';
 import Eco from '../../../../assets/svg/eco.svg';
 import PestControl from '../../../../assets/svg/pest_control.svg';
-import PropertyTabIndicator from '../../../components/property-tab-indicator/PropertyTabIndicator';
+import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 
 const PropertyBoardScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <PropertyTabIndicator active={1} />
+      <HeaderTabIndicator
+        items={[
+          { label: 'Tablero', screen: 'PropertyBoard' },
+          { label: 'Información general', screen: 'PropertyGeneralInfo' },
+          { label: 'Salidas de plantas', screen: 'PropertyPlantExits' },
+        ]}
+        active="PropertyBoard"
+      />
       <View style={styles.indicatorsContainer}>
         <View style={styles.indicator}>
           <View style={styles.indicatorIcon}>

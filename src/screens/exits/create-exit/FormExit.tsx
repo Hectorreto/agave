@@ -9,8 +9,6 @@ import InputText from '../../../components/input-text/InputText';
 
 type Props = {
   exit: Exit;
-  showTitle: boolean;
-  onPressDelete: () => void;
   onChange: (exit: Exit) => void;
 };
 

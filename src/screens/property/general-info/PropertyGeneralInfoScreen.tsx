@@ -5,10 +5,10 @@ import styles from './styles';
 import Description from '../../../../assets/svg/description.svg';
 import Upload from '../../../../assets/svg/upload.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
+import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 import InputDate from '../../../components/input-date/InputDate';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
-import PropertyTabIndicator from '../../../components/property-tab-indicator/PropertyTabIndicator';
 import { Colors } from '../../../themes/theme';
 
 const PropertyGeneralInfoScreen = () => {
@@ -18,7 +18,14 @@ const PropertyGeneralInfoScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <PropertyTabIndicator active={2} />
+      <HeaderTabIndicator
+        items={[
+          { label: 'Tablero', screen: 'PropertyBoard' },
+          { label: 'Información general', screen: 'PropertyGeneralInfo' },
+          { label: 'Salidas de plantas', screen: 'PropertyPlantExits' },
+        ]}
+        active="PropertyGeneralInfo"
+      />
       <View style={styles.innerContainer}>
         <InputText label="Nombre del predio" placeholder="Text" value={text} onChange={setText} />
         <InputDate label="Año de plantación" date={date} onChange={setDate} />
