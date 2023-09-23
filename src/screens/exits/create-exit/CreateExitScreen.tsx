@@ -13,33 +13,36 @@ import InputSelect from '../../../components/input-select/InputSelect';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
+import { createExits, Exit } from '../../../services/exitService';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'CreateExit'>;
 
-export type Exit = {
+export type Item = {
   id: string;
   cnt: number;
   type: string;
   notes: string;
   image: string;
+  plantCount: string;
 };
 
-const newExit = (cnt: number): Exit => {
+const newItem = (cnt: number): Item => {
   return {
     id: uuid.v4() as string,
     cnt,
     type: '',
     notes: '',
     image: '',
+    plantCount: '',
   };
 };
 
 const CreateExitScreen = ({ navigation }: Props) => {
   const { showNotification } = useNotification();
   const [property, setProperty] = useState('');
-  const [exits, setExits] = useState([newExit(1)]);
+  const [exits, setExits] = useState([newItem(1)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedExit, setSelectedExit] = useState<Exit>();
+  const [selectedExit, setSelectedExit] = useState<Item>();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -93,32 +96,39 @@ const CreateExitScreen = ({ navigation }: Props) => {
           Icon={AddCircle}
           onPress={() => {
             const lastCnt = Math.max(...exits.map((e) => e.cnt));
-            setExits([...exits, newExit(lastCnt + 1)]);
+            setExits([...exits, newItem(lastCnt + 1)]);
           }}
         />
       </View>
 
       <View style={styles.saveCancelButtons}>
         <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
-        {exits.length > 1 ? (
-          <CustomButton
-            color="blue"
-            text="Guardar todas"
-            onPress={() => {
-              navigation.navigate('ListExits');
-              showNotification('Las salidas han sido creadas con éxito');
-            }}
-          />
-        ) : (
-          <CustomButton
-            color="blue"
-            text="Guardar"
-            onPress={() => {
-              navigation.navigate('ListExits');
+        <CustomButton
+          color="blue"
+          text={exits.length === 1 ? 'Guardar' : 'Guardar todas'}
+          onPress={() => {
+            createExits(
+              exits.map((exit): Exit => {
+                const nowTime = new Date().getTime();
+                return {
+                  id: exit.id,
+                  createdAt: nowTime,
+                  updatedAt: nowTime,
+                  property,
+                  type: exit.type,
+                  plantCount: Number(exit.plantCount),
+                  notes: exit.notes,
+                };
+              })
+            );
+            if (exits.length === 1) {
               showNotification('La salida ha sido creada con éxito');
-            }}
-          />
-        )}
+            } else {
+              showNotification('Las salidas han sido creadas con éxito');
+            }
+            navigation.navigate('ListExits');
+          }}
+        />
       </View>
 
       <ModalDelete
