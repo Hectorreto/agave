@@ -1,5 +1,6 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
@@ -8,33 +9,23 @@ import ArrowDropDown from '../../../../assets/svg/arrow_drop_down.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
 import MoreVert from '../../../../assets/svg/table/more_vert.svg';
-import database from '../../../../database';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
-import { Exit } from '../../../services/exitService';
+import { Exit, findExits } from '../../../services/exitService';
 import { formatDateTime } from '../../../utils/dateUtils';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'ListExits'>;
 
 const ListExitScreen = ({ navigation }: Props) => {
-  const [update] = useState(4);
   const [data, setData] = useState<Exit[]>([]);
 
-  useEffect(() => {
-    console.log(JSON.stringify(data, null, 2));
-  }, [data]);
-
-  useEffect(() => {
-    database.transaction((transaction) => {
-      const sql = 'SELECT * FROM exit;';
-      transaction.executeSql(sql, [], (_, { rows }) => {
-        const data = rows._array;
-        setData(data);
-      });
-    });
-  }, [update]);
+  useFocusEffect(
+    useCallback(() => {
+      findExits().then(setData);
+    }, [])
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -72,7 +63,7 @@ const ListExitScreen = ({ navigation }: Props) => {
               <CustomButton
                 color="blueWhite"
                 Icon={MoreVert}
-                onPress={() => navigation.navigate('SeeExit')}
+                onPress={() => navigation.navigate('SeeExit', { id: exit.id })}
               />
             </View>,
           ],

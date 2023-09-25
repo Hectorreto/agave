@@ -1,3 +1,4 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
@@ -6,6 +7,7 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
+import { ExitStackParamList } from '../../../navigation/ExitStack';
 
 const exit = {
   property: 'a',
@@ -15,7 +17,13 @@ const exit = {
     'Estas plantas fueron cosechadas por orden de Fulanito Cosme, notamos que a simple vista son plantas sanas y con la madurez apropiada.',
 };
 
-const SeeExitScreen = () => {
+type Props = NativeStackScreenProps<ExitStackParamList, 'SeeExit'>;
+
+const SeeExitScreen = ({ route }: Props) => {
+  const id = route.params.id;
+
+  console.log({ id });
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.helper}>Este formulario sólo es de consulta, no se puede editar</Text>

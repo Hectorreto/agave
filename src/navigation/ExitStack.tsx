@@ -11,7 +11,7 @@ import { Colors } from '../themes/theme';
 export type ExitStackParamList = {
   ListExits: undefined;
   CreateExit: undefined;
-  SeeExit: undefined;
+  SeeExit: { id: string };
 };
 
 const Stack = createNativeStackNavigator<ExitStackParamList>();

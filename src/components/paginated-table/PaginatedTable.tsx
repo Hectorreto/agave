@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import Footer from './Footer';
@@ -13,6 +13,13 @@ type Props = {
 };
 
 const PaginatedTable = ({ titles, rows }: Props) => {
+  const [page, setPage] = useState(1);
+  const total = rows.length;
+  const start = (page - 1) * 5 + 1;
+  const end = Math.min(page * 5, total);
+  const lastPage = Math.ceil(total / 5);
+  const filteredRows = rows.slice(start - 1, end);
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
@@ -22,7 +29,7 @@ const PaginatedTable = ({ titles, rows }: Props) => {
               <View style={styles.titleContainer}>
                 <Text style={styles.titleText}>{title}</Text>
               </View>
-              {rows.map((row, i) => (
+              {filteredRows.map((row, i) => (
                 <View
                   key={row.id}
                   style={i % 2 === 0 ? styles.dataEvenContainer : styles.dataOddContainer}>
@@ -32,7 +39,28 @@ const PaginatedTable = ({ titles, rows }: Props) => {
             </View>
           ))}
         </ScrollView>
-        <Footer />
+        <Footer
+          total={total}
+          start={start}
+          end={end}
+          page={page}
+          onPressPrev={() => {
+            if (page > 1) {
+              setPage(page - 1);
+            }
+          }}
+          onPressNext={() => {
+            if (end < total) {
+              setPage(page + 1);
+            }
+          }}
+          onPressStart={() => {
+            setPage(1);
+          }}
+          onPressEnd={() => {
+            setPage(lastPage);
+          }}
+        />
       </View>
     </View>
   );

@@ -41,7 +41,7 @@ export const createExits = (exits: Exit[]) => {
   });
 };
 
-export const readExits = async (): Promise<Exit[]> => {
+export const findExits = async (): Promise<Exit[]> => {
   return new Promise((resolve) => {
     database.transaction((transaction) => {
       transaction.executeSql('SELECT * FROM exit', [], (_, { rows }) => {
