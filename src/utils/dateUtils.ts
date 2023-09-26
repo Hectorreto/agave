@@ -1,4 +1,4 @@
-export const formatDateTime = (inputDate: Date) => {
+export const formatDateTime = (inputDate: Date | number) => {
   const date = new Date(inputDate);
 
   const day = String(date.getDate()).padStart(2, '0');
@@ -11,7 +11,7 @@ export const formatDateTime = (inputDate: Date) => {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
-export const formatDate = (inputDate: Date) => {
+export const formatDate = (inputDate: Date | number) => {
   const date = new Date(inputDate);
 
   const day = String(date.getDate()).padStart(2, '0');
@@ -19,4 +19,13 @@ export const formatDate = (inputDate: Date) => {
   const year = date.getFullYear();
 
   return `${day}/${month}/${year}`;
+};
+
+export const formatTime = (inputDate: Date | number) => {
+  const date = new Date(inputDate);
+
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${hours}:${minutes}`;
 };

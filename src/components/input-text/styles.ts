@@ -37,6 +37,12 @@ const styles = StyleSheet.create({
   inputWithValue: {
     borderColor: Colors.PRIMARY_400,
   },
+  rightIcon: {
+    position: 'absolute',
+    right: 8,
+    height: 44,
+    justifyContent: 'center',
+  },
 });
 
 export default styles;

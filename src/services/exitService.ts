@@ -4,6 +4,8 @@ export type Exit = {
   id: string;
   createdAt: number;
   updatedAt: number;
+  createdBy: string;
+  updatedBy: string;
   property: string;
   type: string;
   plantCount: number;
@@ -15,6 +17,8 @@ export const createExits = (exits: Exit[]) => {
     'id',
     'createdAt',
     'updatedAt',
+    'createdBy',
+    'updatedBy',
     'property',
     'type',
     'plantCount',
@@ -36,7 +40,12 @@ export const createExits = (exits: Exit[]) => {
         INSERT INTO exit (${keys.join(',')})
         VALUES ${values.join(',')};
       `,
-      args
+      args,
+      undefined,
+      (_, error) => {
+        console.error(error);
+        return false;
+      }
     );
   });
 };
@@ -44,8 +53,23 @@ export const createExits = (exits: Exit[]) => {
 export const findExits = async (): Promise<Exit[]> => {
   return new Promise((resolve) => {
     database.transaction((transaction) => {
-      transaction.executeSql('SELECT * FROM exit', [], (_, { rows }) => {
+      const sql = `
+        SELECT *
+        FROM exit
+        ORDER BY createdAt DESC
+      `;
+      transaction.executeSql(sql, [], (_, { rows }) => {
         resolve(rows._array);
+      });
+    });
+  });
+};
+
+export const findOneExit = async (id: string): Promise<Exit> => {
+  return new Promise((resolve) => {
+    database.transaction((transaction) => {
+      transaction.executeSql('SELECT * FROM exit WHERE id = ?', [id], (_, { rows }) => {
+        resolve(rows._array[0]);
       });
     });
   });

@@ -114,6 +114,8 @@ const CreateExitScreen = ({ navigation }: Props) => {
                   id: exit.id,
                   createdAt: nowTime,
                   updatedAt: nowTime,
+                  createdBy: '',
+                  updatedBy: '',
                   property,
                   type: exit.type,
                   plantCount: Number(exit.plantCount),

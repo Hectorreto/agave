@@ -8,6 +8,8 @@ database.transaction((transaction) => {
       id TEXT PRIMARY KEY,
       createdAt INTEGER,
       updatedAt INTEGER,
+      createdBy TEXT,
+      updatedBy TEXT,
       property TEXT,
       type TEXT,
       plantCount INTEGER,

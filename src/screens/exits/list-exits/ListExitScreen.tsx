@@ -11,6 +11,7 @@ import Search from '../../../../assets/svg/search.svg';
 import MoreVert from '../../../../assets/svg/table/more_vert.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
+import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
 import { Exit, findExits } from '../../../services/exitService';
@@ -19,7 +20,18 @@ import { formatDateTime } from '../../../utils/dateUtils';
 type Props = NativeStackScreenProps<ExitStackParamList, 'ListExits'>;
 
 const ListExitScreen = ({ navigation }: Props) => {
+  const [search, setSearch] = useState('');
   const [data, setData] = useState<Exit[]>([]);
+  const filteredData = data.filter((value) => {
+    if (search) {
+      const searchL = search.toLowerCase();
+      return (
+        value.property.toLowerCase().includes(searchL) || value.type.toLowerCase().includes(searchL)
+      );
+    }
+
+    return true;
+  });
 
   useFocusEffect(
     useCallback(() => {
@@ -44,21 +56,27 @@ const ListExitScreen = ({ navigation }: Props) => {
         />
       </View>
       <Divider />
+
       <View style={styles.filterAndSearchContainer}>
         <FilterAlt />
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchText}>Predio o lugar...</Text>
-          <Search />
+        <View style={{ width: 260 }}>
+          <InputText
+            placeholder="Predio o lugar..."
+            value={search}
+            onChange={setSearch}
+            iconRight={<Search />}
+          />
         </View>
       </View>
+
       <PaginatedTable
         titles={['Tipo de salida', 'Plantas', 'Fecha', '']}
-        rows={data.map((exit) => ({
+        rows={filteredData.map((exit) => ({
           id: exit.id,
           values: [
             <Text style={styles.dataText}>{exit.type}</Text>,
             <Text style={styles.dataText}>{exit.plantCount}</Text>,
-            <Text style={styles.formattedDate}>{formatDateTime(new Date(exit.createdAt))}</Text>,
+            <Text style={styles.formattedDate}>{formatDateTime(exit.createdAt)}</Text>,
             <View style={styles.moreButton}>
               <CustomButton
                 color="blueWhite"

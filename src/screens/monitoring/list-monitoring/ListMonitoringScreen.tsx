@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
@@ -9,6 +10,7 @@ import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
+import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
 import { formatDateTime } from '../../../utils/dateUtils';
@@ -34,6 +36,8 @@ const data = [
 type Props = NativeStackScreenProps<MonitoringStackParamList, 'ListMonitoring'>;
 
 const ListMonitoringScreen = ({ navigation }: Props) => {
+  const [search, setSearch] = useState('');
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.filterContainer}>
@@ -53,9 +57,13 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
       <Divider />
       <View style={styles.filterAndSearchContainer}>
         <FilterAlt />
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchText}>Predio o lugar...</Text>
-          <Search />
+        <View style={{ width: 260 }}>
+          <InputText
+            placeholder="Predio o lugar..."
+            value={search}
+            onChange={setSearch}
+            iconRight={<Search />}
+          />
         </View>
       </View>
       <PaginatedTable

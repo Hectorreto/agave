@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
@@ -8,21 +9,18 @@ import Divider from '../../../components/divider/Divider';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
-
-const exit = {
-  property: 'a',
-  type: '1',
-  plants: '###',
-  notes:
-    'Estas plantas fueron cosechadas por orden de Fulanito Cosme, notamos que a simple vista son plantas sanas y con la madurez apropiada.',
-};
+import { Exit, findOneExit } from '../../../services/exitService';
+import { formatDate, formatTime } from '../../../utils/dateUtils';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'SeeExit'>;
 
 const SeeExitScreen = ({ route }: Props) => {
   const id = route.params.id;
+  const [exit, setExit] = useState({} as Exit);
 
-  console.log({ id });
+  useEffect(() => {
+    findOneExit(id).then((value) => setExit(value));
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -42,23 +40,26 @@ const SeeExitScreen = ({ route }: Props) => {
         label="Tipo de salida"
         placeholder="Selecciona"
         value={exit.type}
-        items={[
-          { label: 'Cosecha', value: '1' },
-          { label: 'Fitosanitaria', value: '2' },
-          { label: 'Para monitoreo', value: '3' },
-          { label: 'Otros', value: '4' },
-        ]}
+        items={[{ label: exit.type, value: exit.type }]}
       />
-      <InputText label="Notas" placeholder="Notas" value={exit.plants} />
+      <InputText
+        label="Numero de plantas"
+        placeholder="Numero de plantas"
+        value={String(exit.plantCount)}
+      />
       <InputText multiline label="Notas" placeholder="Notas" value={exit.notes} />
       <View style={styles.uploadImage}>
         <CustomButton color="blue" text="Cambiar foto" Icon={CameraAlt} />
       </View>
       <Divider />
       <View style={styles.infoContainer}>
-        <Text style={styles.infoText}>Creado por: Martín Rodríguez el 03/06/2023 a las 12:19</Text>
         <Text style={styles.infoText}>
-          Última edición: Mario Enríquez el 03/06/2023 a las 15:23
+          Creado por: {exit.createdBy} el {formatDate(exit.createdAt)} a las{' '}
+          {formatTime(exit.createdAt)}
+        </Text>
+        <Text style={styles.infoText}>
+          Última edición: {exit.updatedBy} el {formatDate(exit.updatedAt)} a las{' '}
+          {formatTime(exit.updatedAt)}
         </Text>
       </View>
     </ScrollView>

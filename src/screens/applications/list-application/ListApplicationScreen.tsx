@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
@@ -7,6 +8,7 @@ import Create from '../../../../assets/svg/create.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
+import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
@@ -52,13 +54,19 @@ const data = [
 ];
 
 const ListApplicationScreen = ({ navigation }: Props) => {
+  const [search, setSearch] = useState('');
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.filterAndSearchContainer}>
         <FilterAlt />
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchText}>Predio o lugar...</Text>
-          <Search />
+        <View style={{ width: 260 }}>
+          <InputText
+            placeholder="Predio o lugar..."
+            value={search}
+            onChange={setSearch}
+            iconRight={<Search />}
+          />
         </View>
       </View>
       <PaginatedTable
