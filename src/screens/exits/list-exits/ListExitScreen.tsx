@@ -2,6 +2,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useCallback, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
@@ -26,7 +27,9 @@ const ListExitScreen = ({ navigation }: Props) => {
     if (search) {
       const searchL = search.toLowerCase();
       return (
-        value.property.toLowerCase().includes(searchL) || value.type.toLowerCase().includes(searchL)
+        value.property.toLowerCase().includes(searchL) ||
+        value.type.toLowerCase().includes(searchL) ||
+        value.plantCount.toLowerCase().includes(searchL)
       );
     }
 
@@ -46,7 +49,23 @@ const ListExitScreen = ({ navigation }: Props) => {
         <Text style={styles.filterText}>Fecha de monitoreo</Text>
         <ArrowDropDown style={styles.filterRightIcon} />
       </View>
-      <View style={styles.map} />
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: 20.6739329,
+          longitude: -103.4178149,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}>
+        <Marker
+          coordinate={{
+            latitude: 20.6739329,
+            longitude: -103.4178149,
+          }}
+          title="Marker Title 1"
+          description="Marker Description 1"
+        />
+      </MapView>
       <View style={styles.newItemContainer}>
         <CustomButton
           color="blue"
@@ -70,6 +89,7 @@ const ListExitScreen = ({ navigation }: Props) => {
       </View>
 
       <PaginatedTable
+        maxRows={3}
         titles={['Tipo de salida', 'Plantas', 'Fecha', '']}
         rows={filteredData.map((exit) => ({
           id: exit.id,

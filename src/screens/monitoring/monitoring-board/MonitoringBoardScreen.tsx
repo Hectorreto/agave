@@ -1,4 +1,5 @@
 import { ScrollView, Text, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 
 import styles from './styles';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
@@ -13,7 +14,23 @@ const MonitoringBoardScreen = () => {
         ]}
         active="MonitoringBoard"
       />
-      <View style={styles.map} />
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: 20.6739329,
+          longitude: -103.4178149,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}>
+        <Marker
+          coordinate={{
+            latitude: 20.6739329,
+            longitude: -103.4178149,
+          }}
+          title="Marker Title 1"
+          description="Marker Description 1"
+        />
+      </MapView>
       <View style={styles.cardContainer}>
         <View style={styles.cardDataContainer}>
           <View style={styles.cardDataInnerContainer}>

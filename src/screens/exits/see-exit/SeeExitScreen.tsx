@@ -4,7 +4,7 @@ import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import Divider from '../../../components/divider/Divider';
-import InputImage from '../../../components/input-image/InputImage';
+import InputCamera from '../../../components/input-camera/InputCamera';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
@@ -48,7 +48,7 @@ const SeeExitScreen = ({ route }: Props) => {
       />
       <InputText multiline label="Notas" placeholder="Notas" value={exit.notes} />
       <View style={styles.uploadImage}>
-        <InputImage value={exit.imageUri} />
+        <InputCamera value={exit.imageUri} />
       </View>
       <Divider />
       <View style={styles.infoContainer}>

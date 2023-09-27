@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
   },
   map: {
     height: 223,
-    borderWidth: 1,
   },
   cardContainer: {
     height: 280,

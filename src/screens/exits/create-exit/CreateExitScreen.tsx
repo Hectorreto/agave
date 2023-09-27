@@ -20,31 +20,34 @@ type Props = NativeStackScreenProps<ExitStackParamList, 'CreateExit'>;
 export type Item = {
   id: string;
   cnt: number;
-  type: string;
-  notes: string;
-  image: string;
-  plantCount: string;
-  imageUri: string;
+  exit: Exit;
 };
 
 const newItem = (cnt: number): Item => {
   return {
     id: uuid.v4() as string,
     cnt,
-    type: '',
-    notes: '',
-    image: '',
-    plantCount: '',
-    imageUri: '',
+    exit: {
+      id: '',
+      createdAt: 0,
+      updatedAt: 0,
+      createdBy: '',
+      updatedBy: '',
+      property: '',
+      type: '',
+      plantCount: '',
+      notes: '',
+      imageUri: '',
+    },
   };
 };
 
 const CreateExitScreen = ({ navigation }: Props) => {
   const { showNotification } = useNotification();
   const [property, setProperty] = useState('');
-  const [exits, setExits] = useState([newItem(1)]);
+  const [items, setItems] = useState([newItem(1)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedExit, setSelectedExit] = useState<Item>();
+  const [selectedItem, setSelectedItem] = useState<Item>();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -64,28 +67,28 @@ const CreateExitScreen = ({ navigation }: Props) => {
         />
       </View>
 
-      {exits.map((exit, index) => (
+      {items.map((item, index) => (
         <Expandable
-          key={exit.id}
-          label={`Salida ${exit.cnt}`}
-          hideLabelAndShowContent={exits.length === 1}
+          key={item.id}
+          label={`Salida ${item.cnt}`}
+          hideLabelAndShowContent={items.length === 1}
           right={
             <CustomButton
               color="redWhite"
               Icon={Delete}
               onPress={() => {
                 setIsModalVisible(true);
-                setSelectedExit(exit);
+                setSelectedItem(item);
               }}
             />
           }>
           <FormExit
-            key={exit.id}
-            exit={exit}
-            onChange={(exit) => {
-              const copyExits = [...exits];
-              copyExits[index] = exit;
-              setExits(copyExits);
+            key={item.id}
+            item={item}
+            onChange={(item) => {
+              const copy = [...items];
+              copy[index] = item;
+              setItems(copy);
             }}
           />
         </Expandable>
@@ -97,8 +100,8 @@ const CreateExitScreen = ({ navigation }: Props) => {
           text="Agregar más salidas"
           Icon={AddCircle}
           onPress={() => {
-            const lastCnt = Math.max(...exits.map((e) => e.cnt));
-            setExits([...exits, newItem(lastCnt + 1)]);
+            const lastCnt = Math.max(...items.map((e) => e.cnt));
+            setItems([...items, newItem(lastCnt + 1)]);
           }}
         />
       </View>
@@ -107,26 +110,26 @@ const CreateExitScreen = ({ navigation }: Props) => {
         <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
         <CustomButton
           color="blue"
-          text={exits.length === 1 ? 'Guardar' : 'Guardar todas'}
+          text={items.length === 1 ? 'Guardar' : 'Guardar todas'}
           onPress={() => {
             createExits(
-              exits.map((exit): Exit => {
+              items.map((item): Exit => {
                 const nowTime = new Date().getTime();
                 return {
-                  id: exit.id,
+                  id: item.id,
                   createdAt: nowTime,
                   updatedAt: nowTime,
                   createdBy: '[Usuario]',
                   updatedBy: '[Usuario]',
                   property,
-                  type: exit.type,
-                  plantCount: Number(exit.plantCount),
-                  notes: exit.notes,
-                  imageUri: exit.imageUri,
+                  type: item.exit.type,
+                  plantCount: item.exit.plantCount,
+                  notes: item.exit.notes,
+                  imageUri: item.exit.imageUri,
                 };
               })
             );
-            if (exits.length === 1) {
+            if (items.length === 1) {
               showNotification('La salida ha sido creada con éxito');
             } else {
               showNotification('Las salidas han sido creadas con éxito');
@@ -143,19 +146,19 @@ const CreateExitScreen = ({ navigation }: Props) => {
           <Text style={styles.modalText}>
             ¿Estás seguro de que deseas
             <Text style={styles.modalTextBold}> eliminar </Text>
-            la Salida {selectedExit?.cnt}? Esta acción no se puede deshacer.
+            la Salida {selectedItem?.cnt}? Esta acción no se puede deshacer.
           </Text>
         }
         onCancel={() => setIsModalVisible(false)}
         onConfirm={() => {
-          const copyExits = exits.filter((value) => value !== selectedExit);
-          if (copyExits.length === 1) {
-            copyExits[0] = {
-              ...copyExits[0],
+          const copy = items.filter((value) => value !== selectedItem);
+          if (copy.length === 1) {
+            copy[0] = {
+              ...copy[0],
               cnt: 1,
             };
           }
-          setExits(copyExits);
+          setItems(copy);
           setIsModalVisible(false);
         }}
       />

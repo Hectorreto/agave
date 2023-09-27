@@ -8,7 +8,7 @@ export type Exit = {
   updatedBy: string;
   property: string;
   type: string;
-  plantCount: number;
+  plantCount: string;
   notes: string;
   imageUri: string;
 };

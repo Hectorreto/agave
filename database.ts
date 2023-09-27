@@ -12,10 +12,10 @@ database.transaction((transaction) => {
       updatedBy TEXT,
       property TEXT,
       type TEXT,
-      plantCount INTEGER,
+      plantCount TEXT,
       notes TEXT,
       imageUri TEXT
-    );
+    );      
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {
     console.error(error);

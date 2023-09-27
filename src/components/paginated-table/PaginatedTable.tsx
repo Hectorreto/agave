@@ -5,6 +5,7 @@ import Footer from './Footer';
 import styles from './styles';
 
 type Props = {
+  maxRows?: number;
   titles: string[];
   rows: {
     id: string;
@@ -12,12 +13,12 @@ type Props = {
   }[];
 };
 
-const PaginatedTable = ({ titles, rows }: Props) => {
+const PaginatedTable = ({ titles, rows, maxRows = 5 }: Props) => {
   const [page, setPage] = useState(1);
   const total = rows.length;
-  const start = Math.min((page - 1) * 5 + 1, total);
-  const end = Math.min(page * 5, total);
-  const lastPage = Math.max(Math.ceil(total / 5), 1);
+  const start = Math.min((page - 1) * maxRows + 1, total);
+  const end = Math.min(page * maxRows, total);
+  const lastPage = Math.max(Math.ceil(total / maxRows), 1);
   const filteredRows = rows.slice(start - 1, end);
 
   return (

@@ -1,9 +1,12 @@
-import * as ImagePicker from 'expo-image-picker';
+import {
+  getCameraPermissionsAsync,
+  launchCameraAsync,
+  requestCameraPermissionsAsync,
+} from 'expo-image-picker';
 import { useEffect, useState } from 'react';
-import { Image, Linking, Platform, TouchableHighlight, View } from 'react-native';
+import { Image, Linking, Platform, View } from 'react-native';
 
 import CameraAlt from '../../../assets/svg/camera_alt.svg';
-import { shadowStyle } from '../../themes/theme';
 import CustomButton from '../custom-button/CustomButton';
 
 type Props = {
@@ -11,7 +14,7 @@ type Props = {
   onChange?: (imageUri: string) => void;
 };
 
-const InputImage = ({ value, onChange }: Props) => {
+const InputCamera = ({ value, onChange }: Props) => {
   const [height, setHeight] = useState(100);
   const [width, setWidth] = useState(100);
 
@@ -28,25 +31,14 @@ const InputImage = ({ value, onChange }: Props) => {
     }
   }, [value]);
 
-  const handleOnPress = (type: 'camera' | 'library') => {
+  const handleOnPress = () => {
     if (!onChange) return undefined;
 
-    const launchImagePicker =
-      type === 'camera' ? ImagePicker.launchCameraAsync : ImagePicker.launchImageLibraryAsync;
-    const getPermissions =
-      type === 'camera'
-        ? ImagePicker.getCameraPermissionsAsync
-        : ImagePicker.getMediaLibraryPermissionsAsync;
-    const requestPermissions =
-      type === 'camera'
-        ? ImagePicker.requestCameraPermissionsAsync
-        : ImagePicker.requestMediaLibraryPermissionsAsync;
-
     return async () => {
-      let permissions = await getPermissions();
+      let permissions = await getCameraPermissionsAsync();
       if (permissions.status !== 'granted') {
         if (permissions.canAskAgain) {
-          permissions = await requestPermissions();
+          permissions = await requestCameraPermissionsAsync();
         } else {
           if (Platform.OS === 'android') {
             await Linking.openSettings();
@@ -58,7 +50,7 @@ const InputImage = ({ value, onChange }: Props) => {
       }
 
       if (permissions.status === 'granted') {
-        const result = await launchImagePicker();
+        const result = await launchCameraAsync();
         if (!result.canceled) {
           onChange(result.assets[0].uri);
         }
@@ -72,22 +64,13 @@ const InputImage = ({ value, onChange }: Props) => {
         color="blue"
         text={value ? 'Cambiar foto' : 'Subir foto'}
         Icon={CameraAlt}
-        onPress={handleOnPress('camera')}
-        onLongPress={handleOnPress('library')}
+        onPress={handleOnPress()}
       />
       {Boolean(value && height && width) && (
-        <TouchableHighlight
-          onPress={handleOnPress('library')}
-          style={{
-            ...shadowStyle,
-            height,
-            width,
-          }}>
-          <Image source={{ uri: value }} height={height} width={width} />
-        </TouchableHighlight>
+        <Image source={{ uri: value }} height={height} width={width} />
       )}
     </View>
   );
 };
 
-export default InputImage;
+export default InputCamera;
