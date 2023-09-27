@@ -13,10 +13,14 @@ database.transaction((transaction) => {
       property TEXT,
       type TEXT,
       plantCount INTEGER,
-      notes TEXT
+      notes TEXT,
+      imageUri TEXT
     );
   `;
-  transaction.executeSql(sql);
+  transaction.executeSql(sql, [], undefined, (_, error) => {
+    console.error(error);
+    return false;
+  });
 });
 
 export default database;

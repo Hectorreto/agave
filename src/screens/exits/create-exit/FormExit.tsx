@@ -3,8 +3,7 @@ import { View } from 'react-native';
 
 import { Item } from './CreateExitScreen';
 import styles from './styles';
-import CameraAlt from '../../../../assets/svg/camera_alt.svg';
-import CustomButton from '../../../components/custom-button/CustomButton';
+import InputImage from '../../../components/input-image/InputImage';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
 
@@ -66,7 +65,12 @@ const FormExit = ({ exit, onChange }: Props) => {
         />
       </View>
       <View style={styles.extraActions}>
-        <CustomButton color="blue" text="Subir foto" Icon={CameraAlt} onPress={() => {}} />
+        <InputImage
+          value={exit.imageUri}
+          onChange={(imageUri) => {
+            onChange({ ...exit, imageUri });
+          }}
+        />
       </View>
     </View>
   );

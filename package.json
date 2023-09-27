@@ -33,7 +33,8 @@
     "react-native-svg": "13.9.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-uuid": "^2.0.1",
-    "expo-sqlite": "~11.3.3"
+    "expo-sqlite": "~11.3.3",
+    "expo-image-picker": "~14.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

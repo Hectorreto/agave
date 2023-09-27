@@ -10,6 +10,7 @@ export type Exit = {
   type: string;
   plantCount: number;
   notes: string;
+  imageUri: string;
 };
 
 export const createExits = (exits: Exit[]) => {
@@ -23,6 +24,7 @@ export const createExits = (exits: Exit[]) => {
     'type',
     'plantCount',
     'notes',
+    'imageUri',
   ];
 
   const values: string[] = [];

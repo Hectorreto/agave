@@ -24,6 +24,7 @@ export type Item = {
   notes: string;
   image: string;
   plantCount: string;
+  imageUri: string;
 };
 
 const newItem = (cnt: number): Item => {
@@ -34,6 +35,7 @@ const newItem = (cnt: number): Item => {
     notes: '',
     image: '',
     plantCount: '',
+    imageUri: '',
   };
 };
 
@@ -114,12 +116,13 @@ const CreateExitScreen = ({ navigation }: Props) => {
                   id: exit.id,
                   createdAt: nowTime,
                   updatedAt: nowTime,
-                  createdBy: '',
-                  updatedBy: '',
+                  createdBy: '[Usuario]',
+                  updatedBy: '[Usuario]',
                   property,
                   type: exit.type,
                   plantCount: Number(exit.plantCount),
                   notes: exit.notes,
+                  imageUri: exit.imageUri,
                 };
               })
             );

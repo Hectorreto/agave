@@ -15,11 +15,12 @@ import { Colors, shadowStyle } from '../../themes/theme';
 type Props = {
   text?: string;
   onPress?: () => void;
+  onLongPress?: () => void;
   Icon?: React.FC<SvgProps>;
   color: 'blue' | 'white' | 'lightBlue' | 'red' | 'redWhite' | 'blueWhite';
 };
 
-const CustomButton = ({ text, onPress, Icon, color }: Props) => {
+const CustomButton = ({ text, onPress, Icon, color, onLongPress }: Props) => {
   const disabled = !onPress;
 
   return (
@@ -46,7 +47,8 @@ const CustomButton = ({ text, onPress, Icon, color }: Props) => {
         disabled && styles.disabled,
         disabled && !text && Icon && styles.disabledOnlyIcon,
       ]}
-      onPress={onPress}>
+      onPress={onPress}
+      onLongPress={onLongPress}>
       {({ pressed }) => (
         <>
           {Icon &&

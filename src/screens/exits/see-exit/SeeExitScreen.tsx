@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
-import CameraAlt from '../../../../assets/svg/camera_alt.svg';
-import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
+import InputImage from '../../../components/input-image/InputImage';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
@@ -49,7 +48,7 @@ const SeeExitScreen = ({ route }: Props) => {
       />
       <InputText multiline label="Notas" placeholder="Notas" value={exit.notes} />
       <View style={styles.uploadImage}>
-        <CustomButton color="blue" text="Cambiar foto" Icon={CameraAlt} />
+        <InputImage value={exit.imageUri} />
       </View>
       <Divider />
       <View style={styles.infoContainer}>
