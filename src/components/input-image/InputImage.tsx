@@ -1,6 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
-import { Image, TouchableHighlight, View } from 'react-native';
+import { Image, Linking, Platform, TouchableHighlight, View } from 'react-native';
 
 import CameraAlt from '../../../assets/svg/camera_alt.svg';
 import { shadowStyle } from '../../themes/theme';
@@ -30,13 +30,38 @@ const InputImage = ({ value, onChange }: Props) => {
 
   const handleOnPress = (type: 'camera' | 'library') => {
     if (!onChange) return undefined;
+
     const launchImagePicker =
       type === 'camera' ? ImagePicker.launchCameraAsync : ImagePicker.launchImageLibraryAsync;
+    const getPermissions =
+      type === 'camera'
+        ? ImagePicker.getCameraPermissionsAsync
+        : ImagePicker.getMediaLibraryPermissionsAsync;
+    const requestPermissions =
+      type === 'camera'
+        ? ImagePicker.requestCameraPermissionsAsync
+        : ImagePicker.requestMediaLibraryPermissionsAsync;
 
     return async () => {
-      const result = await launchImagePicker();
-      if (!result.canceled) {
-        onChange(result.assets[0].uri);
+      let permissions = await getPermissions();
+      if (permissions.status !== 'granted') {
+        if (permissions.canAskAgain) {
+          permissions = await requestPermissions();
+        } else {
+          if (Platform.OS === 'android') {
+            await Linking.openSettings();
+          }
+          if (Platform.OS === 'ios') {
+            await Linking.openURL('app-settings:');
+          }
+        }
+      }
+
+      if (permissions.status === 'granted') {
+        const result = await launchImagePicker();
+        if (!result.canceled) {
+          onChange(result.assets[0].uri);
+        }
       }
     };
   };
