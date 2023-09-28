@@ -13,7 +13,7 @@ export type Exit = {
   imageUri: string;
 };
 
-export const createExits = (exits: Exit[]) => {
+export const createExits = async (exits: Exit[]): Promise<void> => {
   const keys: (keyof Exit)[] = [
     'id',
     'createdAt',
@@ -36,19 +36,23 @@ export const createExits = (exits: Exit[]) => {
     args.push(...data);
   });
 
-  database.transaction((transaction) => {
-    transaction.executeSql(
-      `
+  return new Promise((resolve, reject) => {
+    database.transaction((transaction) => {
+      transaction.executeSql(
+        `
         INSERT INTO exit (${keys.join(',')})
         VALUES ${values.join(',')};
       `,
-      args,
-      undefined,
-      (_, error) => {
-        console.error(error);
-        return false;
-      }
-    );
+        args,
+        () => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+          return false;
+        }
+      );
+    });
   });
 };
 

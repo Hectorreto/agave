@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import uuid from 'react-native-uuid';
 
 import FormExit from './FormExit';
+import { Item, newItem, saveItems, validateForm } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import Delete from '../../../../assets/svg/delete.svg';
@@ -13,34 +13,8 @@ import InputSelect from '../../../components/input-select/InputSelect';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
-import { createExits, Exit } from '../../../services/exitService';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'CreateExit'>;
-
-export type Item = {
-  id: string;
-  cnt: number;
-  exit: Exit;
-};
-
-const newItem = (cnt: number): Item => {
-  return {
-    id: uuid.v4() as string,
-    cnt,
-    exit: {
-      id: '',
-      createdAt: 0,
-      updatedAt: 0,
-      createdBy: '',
-      updatedBy: '',
-      property: '',
-      type: '',
-      plantCount: '',
-      notes: '',
-      imageUri: '',
-    },
-  };
-};
 
 const CreateExitScreen = ({ navigation }: Props) => {
   const { showNotification } = useNotification();
@@ -48,6 +22,22 @@ const CreateExitScreen = ({ navigation }: Props) => {
   const [items, setItems] = useState([newItem(1)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item>();
+
+  const handleOnSave = async () => {
+    if (!validateForm(property, items)) return;
+    const notification =
+      items.length === 1
+        ? 'La salida ha sido creada con éxito'
+        : 'Las salidas han sido creadas con éxito';
+
+    try {
+      await saveItems(property, items);
+      showNotification(notification);
+      navigation.navigate('ListExits');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -111,31 +101,7 @@ const CreateExitScreen = ({ navigation }: Props) => {
         <CustomButton
           color="blue"
           text={items.length === 1 ? 'Guardar' : 'Guardar todas'}
-          onPress={() => {
-            createExits(
-              items.map((item): Exit => {
-                const nowTime = new Date().getTime();
-                return {
-                  id: item.id,
-                  createdAt: nowTime,
-                  updatedAt: nowTime,
-                  createdBy: '[Usuario]',
-                  updatedBy: '[Usuario]',
-                  property,
-                  type: item.exit.type,
-                  plantCount: item.exit.plantCount,
-                  notes: item.exit.notes,
-                  imageUri: item.exit.imageUri,
-                };
-              })
-            );
-            if (items.length === 1) {
-              showNotification('La salida ha sido creada con éxito');
-            } else {
-              showNotification('Las salidas han sido creadas con éxito');
-            }
-            navigation.navigate('ListExits');
-          }}
+          onPress={handleOnSave}
         />
       </View>
 
