@@ -23,6 +23,8 @@ export const newItem = (cnt: number): Item => {
       plantCount: '',
       notes: '',
       imageUri: '',
+      latitude: 20.651243 + Math.random() * (20.704164 - 20.651243),
+      longitude: -103.392861 + Math.random() * (-103.290899 - -103.392861),
     },
   };
 };
@@ -47,6 +49,8 @@ export const saveItems = async (property: string, items: Item[]) => {
         plantCount: item.exit.plantCount,
         notes: item.exit.notes,
         imageUri: item.exit.imageUri,
+        latitude: item.exit.latitude,
+        longitude: item.exit.longitude,
       };
     })
   );

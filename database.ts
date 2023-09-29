@@ -14,7 +14,9 @@ database.transaction((transaction) => {
       type TEXT,
       plantCount TEXT,
       notes TEXT,
-      imageUri TEXT
+      imageUri TEXT,
+      latitude REAL,
+      longitude REAL
     );      
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {

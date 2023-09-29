@@ -65,6 +65,10 @@ const styles = StyleSheet.create({
   moreButton: {
     marginHorizontal: 8,
   },
+  rowButton: {
+    height: '100%',
+    justifyContent: 'center',
+  },
 });
 
 export default styles;

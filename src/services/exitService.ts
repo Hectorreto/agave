@@ -11,6 +11,8 @@ export type Exit = {
   plantCount: string;
   notes: string;
   imageUri: string;
+  latitude: number;
+  longitude: number;
 };
 
 export const createExits = async (exits: Exit[]): Promise<void> => {
@@ -25,6 +27,8 @@ export const createExits = async (exits: Exit[]): Promise<void> => {
     'plantCount',
     'notes',
     'imageUri',
+    'latitude',
+    'longitude',
   ];
 
   const values: string[] = [];

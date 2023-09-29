@@ -1,9 +1,9 @@
-import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useCallback, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
+import { GUADALAJARA_REGION, useMapData, useTableData } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import ArrowDropDown from '../../../../assets/svg/arrow_drop_down.svg';
@@ -15,32 +15,14 @@ import Divider from '../../../components/divider/Divider';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
-import { Exit, findExits } from '../../../services/exitService';
 import { formatDateTime } from '../../../utils/dateUtils';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'ListExits'>;
 
 const ListExitScreen = ({ navigation }: Props) => {
+  const { data, mapRef, markerRefs, moveMapToExit } = useMapData();
   const [search, setSearch] = useState('');
-  const [data, setData] = useState<Exit[]>([]);
-  const filteredData = data.filter((value) => {
-    if (search) {
-      const searchL = search.toLowerCase();
-      return (
-        value.property.toLowerCase().includes(searchL) ||
-        value.type.toLowerCase().includes(searchL) ||
-        value.plantCount.toLowerCase().includes(searchL)
-      );
-    }
-
-    return true;
-  });
-
-  useFocusEffect(
-    useCallback(() => {
-      findExits().then(setData);
-    }, [])
-  );
+  const { filteredData } = useTableData(data, search);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -49,22 +31,16 @@ const ListExitScreen = ({ navigation }: Props) => {
         <Text style={styles.filterText}>Fecha de monitoreo</Text>
         <ArrowDropDown style={styles.filterRightIcon} />
       </View>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 20.6739329,
-          longitude: -103.4178149,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}>
-        <Marker
-          coordinate={{
-            latitude: 20.6739329,
-            longitude: -103.4178149,
-          }}
-          title="Marker Title 1"
-          description="Marker Description 1"
-        />
+      <MapView ref={mapRef} style={styles.map} initialRegion={GUADALAJARA_REGION}>
+        {data.map((exit) => (
+          <Marker
+            key={exit.id}
+            ref={markerRefs.get(exit.id)}
+            coordinate={{ latitude: exit.latitude, longitude: exit.longitude }}
+            title={exit.type}
+            description={formatDateTime(exit.createdAt)}
+          />
+        ))}
       </MapView>
       <View style={styles.newItemContainer}>
         <CustomButton
@@ -94,9 +70,15 @@ const ListExitScreen = ({ navigation }: Props) => {
         rows={filteredData.map((exit) => ({
           id: exit.id,
           values: [
-            <Text style={styles.dataText}>{exit.type}</Text>,
-            <Text style={styles.dataText}>{exit.plantCount}</Text>,
-            <Text style={styles.formattedDate}>{formatDateTime(exit.createdAt)}</Text>,
+            <Pressable style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
+              <Text style={styles.dataText}>{exit.type}</Text>
+            </Pressable>,
+            <Pressable style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
+              <Text style={styles.dataText}>{exit.plantCount}</Text>
+            </Pressable>,
+            <Pressable style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
+              <Text style={styles.formattedDate}>{formatDateTime(exit.createdAt)}</Text>
+            </Pressable>,
             <View style={styles.moreButton}>
               <CustomButton
                 color="blueWhite"
