@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { createRef, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import MapView, { MapMarker } from 'react-native-maps';
 
-import { Exit, findExits } from '../../../services/exitService';
+import { Exit, FindExitOptions, findExits } from '../../../services/exitService';
 
 export const GUADALAJARA_REGION = {
   latitude: 20.67622305129026,
@@ -11,16 +11,9 @@ export const GUADALAJARA_REGION = {
   longitudeDelta: 0.0421,
 };
 
-export const useMapData = () => {
+export const useMapData = (data: Exit[]) => {
   const mapRef = useRef<MapView>(null);
   const [markerRefs, setMarkerRefs] = useState<Map<string, RefObject<MapMarker>>>(new Map());
-  const [data, setData] = useState<Exit[]>([]);
-
-  useFocusEffect(
-    useCallback(() => {
-      findExits().then(setData);
-    }, [])
-  );
 
   const moveMapToExit = (exit: Exit) => {
     mapRef.current?.animateToRegion({
@@ -76,5 +69,38 @@ export const useTableData = (data: Exit[], search: string) => {
 
   return {
     filteredData,
+  };
+};
+
+export const useExits = (date?: Date) => {
+  const [data, setData] = useState<Exit[]>([]);
+  const [options, setOptions] = useState<FindExitOptions>({});
+
+  useEffect(() => {
+    if (!date && options.filter?.createdAt) {
+      const newOptions = { ...options };
+      newOptions.filter = { ...options.filter };
+      newOptions.filter.createdAt = undefined;
+      setOptions(newOptions);
+    }
+    if (date) {
+      const newOptions = { ...options };
+      if (!newOptions.filter) newOptions.filter = {};
+      newOptions.filter.createdAt = {
+        lower: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+        upper: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
+      };
+      setOptions(newOptions);
+    }
+  }, [date]);
+
+  useFocusEffect(
+    useCallback(() => {
+      findExits(options).then((value) => setData(value));
+    }, [options])
+  );
+
+  return {
+    data,
   };
 };

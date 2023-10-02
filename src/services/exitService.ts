@@ -35,9 +35,8 @@ export const createExits = async (exits: Exit[]): Promise<void> => {
   const args: any[] = [];
 
   exits.forEach((exit) => {
-    const data: any[] = keys.map((key) => exit[key]);
-    values.push(`(${Array(data.length).fill('?').join(',')})`);
-    args.push(...data);
+    values.push(`(${keys.map(() => '?').join(',')})`);
+    args.push(...keys.map((key) => exit[key]));
   });
 
   return new Promise((resolve, reject) => {
@@ -60,15 +59,46 @@ export const createExits = async (exits: Exit[]): Promise<void> => {
   });
 };
 
-export const findExits = async (): Promise<Exit[]> => {
+export type FindExitOptions = {
+  paging?: {
+    limit: number;
+    offset: number;
+  };
+  filter?: {
+    createdAt?: {
+      lower: Date;
+      upper: Date;
+    };
+  };
+  sorting?: {
+    createdAt: 'ASC' | 'DESC';
+  };
+};
+
+export const findExits = async (options: FindExitOptions): Promise<Exit[]> => {
+  const args: any[] = [];
+  const where: string[] = [];
+
+  if (options.filter?.createdAt) {
+    where.push('createdAt BETWEEN ? AND ?');
+    args.push(options.filter.createdAt.lower.getTime());
+    args.push(options.filter.createdAt.upper.getTime());
+  }
+
+  let whereSql = '';
+  if (where.length) {
+    whereSql = `WHERE ${where.map((value) => `(${value})`).join(' AND ')}`;
+  }
+
   return new Promise((resolve) => {
     database.transaction((transaction) => {
       const sql = `
         SELECT *
         FROM exit
+        ${whereSql}
         ORDER BY createdAt DESC
       `;
-      transaction.executeSql(sql, [], (_, { rows }) => {
+      transaction.executeSql(sql, args, (_, { rows }) => {
         resolve(rows._array);
       });
     });

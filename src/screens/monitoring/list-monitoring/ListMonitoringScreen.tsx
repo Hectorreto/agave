@@ -5,12 +5,12 @@ import MapView, { Marker } from 'react-native-maps';
 
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
-import ArrowDropDown from '../../../../assets/svg/arrow_drop_down.svg';
 import Create from '../../../../assets/svg/create.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
+import FilterDate from '../../../components/filter-date/FilterDate';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
@@ -38,14 +38,11 @@ type Props = NativeStackScreenProps<MonitoringStackParamList, 'ListMonitoring'>;
 
 const ListMonitoringScreen = ({ navigation }: Props) => {
   const [search, setSearch] = useState('');
+  const [date, setDate] = useState<Date>();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.filterContainer}>
-        <FilterAlt style={styles.filterLeftIcon} />
-        <Text style={styles.filterText}>Fecha de monitoreo</Text>
-        <ArrowDropDown style={styles.filterRightIcon} />
-      </View>
+      <FilterDate date={date} onChange={setDate} />
       <MapView
         style={styles.map}
         initialRegion={{

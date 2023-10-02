@@ -1,13 +1,13 @@
+import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
-import ArrowDropDown from '../../../../assets/svg/arrow_drop_down.svg';
-import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import MoreVert from '../../../../assets/svg/table/more_vert.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
+import FilterDate from '../../../components/filter-date/FilterDate';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { formatDateTime } from '../../../utils/dateUtils';
@@ -34,6 +34,8 @@ const data = [
 ];
 
 const PropertyPlantExitsScreen = () => {
+  const [date, setDate] = useState<Date>();
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <HeaderTabIndicator
@@ -44,11 +46,7 @@ const PropertyPlantExitsScreen = () => {
         ]}
         active="PropertyPlantExits"
       />
-      <View style={styles.filterContainer}>
-        <FilterAlt style={styles.filterLeftIcon} />
-        <Text style={styles.filterText}>Fecha de monitoreo</Text>
-        <ArrowDropDown style={styles.filterRightIcon} />
-      </View>
+      <FilterDate date={date} onChange={setDate} />
       <MapView
         style={styles.map}
         initialRegion={{
