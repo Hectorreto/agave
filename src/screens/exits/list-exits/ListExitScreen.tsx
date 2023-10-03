@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 import { GUADALAJARA_REGION, useExits, useMapData, useTableData } from './helpers';
@@ -68,15 +68,15 @@ const ListExitScreen = ({ navigation }: Props) => {
         rows={filteredData.map((exit) => ({
           id: exit.id,
           values: [
-            <Pressable style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
+            <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
               <Text style={styles.dataText}>{exit.type}</Text>
-            </Pressable>,
-            <Pressable style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
+            </TouchableOpacity>,
+            <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
               <Text style={styles.dataText}>{exit.plantCount}</Text>
-            </Pressable>,
-            <Pressable style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
+            </TouchableOpacity>,
+            <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
               <Text style={styles.formattedDate}>{formatDateTime(exit.createdAt)}</Text>
-            </Pressable>,
+            </TouchableOpacity>,
             <View style={styles.moreButton}>
               <CustomButton
                 color="blueWhite"

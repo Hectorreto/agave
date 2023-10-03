@@ -7,8 +7,8 @@ import { Exit, FindExitOptions, findExits } from '../../../services/exitService'
 export const GUADALAJARA_REGION = {
   latitude: 20.67622305129026,
   longitude: -103.34720767164721,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
+  latitudeDelta: 0.1,
+  longitudeDelta: 0.05,
 };
 
 export const useMapData = (data: Exit[]) => {
@@ -19,7 +19,7 @@ export const useMapData = (data: Exit[]) => {
     mapRef.current?.animateToRegion({
       latitude: exit.latitude,
       longitude: exit.longitude,
-      latitudeDelta: 0.05,
+      latitudeDelta: 0.1,
       longitudeDelta: 0.05,
     });
     markerRefs.get(exit.id)?.current?.showCallout();

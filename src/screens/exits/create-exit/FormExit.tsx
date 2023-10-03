@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import { Item } from './CreateExitScreen';
+import { Item } from './helpers';
 import styles from './styles';
 import InputCamera from '../../../components/input-camera/InputCamera';
 import InputSelect from '../../../components/input-select/InputSelect';
@@ -67,8 +67,16 @@ const FormExit = ({ item, onChange }: Props) => {
       <View style={styles.extraActions}>
         <InputCamera
           value={item.exit.imageUri}
-          onChange={(imageUri) => {
-            onChange({ ...item, exit: { ...item.exit, imageUri } });
+          onChange={(imageUri, latitude, longitude) => {
+            onChange({
+              ...item,
+              exit: {
+                ...item.exit,
+                imageUri,
+                latitude,
+                longitude,
+              },
+            });
           }}
         />
       </View>

@@ -3,6 +3,11 @@ import {
   launchCameraAsync,
   requestCameraPermissionsAsync,
 } from 'expo-image-picker';
+import {
+  getCurrentPositionAsync,
+  getForegroundPermissionsAsync,
+  requestForegroundPermissionsAsync,
+} from 'expo-location';
 import { useEffect, useState } from 'react';
 import { Image, Linking, Platform, View } from 'react-native';
 
@@ -11,7 +16,7 @@ import CustomButton from '../custom-button/CustomButton';
 
 type Props = {
   value: string;
-  onChange?: (imageUri: string) => void;
+  onChange?: (imageUri: string, latitude: number, longitude: number) => void;
 };
 
 const InputCamera = ({ value, onChange }: Props) => {
@@ -31,29 +36,60 @@ const InputCamera = ({ value, onChange }: Props) => {
     }
   }, [value]);
 
+  const handleCameraPermissions = async () => {
+    let permissions = await getCameraPermissionsAsync();
+    if (permissions.status !== 'granted') {
+      if (permissions.canAskAgain) {
+        permissions = await requestCameraPermissionsAsync();
+      } else {
+        if (Platform.OS === 'android') {
+          await Linking.openSettings();
+        }
+        if (Platform.OS === 'ios') {
+          await Linking.openURL('app-settings:');
+        }
+      }
+    }
+
+    if (permissions.status !== 'granted') {
+      throw new Error('Camera permissions not granted');
+    }
+  };
+
+  const handleLocationPermissions = async () => {
+    let permissions = await getForegroundPermissionsAsync();
+    if (permissions.status !== 'granted') {
+      if (permissions.canAskAgain) {
+        permissions = await requestForegroundPermissionsAsync();
+      } else {
+        if (Platform.OS === 'android') {
+          await Linking.openSettings();
+        }
+        if (Platform.OS === 'ios') {
+          await Linking.openURL('app-settings:');
+        }
+      }
+    }
+
+    if (permissions.status !== 'granted') {
+      throw new Error('Location permissions not granted');
+    }
+  };
+
   const handleOnPress = () => {
     if (!onChange) return undefined;
 
     return async () => {
-      let permissions = await getCameraPermissionsAsync();
-      if (permissions.status !== 'granted') {
-        if (permissions.canAskAgain) {
-          permissions = await requestCameraPermissionsAsync();
-        } else {
-          if (Platform.OS === 'android') {
-            await Linking.openSettings();
-          }
-          if (Platform.OS === 'ios') {
-            await Linking.openURL('app-settings:');
-          }
-        }
-      }
-
-      if (permissions.status === 'granted') {
+      try {
+        await handleCameraPermissions();
+        await handleLocationPermissions();
         const result = await launchCameraAsync();
         if (!result.canceled) {
-          onChange(result.assets[0].uri);
+          const location = await getCurrentPositionAsync();
+          onChange(result.assets[0].uri, location.coords.latitude, location.coords.longitude);
         }
+      } catch (error) {
+        console.error(error);
       }
     };
   };
