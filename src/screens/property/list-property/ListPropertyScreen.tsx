@@ -40,7 +40,7 @@ const ListPropertyScreen = ({ navigation }: Props) => {
         </View>
       </View>
       <PaginatedTable
-        titles={['Predio', '']}
+        titles={[<Text style={styles.tableTitleText}>Predio</Text>, <></>]}
         rows={data.map((value) => ({
           id: value.id,
           values: [

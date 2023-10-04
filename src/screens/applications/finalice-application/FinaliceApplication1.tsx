@@ -51,7 +51,11 @@ const FinaliceApplication1 = ({ navigation }: Props) => {
     <ScrollView contentContainerStyle={styles.container}>
       <TabIndicator titles={['Ticket', 'Finalizar aplicación']} current={1} />
       <PaginatedTable
-        titles={['Producto', 'Cant. total', 'Cant. real']}
+        titles={[
+          <Text style={styles.tableTitleText}>Producto</Text>,
+          <Text style={styles.tableTitleText}>Cant. total</Text>,
+          <Text style={styles.tableTitleText}>Cant. real</Text>,
+        ]}
         rows={data.map((value, index) => ({
           id: value.id,
           values: [

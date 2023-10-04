@@ -48,7 +48,10 @@ const CreateApplication3Screen = ({ navigation }: Props) => {
       <TabIndicator titles={['', '', 'Ticket', '']} current={3} />
 
       <PaginatedTable
-        titles={['Producto', 'Cantidad total']}
+        titles={[
+          <Text style={styles.tableTitleText}>Producto</Text>,
+          <Text style={styles.tableTitleText}>Cantidad total</Text>,
+        ]}
         rows={data.map((value) => ({
           id: value.id,
           values: [

@@ -48,51 +48,63 @@ export const useMapData = (data: Exit[]) => {
   };
 };
 
-export const useTableData = (data: Exit[], search: string) => {
-  const [filteredData, setFilteredData] = useState<Exit[]>([]);
-
-  useEffect(() => {
-    setFilteredData(
-      data.filter((value) => {
-        if (search) {
-          const searchL = search.toLowerCase();
-          return (
-            value.property.toLowerCase().includes(searchL) ||
-            value.type.toLowerCase().includes(searchL) ||
-            value.plantCount.toLowerCase().includes(searchL)
-          );
-        }
-        return true;
-      })
-    );
-  }, [data, search]);
-
-  return {
-    filteredData,
-  };
+type UseExitsProps = {
+  date?: Date;
+  search: string;
+  createdAtSort: 'ASC' | 'DESC';
 };
 
-export const useExits = (date?: Date) => {
+export const useExits = ({ date, search, createdAtSort }: UseExitsProps) => {
   const [data, setData] = useState<Exit[]>([]);
   const [options, setOptions] = useState<FindExitOptions>({});
 
   useEffect(() => {
-    if (!date && options.filter?.createdAt) {
-      const newOptions = { ...options };
-      newOptions.filter = { ...options.filter };
-      newOptions.filter.createdAt = undefined;
-      setOptions(newOptions);
-    }
+    const newOptions = { ...options };
     if (date) {
-      const newOptions = { ...options };
-      if (!newOptions.filter) newOptions.filter = {};
-      newOptions.filter.createdAt = {
-        lower: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-        upper: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
+      newOptions.filter = {
+        ...options.filter,
+        createdAt: {
+          lower: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+          upper: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
+        },
       };
-      setOptions(newOptions);
+    } else {
+      newOptions.filter = {
+        ...options.filter,
+        createdAt: undefined,
+      };
     }
+    setOptions(newOptions);
   }, [date]);
+
+  useEffect(() => {
+    const newOptions = { ...options };
+    if (search) {
+      newOptions.filter = {
+        ...options.filter,
+        property: `%${search}%`,
+        type: `%${search}%`,
+        plantCount: `%${search}%`,
+      };
+    } else {
+      newOptions.filter = {
+        ...options.filter,
+        property: undefined,
+        type: undefined,
+        plantCount: undefined,
+      };
+    }
+    setOptions(newOptions);
+  }, [search]);
+
+  useEffect(() => {
+    const newOptions = { ...options };
+    newOptions.sorting = {
+      ...newOptions.sorting,
+      createdAt: createdAtSort,
+    };
+    setOptions(newOptions);
+  }, [createdAtSort]);
 
   useFocusEffect(
     useCallback(() => {

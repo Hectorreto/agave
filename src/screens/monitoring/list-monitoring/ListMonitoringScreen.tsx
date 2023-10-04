@@ -81,7 +81,11 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
         </View>
       </View>
       <PaginatedTable
-        titles={['Predio', 'Fecha', '']}
+        titles={[
+          <Text style={styles.tableTitleText}>Predio</Text>,
+          <Text style={styles.tableTitleText}>Fecha</Text>,
+          <></>,
+        ]}
         rows={data.map((value) => ({
           id: value.id,
           values: [

@@ -70,7 +70,12 @@ const ListApplicationScreen = ({ navigation }: Props) => {
         </View>
       </View>
       <PaginatedTable
-        titles={['Predio', 'Mes de aplicación', 'Estado', '']}
+        titles={[
+          <Text style={styles.tableTitleText}>Predio</Text>,
+          <Text style={styles.tableTitleText}>Mes de aplicación</Text>,
+          <Text style={styles.tableTitleText}>Estado</Text>,
+          <></>,
+        ]}
         rows={data.map((value) => ({
           id: value.id,
           values: [

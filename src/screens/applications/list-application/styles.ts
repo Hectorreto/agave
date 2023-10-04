@@ -56,6 +56,12 @@ const styles = StyleSheet.create({
   moreButton: {
     marginHorizontal: 8,
   },
+  tableTitleText: {
+    fontWeight: '600',
+    color: Colors.PRIMARY_700,
+    fontSize: 16,
+    marginHorizontal: 16,
+  },
 });
 
 export default styles;

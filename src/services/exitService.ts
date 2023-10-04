@@ -69,6 +69,9 @@ export type FindExitOptions = {
       lower: Date;
       upper: Date;
     };
+    property?: string;
+    type?: string;
+    plantCount?: string;
   };
   sorting?: {
     createdAt: 'ASC' | 'DESC';
@@ -76,8 +79,8 @@ export type FindExitOptions = {
 };
 
 export const findExits = async (options: FindExitOptions): Promise<Exit[]> => {
-  const args: any[] = [];
   const where: string[] = [];
+  const args: any[] = [];
 
   if (options.filter?.createdAt) {
     where.push('createdAt BETWEEN ? AND ?');
@@ -85,9 +88,32 @@ export const findExits = async (options: FindExitOptions): Promise<Exit[]> => {
     args.push(options.filter.createdAt.upper.getTime());
   }
 
+  // search
+  const whereOr: string[] = [];
+  if (options.filter?.property) {
+    whereOr.push('property LIKE ? COLLATE NOCASE');
+    args.push(options.filter.property);
+  }
+  if (options.filter?.type) {
+    whereOr.push('type LIKE ? COLLATE NOCASE');
+    args.push(options.filter.type);
+  }
+  if (options.filter?.plantCount) {
+    whereOr.push('plantCount LIKE ? COLLATE NOCASE');
+    args.push(options.filter.plantCount);
+  }
+  if (whereOr.length) {
+    where.push(whereOr.join(' OR '));
+  }
+
   let whereSql = '';
   if (where.length) {
     whereSql = `WHERE ${where.map((value) => `(${value})`).join(' AND ')}`;
+  }
+
+  let orderSql = 'ORDER BY createdAt DESC';
+  if (options.sorting?.createdAt === 'ASC') {
+    orderSql = 'ORDER BY createdAt ASC';
   }
 
   return new Promise((resolve) => {
@@ -96,7 +122,7 @@ export const findExits = async (options: FindExitOptions): Promise<Exit[]> => {
         SELECT *
         FROM exit
         ${whereSql}
-        ORDER BY createdAt DESC
+        ${orderSql}
       `;
       transaction.executeSql(sql, args, (_, { rows }) => {
         resolve(rows._array);

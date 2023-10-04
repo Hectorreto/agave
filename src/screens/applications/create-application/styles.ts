@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native';
 
+import { Colors } from '../../../themes/theme';
+
 const styles = StyleSheet.create({
   container: {
     padding: 24,
@@ -45,6 +47,12 @@ const styles = StyleSheet.create({
   },
   helperButton: {
     alignItems: 'center',
+  },
+  tableTitleText: {
+    fontWeight: '600',
+    color: Colors.PRIMARY_700,
+    fontSize: 16,
+    marginHorizontal: 16,
   },
 });
 

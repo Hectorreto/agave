@@ -50,6 +50,24 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
   },
+  tableDateSort: {
+    flexDirection: 'row',
+    height: '100%',
+    alignItems: 'center',
+  },
+  tableTitleText: {
+    fontWeight: '600',
+    color: Colors.PRIMARY_700,
+    fontSize: 16,
+    marginHorizontal: 16,
+  },
+  tableTitleTextSort: {
+    fontWeight: '600',
+    color: Colors.PRIMARY_700,
+    fontSize: 16,
+    marginHorizontal: 16,
+    marginRight: 0,
+  },
 });
 
 export default styles;

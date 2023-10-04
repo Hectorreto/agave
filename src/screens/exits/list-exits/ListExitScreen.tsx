@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-import { GUADALAJARA_REGION, useExits, useMapData, useTableData } from './helpers';
+import { GUADALAJARA_REGION, useExits, useMapData } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
+import ExpandLess from '../../../../assets/svg/expand_less.svg';
+import ExpandMore from '../../../../assets/svg/expand_more.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
 import MoreVert from '../../../../assets/svg/table/more_vert.svg';
@@ -15,16 +17,17 @@ import FilterDate from '../../../components/filter-date/FilterDate';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
-import { formatDateTime } from '../../../utils/dateUtils';
+import { Colors } from '../../../themes/theme';
+import { formatDate, formatDateTime, formatTime } from '../../../utils/dateUtils';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'ListExits'>;
 
 const ListExitScreen = ({ navigation }: Props) => {
   const [date, setDate] = useState<Date>();
-  const { data } = useExits(date);
-  const { mapRef, markerRefs, moveMapToExit } = useMapData(data);
   const [search, setSearch] = useState('');
-  const { filteredData } = useTableData(data, search);
+  const [createdAtSort, setCreatedAtSort] = useState<'ASC' | 'DESC'>('DESC');
+  const { data } = useExits({ date, search, createdAtSort });
+  const { mapRef, markerRefs, moveMapToExit } = useMapData(data);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -37,6 +40,7 @@ const ListExitScreen = ({ navigation }: Props) => {
             coordinate={{ latitude: exit.latitude, longitude: exit.longitude }}
             title={exit.type}
             description={formatDateTime(exit.createdAt)}
+            onCalloutPress={() => navigation.navigate('SeeExit', { id: exit.id })}
           />
         ))}
       </MapView>
@@ -64,8 +68,28 @@ const ListExitScreen = ({ navigation }: Props) => {
 
       <PaginatedTable
         maxRows={3}
-        titles={['Tipo de salida', 'Plantas', 'Fecha', '']}
-        rows={filteredData.map((exit) => ({
+        titles={[
+          <Text style={styles.tableTitleText}>Tipo de salida</Text>,
+          <Text style={styles.tableTitleText}>Plantas</Text>,
+          <TouchableOpacity
+            onPress={() => {
+              if (createdAtSort === 'ASC') {
+                setCreatedAtSort('DESC');
+              } else {
+                setCreatedAtSort('ASC');
+              }
+            }}
+            style={styles.tableDateSort}>
+            <Text style={styles.tableTitleTextSort}>Fecha</Text>
+            {createdAtSort === 'DESC' ? (
+              <ExpandMore fill={Colors.PRIMARY_200} />
+            ) : (
+              <ExpandLess fill={Colors.PRIMARY_200} />
+            )}
+          </TouchableOpacity>,
+          <></>,
+        ]}
+        rows={data.map((exit) => ({
           id: exit.id,
           values: [
             <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
@@ -75,7 +99,8 @@ const ListExitScreen = ({ navigation }: Props) => {
               <Text style={styles.dataText}>{exit.plantCount}</Text>
             </TouchableOpacity>,
             <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToExit(exit)}>
-              <Text style={styles.formattedDate}>{formatDateTime(exit.createdAt)}</Text>
+              <Text style={styles.formattedDate}>{formatDate(exit.createdAt)}</Text>
+              <Text style={styles.formattedDate}>{formatTime(exit.createdAt)}</Text>
             </TouchableOpacity>,
             <View style={styles.moreButton}>
               <CustomButton

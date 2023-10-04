@@ -69,7 +69,12 @@ const PropertyPlantExitsScreen = () => {
       </View>
       <Divider />
       <PaginatedTable
-        titles={['Tipo de salida', 'Plantas', 'Fecha', '']}
+        titles={[
+          <Text style={styles.tableTitleText}>Tipo de salida</Text>,
+          <Text style={styles.tableTitleText}>Plantas</Text>,
+          <Text style={styles.tableTitleText}>Fecha</Text>,
+          <></>,
+        ]}
         rows={data.map((value) => ({
           id: value.id,
           values: [

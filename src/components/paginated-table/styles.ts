@@ -47,12 +47,6 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'row',
   },
-  titleText: {
-    fontWeight: '600',
-    color: Colors.PRIMARY_700,
-    fontSize: 16,
-    marginHorizontal: 16,
-  },
   titleContainer: {
     justifyContent: 'center',
     borderRightWidth: 1,
