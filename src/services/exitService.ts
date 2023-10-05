@@ -1,5 +1,28 @@
 import database from '../../database';
 
+database.transaction((transaction) => {
+  const sql = `
+    CREATE TABLE IF NOT EXISTS exit (
+      id TEXT PRIMARY KEY,
+      createdAt INTEGER,
+      updatedAt INTEGER,
+      createdBy TEXT,
+      updatedBy TEXT,
+      property TEXT,
+      type TEXT,
+      plantCount TEXT,
+      notes TEXT,
+      imageUri TEXT,
+      latitude REAL,
+      longitude REAL
+    );      
+  `;
+  transaction.executeSql(sql, [], undefined, (_, error) => {
+    console.error(error);
+    return false;
+  });
+});
+
 export type Exit = {
   id: string;
   createdAt: number;
@@ -15,22 +38,22 @@ export type Exit = {
   longitude: number;
 };
 
-export const createExits = async (exits: Exit[]): Promise<void> => {
-  const keys: (keyof Exit)[] = [
-    'id',
-    'createdAt',
-    'updatedAt',
-    'createdBy',
-    'updatedBy',
-    'property',
-    'type',
-    'plantCount',
-    'notes',
-    'imageUri',
-    'latitude',
-    'longitude',
-  ];
+const keys: (keyof Exit)[] = [
+  'id',
+  'createdAt',
+  'updatedAt',
+  'createdBy',
+  'updatedBy',
+  'property',
+  'type',
+  'plantCount',
+  'notes',
+  'imageUri',
+  'latitude',
+  'longitude',
+];
 
+export const createExits = async (exits: Exit[]): Promise<void> => {
   const values: string[] = [];
   const args: any[] = [];
 

@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
+import { newApplication } from './helpers';
 import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputDate from '../../../components/input-date/InputDate';
@@ -75,7 +76,19 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
         <CustomButton
           color="blue"
           text="Siguiente"
-          onPress={() => navigation.navigate('CreateApplication2')}
+          onPress={() => {
+            if (!property || !concept || !month || !date) return;
+
+            navigation.navigate('CreateApplication2', {
+              application: {
+                ...newApplication(),
+                property,
+                concept,
+                applicationMonth: month,
+                scheduledDate: date.getTime(),
+              },
+            });
+          }}
         />
       </View>
     </ScrollView>

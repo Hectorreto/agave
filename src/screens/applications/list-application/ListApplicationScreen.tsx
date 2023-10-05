@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
+import { useApplications } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import Create from '../../../../assets/svg/create.svg';
@@ -14,47 +15,9 @@ import { ApplicationStackParamList } from '../../../navigation/ApplicationStack'
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'ListApplications'>;
 
-const data = [
-  {
-    id: '1',
-    property: 'Nombre del predio',
-    month: 'Septiembre',
-    state: 'inProcess',
-  },
-  {
-    id: '2',
-    property: 'Nombre del predio',
-    month: 'Agosto',
-    state: 'finalized',
-  },
-  {
-    id: '3',
-    property: 'Nombre del predio',
-    month: 'Enero',
-    state: 'inProcess',
-  },
-  {
-    id: '4',
-    property: 'Nombre del predio',
-    month: 'Marzo',
-    state: 'finalized',
-  },
-  {
-    id: '5',
-    property: 'Nombre del predio',
-    month: 'Diciembre',
-    state: 'finalized',
-  },
-  {
-    id: '6',
-    property: 'Nombre del predio',
-    month: 'Junio',
-    state: 'finalized',
-  },
-];
-
 const ListApplicationScreen = ({ navigation }: Props) => {
   const [search, setSearch] = useState('');
+  const { data } = useApplications();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -80,7 +43,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
           id: value.id,
           values: [
             <Text style={styles.dataText}>{value.property}</Text>,
-            <Text style={styles.dataText}>{value.month}</Text>,
+            <Text style={styles.dataText}>{value.applicationMonth}</Text>,
             <View
               style={[
                 styles.statusContainer,

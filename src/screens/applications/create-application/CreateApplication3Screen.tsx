@@ -42,7 +42,9 @@ const data = [
   },
 ];
 
-const CreateApplication3Screen = ({ navigation }: Props) => {
+const CreateApplication3Screen = ({ navigation, route }: Props) => {
+  const { application, products } = route.params;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TabIndicator titles={['', '', 'Ticket', '']} current={3} />
@@ -74,7 +76,7 @@ const CreateApplication3Screen = ({ navigation }: Props) => {
         <CustomButton
           color="blue"
           text="Siguiente"
-          onPress={() => navigation.navigate('CreateApplication4')}
+          onPress={() => navigation.navigate('CreateApplication4', { application, products })}
         />
       </View>
     </ScrollView>
