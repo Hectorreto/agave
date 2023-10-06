@@ -2,7 +2,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
-import { useApplications } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import Create from '../../../../assets/svg/create.svg';
@@ -11,13 +10,29 @@ import Search from '../../../../assets/svg/search.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
+import { useApplications } from '../../../hooks/useApplications';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'ListApplications'>;
 
+const MonthNames = [
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
+];
+
 const ListApplicationScreen = ({ navigation }: Props) => {
   const [search, setSearch] = useState('');
-  const { data } = useApplications();
+  const { data } = useApplications({ search });
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -35,7 +50,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
       <PaginatedTable
         titles={[
           <Text style={styles.tableTitleText}>Predio</Text>,
-          <Text style={styles.tableTitleText}>Mes de aplicación</Text>,
+          <Text style={[styles.tableTitleText, { maxWidth: 120 }]}>Mes de aplicación</Text>,
           <Text style={styles.tableTitleText}>Estado</Text>,
           <></>,
         ]}
@@ -43,7 +58,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
           id: value.id,
           values: [
             <Text style={styles.dataText}>{value.property}</Text>,
-            <Text style={styles.dataText}>{value.applicationMonth}</Text>,
+            <Text style={styles.dataText}>{MonthNames[Number(value.applicationMonth)]}</Text>,
             <View
               style={[
                 styles.statusContainer,
@@ -57,7 +72,9 @@ const ListApplicationScreen = ({ navigation }: Props) => {
                 <CustomButton
                   color="white"
                   Icon={Create}
-                  onPress={() => navigation.navigate('FinaliceApplication1')}
+                  onPress={() =>
+                    navigation.navigate('FinaliceApplication1', { applicationId: value.id })
+                  }
                 />
               )}
               {value.state === 'finalized' && <CustomButton color="white" Icon={Create} />}

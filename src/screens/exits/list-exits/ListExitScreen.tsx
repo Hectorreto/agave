@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
-import { GUADALAJARA_REGION, useExits, useMapData } from './helpers';
+import { GUADALAJARA_REGION, useMapData } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import ExpandLess from '../../../../assets/svg/expand_less.svg';
@@ -16,6 +16,7 @@ import Divider from '../../../components/divider/Divider';
 import FilterDate from '../../../components/filter-date/FilterDate';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
+import { useExits } from '../../../hooks/useExits';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
 import { Colors } from '../../../themes/theme';
 import { formatDate, formatDateTime, formatTime } from '../../../utils/dateUtils';

@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     color: Colors.PRIMARY_700,
     fontSize: 16,
     marginHorizontal: 16,
+    maxWidth: 150,
   },
 });
 

@@ -7,11 +7,25 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
+import { finalizeApplication } from '../../../services/applicationService';
+import { finalizeProducts } from '../../../services/productService';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplication2'>;
 
-const FinaliceApplication2 = ({ navigation }: Props) => {
+const FinaliceApplication2Screen = ({ navigation, route }: Props) => {
+  const { applicationId, products } = route.params;
   const { showNotification } = useNotification();
+
+  const handleCreate = async () => {
+    try {
+      await finalizeApplication(applicationId);
+      await finalizeProducts(products);
+      showNotification('La aplicación ha sido finalizada con éxito');
+      navigation.navigate('ListApplications');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -33,17 +47,10 @@ const FinaliceApplication2 = ({ navigation }: Props) => {
           text="Cancelar"
           onPress={() => navigation.navigate('ListApplications')}
         />
-        <CustomButton
-          color="blue"
-          text="Crear"
-          onPress={() => {
-            navigation.navigate('ListApplications');
-            showNotification('La aplicación ha sido finalizada con éxito');
-          }}
-        />
+        <CustomButton color="blue" text="Crear" onPress={handleCreate} />
       </View>
     </ScrollView>
   );
 };
 
-export default FinaliceApplication2;
+export default FinaliceApplication2Screen;

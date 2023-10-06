@@ -1,13 +1,13 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView, Text, View } from 'react-native';
 
-import { saveApplications } from './helpers';
 import styles from './styles';
 import CameraAlt from '../../../../assets/svg/camera_alt.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
+import { createApplication } from '../../../services/applicationService';
 import { createProducts } from '../../../services/productService';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication4'>;
@@ -18,7 +18,7 @@ const CreateApplication4Screen = ({ navigation, route }: Props) => {
 
   const handleOnSave = async () => {
     try {
-      await saveApplications([application]);
+      await createApplication(application);
       await createProducts(products);
       showNotification('La aplicación ha sido creada con éxito');
       navigation.navigate('ListApplications');

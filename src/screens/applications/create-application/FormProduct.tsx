@@ -1,11 +1,11 @@
 import { View } from 'react-native';
 
-import { Product } from './CreateApplication2Screen';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import RemoveCircle from '../../../../assets/svg/remove_circle.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
+import { Product } from '../../../services/productService';
 
 type Props = {
   product: Product;

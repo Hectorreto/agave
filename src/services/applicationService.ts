@@ -19,7 +19,7 @@ database.transaction((transaction) => {
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {
     console.error(error);
-    return false;
+    return true;
   });
 });
 
@@ -53,21 +53,21 @@ const keys: (keyof Application)[] = [
   'notes',
 ];
 
-export const createApplications = async (applications: Application[]): Promise<void> => {
-  const values: string[] = [];
-  const args: any[] = [];
-
-  applications.forEach((application) => {
-    values.push(`(${keys.map(() => '?').join(',')})`);
-    args.push(...keys.map((key) => application[key]));
-  });
+export const createApplication = (application: Application): Promise<void> => {
+  const nowTime = new Date().getTime();
+  const applicationCopy = {
+    ...application,
+    createdAt: nowTime,
+    updatedAt: nowTime,
+  };
+  const args = keys.map((key) => applicationCopy[key]);
 
   return new Promise((resolve, reject) => {
     database.transaction((transaction) => {
       transaction.executeSql(
         `
           INSERT INTO application (${keys.join(',')})
-          VALUES ${values.join(',')};
+          VALUES (${keys.map(() => '?').join(',')})
         `,
         args,
         () => {
@@ -75,23 +75,67 @@ export const createApplications = async (applications: Application[]): Promise<v
         },
         (_, error) => {
           reject(error);
-          return false;
+          return true;
         }
       );
     });
   });
 };
 
-export const findApplications = async (): Promise<Application[]> => {
+export type FindApplicationOptions = {
+  filter?: {
+    property?: string;
+  };
+};
+
+export const findApplications = async (options: FindApplicationOptions): Promise<Application[]> => {
+  const where: string[] = [];
+  const args: any[] = [];
+
+  if (options.filter?.property) {
+    where.push('property LIKE ? COLLATE NOCASE');
+    args.push(options.filter.property);
+  }
+
+  let whereSql = '';
+  if (where.length) {
+    whereSql = `WHERE ${where.map((value) => `(${value})`).join(' AND ')}`;
+  }
+
   return new Promise((resolve) => {
     database.transaction((transaction) => {
       const sql = `
         SELECT *
         FROM application
+        ${whereSql}
       `;
-      transaction.executeSql(sql, [], (_, { rows }) => {
+      transaction.executeSql(sql, args, (_, { rows }) => {
         resolve(rows._array);
       });
+    });
+  });
+};
+
+export const finalizeApplication = (applicationId: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    database.transaction((transaction) => {
+      transaction.executeSql(
+        `
+          UPDATE application
+          SET 
+            state = 'finalized',
+            updatedAt = ?
+          WHERE id = ?
+        `,
+        [new Date().getTime(), applicationId],
+        () => {
+          resolve();
+        },
+        (_, error) => {
+          reject(error);
+          return true;
+        }
+      );
     });
   });
 };

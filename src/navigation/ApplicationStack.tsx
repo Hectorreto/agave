@@ -4,15 +4,14 @@ import React from 'react';
 import HeaderBackButton from '../components/header-back-button/HeaderBackButton';
 import HeaderOpenDrawerButton from '../components/header-open-drawer-button/HeaderOpenDrawerButton';
 import CreateApplication1Screen from '../screens/applications/create-application/CreateApplication1Screen';
-import CreateApplication2Screen, {
-  Product,
-} from '../screens/applications/create-application/CreateApplication2Screen';
+import CreateApplication2Screen from '../screens/applications/create-application/CreateApplication2Screen';
 import CreateApplication3Screen from '../screens/applications/create-application/CreateApplication3Screen';
 import CreateApplication4Screen from '../screens/applications/create-application/CreateApplication4Screen';
-import FinaliceApplication1 from '../screens/applications/finalice-application/FinaliceApplication1';
-import FinaliceApplication2 from '../screens/applications/finalice-application/FinaliceApplication2';
+import FinaliceApplication1Screen from '../screens/applications/finalice-application/FinaliceApplication1Screen';
+import FinaliceApplication2Screen from '../screens/applications/finalice-application/FinaliceApplication2Screen';
 import ListApplicationScreen from '../screens/applications/list-application/ListApplicationScreen';
 import { Application } from '../services/applicationService';
+import { Product } from '../services/productService';
 import { Colors } from '../themes/theme';
 
 export type ApplicationStackParamList = {
@@ -21,8 +20,8 @@ export type ApplicationStackParamList = {
   CreateApplication2: { application: Application };
   CreateApplication3: { application: Application; products: Product[] };
   CreateApplication4: { application: Application; products: Product[] };
-  FinaliceApplication1: undefined;
-  FinaliceApplication2: undefined;
+  FinaliceApplication1: { applicationId: string };
+  FinaliceApplication2: { applicationId: string; products: Product[] };
 };
 
 const Stack = createNativeStackNavigator<ApplicationStackParamList>();
@@ -54,14 +53,14 @@ const ApplicationStack = () => {
       />
       <Stack.Screen
         name="FinaliceApplication1"
-        component={FinaliceApplication1}
+        component={FinaliceApplication1Screen}
         options={{
           title: 'Finalizar aplicación',
         }}
       />
       <Stack.Screen
         name="FinaliceApplication2"
-        component={FinaliceApplication2}
+        component={FinaliceApplication2Screen}
         options={{
           title: 'Finalizar aplicación',
         }}

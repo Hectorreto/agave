@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: Colors.NEUTRAL_200,
     backgroundColor: Colors.NEUTRAL,
-    maxWidth: 150,
     height: 52,
   },
   dataEvenContainer: {
@@ -60,7 +59,6 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: Colors.NEUTRAL_200,
     backgroundColor: Colors.NEUTRAL_100,
-    maxWidth: 150,
     height: 52,
   },
   dataOddContainer: {
@@ -68,7 +66,6 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: Colors.NEUTRAL_200,
     backgroundColor: Colors.NEUTRAL,
-    maxWidth: 150,
     height: 52,
   },
 });

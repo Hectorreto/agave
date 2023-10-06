@@ -19,7 +19,7 @@ database.transaction((transaction) => {
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {
     console.error(error);
-    return false;
+    return true;
   });
 });
 
@@ -75,7 +75,7 @@ export const createExits = async (exits: Exit[]): Promise<void> => {
         },
         (_, error) => {
           reject(error);
-          return false;
+          return true;
         }
       );
     });
@@ -83,10 +83,6 @@ export const createExits = async (exits: Exit[]): Promise<void> => {
 };
 
 export type FindExitOptions = {
-  paging?: {
-    limit: number;
-    offset: number;
-  };
   filter?: {
     createdAt?: {
       lower: Date;

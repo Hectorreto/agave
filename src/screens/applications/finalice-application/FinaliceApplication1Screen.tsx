@@ -7,50 +7,22 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
+import { useProducts } from '../../../hooks/useProducts';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
-
-const data = [
-  {
-    id: '1',
-    product: 'Nombre de producto',
-    total: '###',
-  },
-  {
-    id: '2',
-    product: 'Nombre de producto',
-    total: '###',
-  },
-  {
-    id: '3',
-    product: 'Nombre de producto',
-    total: '###',
-  },
-  {
-    id: '4',
-    product: 'Nombre de producto',
-    total: '###',
-  },
-  {
-    id: '5',
-    product: 'Nombre de producto',
-    total: '###',
-  },
-  {
-    id: '6',
-    product: 'Nombre de producto',
-    total: '###',
-  },
-];
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplication1'>;
 
-const FinaliceApplication1 = ({ navigation }: Props) => {
-  const [amounts, setAmounts] = useState<string[]>(data.map(() => ''));
+const FinaliceApplication1Screen = ({ navigation, route }: Props) => {
+  const { applicationId } = route.params;
+  const { data } = useProducts({ applicationId });
+  const [amounts, setAmounts] = useState<string[]>([]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TabIndicator titles={['Ticket', 'Finalizar aplicación']} current={1} />
       <PaginatedTable
+        showFooter={false}
+        flex={[3, 2, 2]}
         titles={[
           <Text style={styles.tableTitleText}>Producto</Text>,
           <Text style={styles.tableTitleText}>Cant. total</Text>,
@@ -59,8 +31,8 @@ const FinaliceApplication1 = ({ navigation }: Props) => {
         rows={data.map((value, index) => ({
           id: value.id,
           values: [
-            <Text style={styles.tableText}>{value.product}</Text>,
-            <Text style={styles.tableText}>{value.total}</Text>,
+            <Text style={styles.tableText}>{value.name}</Text>,
+            <Text style={styles.tableText}>{value.amount}</Text>,
             <View style={styles.tableInput}>
               <InputText
                 placeholder="###"
@@ -87,11 +59,22 @@ const FinaliceApplication1 = ({ navigation }: Props) => {
         <CustomButton
           color="blue"
           text="Siguiente"
-          onPress={() => navigation.navigate('FinaliceApplication2')}
+          onPress={() => {
+            for (let i = 0; i < data.length; i++) {
+              if (!amounts[i]) return;
+            }
+
+            const products = data.map((product, index) => ({
+              ...product,
+              realAmount: amounts[index],
+            }));
+
+            navigation.navigate('FinaliceApplication2', { applicationId, products });
+          }}
         />
       </View>
     </ScrollView>
   );
 };
 
-export default FinaliceApplication1;
+export default FinaliceApplication1Screen;
