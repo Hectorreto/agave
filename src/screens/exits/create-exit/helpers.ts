@@ -23,8 +23,8 @@ export const newItem = (cnt: number): Item => {
       plantCount: '',
       notes: '',
       imageUri: '',
-      latitude: 20.651243 + Math.random() * (20.704164 - 20.651243),
-      longitude: -103.392861 + Math.random() * (-103.290899 - -103.392861),
+      latitude: 0,
+      longitude: 0,
     },
   };
 };

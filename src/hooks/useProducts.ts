@@ -7,7 +7,7 @@ type Props = {
   applicationId: string;
 };
 
-export const useProducts = ({ applicationId }: Props) => {
+const useProducts = ({ applicationId }: Props) => {
   const [data, setData] = useState<Product[]>([]);
 
   useFocusEffect(
@@ -24,3 +24,5 @@ export const useProducts = ({ applicationId }: Props) => {
     data,
   };
 };
+
+export default useProducts;

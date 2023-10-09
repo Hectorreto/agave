@@ -10,6 +10,7 @@ import Divider from '../../../components/divider/Divider';
 import FilterDate from '../../../components/filter-date/FilterDate';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
+import { GUADALAJARA_REGION } from '../../../utils/constants';
 import { formatDateTime } from '../../../utils/dateUtils';
 
 const data = [
@@ -47,14 +48,7 @@ const PropertyPlantExitsScreen = () => {
         active="PropertyPlantExits"
       />
       <FilterDate date={date} onChange={setDate} />
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 20.6739329,
-          longitude: -103.4178149,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}>
+      <MapView style={styles.map} initialRegion={GUADALAJARA_REGION}>
         <Marker
           coordinate={{
             latitude: 20.6739329,

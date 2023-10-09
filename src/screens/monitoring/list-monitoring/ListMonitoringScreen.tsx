@@ -1,11 +1,14 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
+import { useMapData } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import Create from '../../../../assets/svg/create.svg';
+import ExpandLess from '../../../../assets/svg/expand_less.svg';
+import ExpandMore from '../../../../assets/svg/expand_more.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
@@ -13,52 +16,37 @@ import Divider from '../../../components/divider/Divider';
 import FilterDate from '../../../components/filter-date/FilterDate';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
+import useMonitoring from '../../../hooks/useMonitoring';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
-import { formatDateTime } from '../../../utils/dateUtils';
-
-const data = [
-  {
-    id: '1',
-    name: 'Nombre del predio',
-    date: new Date(2023, 7, 8, 15, 34),
-  },
-  {
-    id: '2',
-    name: 'Nombre del predio',
-    date: new Date(2023, 7, 6, 10, 3),
-  },
-  {
-    id: '3',
-    name: 'Nombre del predio',
-    date: new Date(2023, 7, 1, 9, 41),
-  },
-];
+import { Colors } from '../../../themes/theme';
+import { GUADALAJARA_REGION } from '../../../utils/constants';
+import { formatDate, formatDateTime, formatTime } from '../../../utils/dateUtils';
 
 type Props = NativeStackScreenProps<MonitoringStackParamList, 'ListMonitoring'>;
 
 const ListMonitoringScreen = ({ navigation }: Props) => {
   const [search, setSearch] = useState('');
   const [date, setDate] = useState<Date>();
+  const [createdAtSort, setCreatedAtSort] = useState<'ASC' | 'DESC'>('DESC');
+  const { data } = useMonitoring({ date, search, createdAtSort });
+  const { mapRef, markerRefs, moveMapToMonitoring } = useMapData(data);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <FilterDate date={date} onChange={setDate} />
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 20.6739329,
-          longitude: -103.4178149,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}>
-        <Marker
-          coordinate={{
-            latitude: 20.6739329,
-            longitude: -103.4178149,
-          }}
-          title="Marker Title 1"
-          description="Marker Description 1"
-        />
+      <MapView ref={mapRef} style={styles.map} initialRegion={GUADALAJARA_REGION}>
+        {data.map((monitoring) => (
+          <Marker
+            key={monitoring.id}
+            ref={markerRefs.get(monitoring.id)}
+            coordinate={{ latitude: monitoring.latitude, longitude: monitoring.longitude }}
+            title={monitoring.property}
+            description={formatDateTime(monitoring.createdAt)}
+            onCalloutPress={() =>
+              navigation.navigate('SeeMonitoring', { monitoringId: monitoring.id })
+            }
+          />
+        ))}
       </MapView>
       <View style={styles.newItemContainer}>
         <CustomButton
@@ -81,21 +69,42 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
         </View>
       </View>
       <PaginatedTable
+        flex={[1, 0, 0]}
         titles={[
           <Text style={styles.tableTitleText}>Predio</Text>,
-          <Text style={styles.tableTitleText}>Fecha</Text>,
+          <TouchableOpacity
+            onPress={() => {
+              if (createdAtSort === 'ASC') {
+                setCreatedAtSort('DESC');
+              } else {
+                setCreatedAtSort('ASC');
+              }
+            }}
+            style={styles.tableDateSort}>
+            <Text style={styles.tableTitleTextSort}>Fecha</Text>
+            {createdAtSort === 'DESC' ? (
+              <ExpandMore fill={Colors.PRIMARY_200} />
+            ) : (
+              <ExpandLess fill={Colors.PRIMARY_200} />
+            )}
+          </TouchableOpacity>,
           <></>,
         ]}
         rows={data.map((value) => ({
           id: value.id,
           values: [
-            <Text style={styles.dataText}>{value.name}</Text>,
-            <Text style={styles.formattedDate}>{formatDateTime(value.date)}</Text>,
+            <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToMonitoring(value)}>
+              <Text style={styles.dataText}>{value.property}</Text>
+            </TouchableOpacity>,
+            <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToMonitoring(value)}>
+              <Text style={styles.formattedDate}>{formatDate(value.createdAt)}</Text>
+              <Text style={styles.formattedDate}>{formatTime(value.createdAt)}</Text>
+            </TouchableOpacity>,
             <View style={styles.moreButton}>
               <CustomButton
                 color="white"
                 Icon={Create}
-                onPress={() => navigation.navigate('SeeMonitoring')}
+                onPress={() => navigation.navigate('SeeMonitoring', { monitoringId: value.id })}
               />
             </View>,
           ],

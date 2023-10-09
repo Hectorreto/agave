@@ -1,21 +1,23 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 
-import { Exit, findExits } from '../services/exitService';
+import { findMonitoring, Monitoring } from '../services/monitoringService';
 
 type Props = {
+  id?: string;
   date?: Date;
-  search: string;
-  createdAtSort: 'ASC' | 'DESC';
+  search?: string;
+  createdAtSort?: 'ASC' | 'DESC';
 };
 
-const useExits = ({ date, search, createdAtSort }: Props) => {
-  const [data, setData] = useState<Exit[]>([]);
+const useMonitoring = ({ id, date, search, createdAtSort }: Props) => {
+  const [data, setData] = useState<Monitoring[]>([]);
 
   useFocusEffect(
     useCallback(() => {
-      findExits({
+      findMonitoring({
         filter: {
+          id,
           createdAt: !date
             ? undefined
             : {
@@ -23,14 +25,12 @@ const useExits = ({ date, search, createdAtSort }: Props) => {
                 upper: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
               },
           property: !search ? undefined : `%${search}%`,
-          type: !search ? undefined : `%${search}%`,
-          plantCount: !search ? undefined : `%${search}%`,
         },
         sorting: {
           createdAt: createdAtSort,
         },
       }).then((value) => setData(value));
-    }, [date, search, createdAtSort])
+    }, [id, date, search, createdAtSort])
   );
 
   return {
@@ -38,4 +38,4 @@ const useExits = ({ date, search, createdAtSort }: Props) => {
   };
 };
 
-export default useExits;
+export default useMonitoring;

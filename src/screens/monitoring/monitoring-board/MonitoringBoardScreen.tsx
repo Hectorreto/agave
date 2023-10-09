@@ -3,6 +3,7 @@ import MapView, { Marker } from 'react-native-maps';
 
 import styles from './styles';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
+import { GUADALAJARA_REGION } from '../../../utils/constants';
 
 const MonitoringBoardScreen = () => {
   return (
@@ -14,14 +15,7 @@ const MonitoringBoardScreen = () => {
         ]}
         active="MonitoringBoard"
       />
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 20.6739329,
-          longitude: -103.4178149,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}>
+      <MapView style={styles.map} initialRegion={GUADALAJARA_REGION}>
         <Marker
           coordinate={{
             latitude: 20.6739329,

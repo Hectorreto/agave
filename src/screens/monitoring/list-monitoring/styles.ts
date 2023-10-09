@@ -52,6 +52,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginHorizontal: 16,
   },
+  tableDateSort: {
+    flexDirection: 'row',
+    height: '100%',
+    alignItems: 'center',
+  },
+  tableTitleTextSort: {
+    fontWeight: '600',
+    color: Colors.PRIMARY_700,
+    fontSize: 16,
+    marginHorizontal: 16,
+    marginRight: 0,
+  },
+  rowButton: {
+    height: '100%',
+    justifyContent: 'center',
+  },
 });
 
 export default styles;

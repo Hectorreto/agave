@@ -7,7 +7,7 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
-import { useProducts } from '../../../hooks/useProducts';
+import useProducts from '../../../hooks/useProducts';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplication1'>;

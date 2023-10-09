@@ -9,7 +9,7 @@ import RadioButtonOffPressed from '../../../assets/svg/radio-button/radio_button
 type Props = {
   label: string;
   active: boolean;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 const RadioButton = ({ label, active, onPress }: Props) => {

@@ -10,7 +10,7 @@ import Search from '../../../../assets/svg/search.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
-import { useApplications } from '../../../hooks/useApplications';
+import useApplications from '../../../hooks/useApplications';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'ListApplications'>;

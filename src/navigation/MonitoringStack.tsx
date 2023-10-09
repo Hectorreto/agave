@@ -11,7 +11,7 @@ import { Colors } from '../themes/theme';
 export type MonitoringStackParamList = {
   ListMonitoring: undefined;
   CreateMonitoring: undefined;
-  SeeMonitoring: undefined;
+  SeeMonitoring: { monitoringId: string };
 };
 
 const Stack = createNativeStackNavigator<MonitoringStackParamList>();

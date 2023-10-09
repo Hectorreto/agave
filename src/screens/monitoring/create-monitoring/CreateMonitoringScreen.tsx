@@ -2,30 +2,32 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
+import { newMonitoring } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
-import CameraAlt from '../../../../assets/svg/camera_alt.svg';
 import Delete from '../../../../assets/svg/delete.svg';
 import Checkbox from '../../../components/checkbox/Checkbox';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
 import Expandable from '../../../components/expandable/Expandable';
+import InputCamera from '../../../components/input-camera/InputCamera';
 import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import ModalMonitoringForm from '../../../components/modal-monitoring-form/ModalMonitoringForm';
 import RadioButton from '../../../components/radio-button/RadioButton';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
+import { createMonitoring } from '../../../services/monitoringService';
 
 type Props = NativeStackScreenProps<MonitoringStackParamList, 'CreateMonitoring'>;
 
 const CreateMonitoringScreen = ({ navigation }: Props) => {
   const { showNotification } = useNotification();
-  const [property, setProperty] = useState('');
+  const [monitoring, setMonitoring] = useState(newMonitoring());
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form, setForm] = useState<boolean[]>(Array(8).fill(false));
   const [formCopy, setFormCopy] = useState<boolean[]>([]);
-  const [radio, setRadio] = useState('');
   const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
   const [selectedForm, setSelectedForm] = useState({ index: 0, name: '' });
 
@@ -45,20 +47,20 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
         <InputText
           label="Predio"
           placeholder="Escribe o selecciona"
-          value={property}
-          onChange={setProperty}
+          value={monitoring.property}
+          onChange={(property) => setMonitoring({ ...monitoring, property })}
         />
         <InputText
           label="Número de cuadrantes"
           placeholder="Número"
-          value={property}
-          onChange={setProperty}
+          value={monitoring.quadrantNumber}
+          onChange={(quadrantNumber) => setMonitoring({ ...monitoring, quadrantNumber })}
         />
         <InputText
           label="Número de plantas por cuadrante"
           placeholder="Número"
-          value={property}
-          onChange={setProperty}
+          value={monitoring.plantsPerQuadrant}
+          onChange={(plantsPerQuadrant) => setMonitoring({ ...monitoring, plantsPerQuadrant })}
         />
       </Expandable>
 
@@ -78,8 +80,8 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           <InputText
             label="Estimación de rendimiento en kg"
             placeholder="### kg"
-            value={property}
-            onChange={setProperty}
+            value={monitoring.plantPerformanceKg || ''}
+            onChange={(plantPerformanceKg) => setMonitoring({ ...monitoring, plantPerformanceKg })}
           />
         </Expandable>
       )}
@@ -99,15 +101,27 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           <InputText
             label="Tipo de plaga"
             placeholder="Tipo de plaga"
-            value={property}
-            onChange={setProperty}
+            value={monitoring.plagueType || ''}
+            onChange={(plagueType) => setMonitoring({ ...monitoring, plagueType })}
           />
           <View style={styles.radioContainer}>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.plagueIncidence === 'low'}
+                onPress={() => setMonitoring({ ...monitoring, plagueIncidence: 'low' })}
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.plagueIncidence === 'medium'}
+                onPress={() => setMonitoring({ ...monitoring, plagueIncidence: 'medium' })}
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.plagueIncidence === 'high'}
+                onPress={() => setMonitoring({ ...monitoring, plagueIncidence: 'high' })}
+              />
             </View>
           </View>
         </Expandable>
@@ -128,15 +142,27 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           <InputText
             label="Tipo de enfermedad"
             placeholder="Tipo de enfermedad"
-            value={property}
-            onChange={setProperty}
+            value={monitoring.diseaseType || ''}
+            onChange={(diseaseType) => setMonitoring({ ...monitoring, diseaseType })}
           />
           <View style={styles.radioContainer}>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.diseaseIncidence === 'low'}
+                onPress={() => setMonitoring({ ...monitoring, diseaseIncidence: 'low' })}
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.diseaseIncidence === 'medium'}
+                onPress={() => setMonitoring({ ...monitoring, diseaseIncidence: 'medium' })}
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.diseaseIncidence === 'high'}
+                onPress={() => setMonitoring({ ...monitoring, diseaseIncidence: 'high' })}
+              />
             </View>
           </View>
         </Expandable>
@@ -154,21 +180,38 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
               }}
             />
           }>
-          <InputText label="Maleza" placeholder="Maleza" value={property} onChange={setProperty} />
           <InputText
-            label="Altura aproximada en cm"
-            placeholder="Altura"
-            value={property}
-            onChange={setProperty}
+            label="Maleza"
+            placeholder="Maleza"
+            value={monitoring.undergrowthName || ''}
+            onChange={(undergrowthName) => setMonitoring({ ...monitoring, undergrowthName })}
           />
           <View style={styles.radioContainer}>
             <Text style={styles.radioLabel}>Tipo de hoja</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Ancha" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Angosta" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Leñosa" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Ancha"
+                active={monitoring.undergrowthLeafType === 'wide'}
+                onPress={() => setMonitoring({ ...monitoring, undergrowthLeafType: 'wide' })}
+              />
+              <RadioButton
+                label="Angosta"
+                active={monitoring.undergrowthLeafType === 'narrow'}
+                onPress={() => setMonitoring({ ...monitoring, undergrowthLeafType: 'narrow' })}
+              />
+              <RadioButton
+                label="Leñosa"
+                active={monitoring.undergrowthLeafType === 'woody'}
+                onPress={() => setMonitoring({ ...monitoring, undergrowthLeafType: 'woody' })}
+              />
             </View>
           </View>
+          <InputText
+            label="Altura aproximada en cm"
+            placeholder="Altura"
+            value={monitoring.undergrowthHeight || ''}
+            onChange={(undergrowthHeight) => setMonitoring({ ...monitoring, undergrowthHeight })}
+          />
         </Expandable>
       )}
       {form[4] && (
@@ -188,27 +231,81 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             <Text style={styles.radioTitle}>Herbicidas</Text>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.phytotoxicDamageHerbicideIncidence === 'low'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, phytotoxicDamageHerbicideIncidence: 'low' })
+                }
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.phytotoxicDamageHerbicideIncidence === 'medium'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, phytotoxicDamageHerbicideIncidence: 'medium' })
+                }
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.phytotoxicDamageHerbicideIncidence === 'high'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, phytotoxicDamageHerbicideIncidence: 'high' })
+                }
+              />
             </View>
           </View>
           <View style={styles.radioContainer}>
             <Text style={styles.radioTitle}>Pesticidas</Text>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.phytotoxicDamagePesticideIncidence === 'low'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, phytotoxicDamagePesticideIncidence: 'low' })
+                }
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.phytotoxicDamagePesticideIncidence === 'medium'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, phytotoxicDamagePesticideIncidence: 'medium' })
+                }
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.phytotoxicDamagePesticideIncidence === 'high'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, phytotoxicDamagePesticideIncidence: 'high' })
+                }
+              />
             </View>
           </View>
           <View style={styles.radioContainer}>
             <Text style={styles.radioTitle}>Exceso de sales</Text>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.phytotoxicDamageExcessSaltIncidence === 'low'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, phytotoxicDamageExcessSaltIncidence: 'low' })
+                }
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.phytotoxicDamageExcessSaltIncidence === 'medium'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, phytotoxicDamageExcessSaltIncidence: 'medium' })
+                }
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.phytotoxicDamageExcessSaltIncidence === 'high'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, phytotoxicDamageExcessSaltIncidence: 'high' })
+                }
+              />
             </View>
           </View>
         </Expandable>
@@ -230,54 +327,162 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             <Text style={styles.radioTitle}>Helada</Text>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.environmentalDamageFrostIncidence === 'low'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageFrostIncidence: 'low' })
+                }
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.environmentalDamageFrostIncidence === 'medium'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageFrostIncidence: 'medium' })
+                }
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.environmentalDamageFrostIncidence === 'high'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageFrostIncidence: 'high' })
+                }
+              />
             </View>
           </View>
           <View style={styles.radioContainer}>
             <Text style={styles.radioTitle}>Estrés</Text>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.environmentalDamageStressIncidence === 'low'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageStressIncidence: 'low' })
+                }
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.environmentalDamageStressIncidence === 'medium'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageStressIncidence: 'medium' })
+                }
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.environmentalDamageStressIncidence === 'high'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageStressIncidence: 'high' })
+                }
+              />
             </View>
           </View>
           <View style={styles.radioContainer}>
             <Text style={styles.radioTitle}>Inundación</Text>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.environmentalDamageFloodIncidence === 'low'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageFloodIncidence: 'low' })
+                }
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.environmentalDamageFloodIncidence === 'medium'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageFloodIncidence: 'medium' })
+                }
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.environmentalDamageFloodIncidence === 'high'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageFloodIncidence: 'high' })
+                }
+              />
             </View>
           </View>
           <View style={styles.radioContainer}>
             <Text style={styles.radioTitle}>Incendio</Text>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.environmentalDamageFireIncidence === 'low'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageFireIncidence: 'low' })
+                }
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.environmentalDamageFireIncidence === 'medium'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageFireIncidence: 'medium' })
+                }
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.environmentalDamageFireIncidence === 'high'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageFireIncidence: 'high' })
+                }
+              />
             </View>
           </View>
           <View style={styles.radioContainer}>
             <Text style={styles.radioTitle}>Granizo</Text>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.environmentalDamageHailIncidence === 'low'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageHailIncidence: 'low' })
+                }
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.environmentalDamageHailIncidence === 'medium'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageHailIncidence: 'medium' })
+                }
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.environmentalDamageHailIncidence === 'high'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageHailIncidence: 'high' })
+                }
+              />
             </View>
           </View>
           <View style={styles.radioContainer}>
             <Text style={styles.radioTitle}>Otros</Text>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.environmentalDamageOtherIncidence === 'low'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageOtherIncidence: 'low' })
+                }
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.environmentalDamageOtherIncidence === 'medium'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageOtherIncidence: 'medium' })
+                }
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.environmentalDamageOtherIncidence === 'high'}
+                onPress={() =>
+                  setMonitoring({ ...monitoring, environmentalDamageOtherIncidence: 'high' })
+                }
+              />
             </View>
           </View>
         </Expandable>
@@ -298,17 +503,31 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           <View style={styles.radioContainer}>
             <Text style={styles.radioLabel}>Incidencia</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.colorimetryIncidence === 'low'}
+                onPress={() => setMonitoring({ ...monitoring, colorimetryIncidence: 'low' })}
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.colorimetryIncidence === 'medium'}
+                onPress={() => setMonitoring({ ...monitoring, colorimetryIncidence: 'medium' })}
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.colorimetryIncidence === 'high'}
+                onPress={() => setMonitoring({ ...monitoring, colorimetryIncidence: 'high' })}
+              />
             </View>
           </View>
           <InputText
             multiline
             label="Comentarios"
             placeholder="Escribe tus comentarios"
-            value={property}
-            onChange={setProperty}
+            value={monitoring.colorimetryComments || ''}
+            onChange={(colorimetryComments) =>
+              setMonitoring({ ...monitoring, colorimetryComments })
+            }
           />
         </Expandable>
       )}
@@ -328,15 +547,27 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           <InputText
             label="Tipo de daño físico"
             placeholder="Tipo de daño físico"
-            value={property}
-            onChange={setProperty}
+            value={monitoring.physicalDamageType || ''}
+            onChange={(physicalDamageType) => setMonitoring({ ...monitoring, physicalDamageType })}
           />
           <View style={styles.radioContainer}>
             <Text style={styles.radioLabel}>Tipo de hoja</Text>
             <View style={styles.radioInnerContainer}>
-              <RadioButton label="Baja" active={radio === 'A'} onPress={() => setRadio('A')} />
-              <RadioButton label="Media" active={radio === 'B'} onPress={() => setRadio('B')} />
-              <RadioButton label="Alta" active={radio === 'C'} onPress={() => setRadio('C')} />
+              <RadioButton
+                label="Baja"
+                active={monitoring.physicalDamageLeafType === 'wide'}
+                onPress={() => setMonitoring({ ...monitoring, physicalDamageLeafType: 'wide' })}
+              />
+              <RadioButton
+                label="Media"
+                active={monitoring.physicalDamageLeafType === 'narrow'}
+                onPress={() => setMonitoring({ ...monitoring, physicalDamageLeafType: 'narrow' })}
+              />
+              <RadioButton
+                label="Alta"
+                active={monitoring.physicalDamageLeafType === 'woody'}
+                onPress={() => setMonitoring({ ...monitoring, physicalDamageLeafType: 'woody' })}
+              />
             </View>
           </View>
         </Expandable>
@@ -365,16 +596,20 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
                 <InputText
                   label="De cuadrante"
                   placeholder="##"
-                  value={property}
-                  onChange={setProperty}
+                  value={monitoring.quadrantQualification}
+                  onChange={(quadrantQualification) =>
+                    setMonitoring({ ...monitoring, quadrantQualification })
+                  }
                 />
               </View>
               <View style={styles.bottomFormDoubleInputItem}>
                 <InputText
                   label="De monitoreo"
                   placeholder="##"
-                  value={property}
-                  onChange={setProperty}
+                  value={monitoring.monitoringQualification}
+                  onChange={(monitoringQualification) =>
+                    setMonitoring({ ...monitoring, monitoringQualification })
+                  }
                 />
               </View>
             </View>
@@ -382,13 +617,18 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
               multiline
               label="Comentarios (Opcional)"
               placeholder="Escribe tus comentarios"
-              value={property}
-              onChange={setProperty}
+              value={monitoring.comments || ''}
+              onChange={(comments) => setMonitoring({ ...monitoring, comments })}
             />
           </View>
 
           <View style={styles.bottomFormUploadImageButton}>
-            <CustomButton color="blue" text="Subir foto" Icon={CameraAlt} onPress={() => {}} />
+            <InputCamera
+              value={monitoring.imageUri}
+              onChange={(imageUri, latitude, longitude) => {
+                setMonitoring({ ...monitoring, imageUri, latitude, longitude });
+              }}
+            />
           </View>
 
           <View style={styles.saveCancelButtons}>
@@ -396,9 +636,14 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             <CustomButton
               color="blue"
               text="Guardar"
-              onPress={() => {
-                navigation.navigate('ListMonitoring');
-                showNotification('El monitoreo ha sido creado con éxito');
+              onPress={async () => {
+                try {
+                  await createMonitoring(monitoring);
+                  navigation.navigate('ListMonitoring');
+                  showNotification('El monitoreo ha sido creado con éxito');
+                } catch (error) {
+                  console.error(error);
+                }
               }}
             />
           </View>

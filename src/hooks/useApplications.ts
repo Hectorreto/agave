@@ -7,7 +7,7 @@ type Props = {
   search?: string;
 };
 
-export const useApplications = ({ search }: Props) => {
+const useApplications = ({ search }: Props) => {
   const [data, setData] = useState<Application[]>([]);
 
   useFocusEffect(
@@ -24,3 +24,5 @@ export const useApplications = ({ search }: Props) => {
     data,
   };
 };
+
+export default useApplications;

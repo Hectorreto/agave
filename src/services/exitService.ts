@@ -97,7 +97,7 @@ export type FindExitOptions = {
   };
 };
 
-export const findExits = async (options: FindExitOptions): Promise<Exit[]> => {
+export const findExits = (options: FindExitOptions): Promise<Exit[]> => {
   const where: string[] = [];
   const args: any[] = [];
 

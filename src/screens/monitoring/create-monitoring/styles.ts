@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottomFormUploadImageButton: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   radioContainer: {
     gap: 4,
