@@ -1,11 +1,25 @@
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+import { useEffect, useRef } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { MapMarker, Marker } from 'react-native-maps';
 
 import styles from './styles';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
-import { GUADALAJARA_REGION } from '../../../utils/constants';
+import { MonitoringTabsParamList } from '../../../navigation/MonitoringTabs';
+import { formatDateTime } from '../../../utils/dateUtils';
 
-const MonitoringBoardScreen = () => {
+type Props = MaterialTopTabScreenProps<MonitoringTabsParamList, 'MonitoringBoard'>;
+
+const MonitoringBoardScreen = ({ route }: Props) => {
+  const { monitoring } = route.params;
+  const markerRef = useRef<MapMarker>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      markerRef.current?.showCallout();
+    }, 1);
+  }, []);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <HeaderTabIndicator
@@ -15,14 +29,19 @@ const MonitoringBoardScreen = () => {
         ]}
         active="MonitoringBoard"
       />
-      <MapView style={styles.map} initialRegion={GUADALAJARA_REGION}>
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: monitoring.latitude,
+          longitude: monitoring.longitude,
+          latitudeDelta: 0.1,
+          longitudeDelta: 0.05,
+        }}>
         <Marker
-          coordinate={{
-            latitude: 20.6739329,
-            longitude: -103.4178149,
-          }}
-          title="Marker Title 1"
-          description="Marker Description 1"
+          ref={markerRef}
+          coordinate={{ latitude: monitoring.latitude, longitude: monitoring.longitude }}
+          title={monitoring.property}
+          description={formatDateTime(monitoring.createdAt)}
         />
       </MapView>
       <View style={styles.cardContainer}>

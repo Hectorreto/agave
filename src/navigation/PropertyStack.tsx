@@ -4,12 +4,14 @@ import React from 'react';
 import PropertyTabs from './PropertyTabs';
 import HeaderBackButton from '../components/header-back-button/HeaderBackButton';
 import HeaderOpenDrawerButton from '../components/header-open-drawer-button/HeaderOpenDrawerButton';
+import CreatePropertyScreen from '../screens/property/create-property/CreatePropertyScreen';
 import ListPropertyScreen from '../screens/property/list-property/ListPropertyScreen';
 import { Colors } from '../themes/theme';
 
 export type PropertyStackParamList = {
   ListProperties: undefined;
   PropertyTabs: undefined;
+  CreateProperty: undefined;
 };
 
 const Stack = createNativeStackNavigator<PropertyStackParamList>();
@@ -43,6 +45,11 @@ const PropertyStack = () => {
         name="PropertyTabs"
         component={PropertyTabs}
         options={{ title: 'Ver predio' }}
+      />
+      <Stack.Screen
+        name="CreateProperty"
+        component={CreatePropertyScreen}
+        options={{ title: 'Nuevo predio' }}
       />
     </Stack.Navigator>
   );

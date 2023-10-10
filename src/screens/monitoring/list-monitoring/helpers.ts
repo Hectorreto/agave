@@ -12,7 +12,7 @@ export const useMapData = (data: Monitoring[]) => {
       latitude: monitoring.latitude,
       longitude: monitoring.longitude,
       latitudeDelta: 0.1,
-      longitudeDelta: 0.1,
+      longitudeDelta: 0.05,
     });
     markerRefs.get(monitoring.id)?.current?.showCallout();
   };

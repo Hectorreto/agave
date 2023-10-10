@@ -33,13 +33,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   moreButton: {
-    marginHorizontal: 8,
+    marginHorizontal: 16,
   },
   tableTitleText: {
     fontWeight: '600',
     color: Colors.PRIMARY_700,
     fontSize: 16,
     marginHorizontal: 16,
+  },
+  newItemContainer: {
+    alignItems: 'center',
   },
 });
 

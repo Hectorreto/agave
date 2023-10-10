@@ -8,7 +8,7 @@ import MonitoringBoardScreen from '../screens/monitoring/monitoring-board/Monito
 import { Monitoring } from '../services/monitoringService';
 
 export type MonitoringTabsParamList = {
-  MonitoringBoard: undefined;
+  MonitoringBoard: { monitoring: Monitoring };
   MonitoringGeneralInfo: { monitoring: Monitoring };
 };
 
@@ -24,7 +24,11 @@ const MonitoringTabs = ({ route }: Props) => {
 
   return (
     <Tab.Navigator tabBar={() => <></>} screenOptions={{ swipeEnabled: false }}>
-      <Tab.Screen name="MonitoringBoard" component={MonitoringBoardScreen} />
+      <Tab.Screen
+        name="MonitoringBoard"
+        component={MonitoringBoardScreen}
+        initialParams={{ monitoring }}
+      />
       <Tab.Screen
         name="MonitoringGeneralInfo"
         component={MonitoringGeneralInfoScreen}

@@ -27,44 +27,44 @@ const PropertyGeneralInfoScreen = () => {
         active="PropertyGeneralInfo"
       />
       <View style={styles.innerContainer}>
-        <InputText label="Nombre del predio" placeholder="Text" value={text} onChange={setText} />
+        <InputText
+          label="Nombre del predio"
+          placeholder="Nombre del predio"
+          value={text}
+          onChange={setText}
+        />
         <InputDate label="Año de plantación" date={date} onChange={setDate} />
         <InputSelect
           label="Tipo de cultivos"
-          placeholder="Text"
+          placeholder="Tipo de cultivos"
           value={text}
           onChange={setText}
           items={[{ label: 'Agave', value: '1' }]}
         />
-        <InputText label="Ubicación" placeholder="Text" value={text} onChange={setText} />
+        <InputText label="Ubicación" placeholder="Ubicación" value={text} onChange={setText} />
         <View style={styles.doubleInputContainer}>
           <View style={styles.doubleInputItem}>
-            <InputText
-              label="No. de hectáreas"
-              placeholder="Text"
-              value={text}
-              onChange={setText}
-            />
+            <InputText label="No. de hectáreas" placeholder="###" value={text} onChange={setText} />
           </View>
           <View style={styles.doubleInputItem}>
             <InputText
               label="No. de plantas sembradas"
-              placeholder="Text"
+              placeholder="###"
               value={text}
               onChange={setText}
             />
           </View>
         </View>
-        <InputText label="Folio" placeholder="Text" value={text} onChange={setText} />
-        <InputText label="Registro" placeholder="Text" value={text} onChange={setText} />
+        <InputText label="Folio" placeholder="Folio" value={text} onChange={setText} />
+        <InputText label="Registro" placeholder="Registro" value={text} onChange={setText} />
         <InputText
           label="Identificador interno"
-          placeholder="Text"
+          placeholder="Identificador interno"
           value={text}
           onChange={setText}
         />
         <InputText
-          placeholder="Text"
+          placeholder="###"
           value={text}
           onChange={setText}
           label="Número de tablas por predio"
