@@ -17,7 +17,7 @@ type Props = NativeStackScreenProps<PropertyStackParamList, 'ListProperties'>;
 
 const ListPropertyScreen = ({ navigation }: Props) => {
   const [search, setSearch] = useState('');
-  const { data } = useProperties();
+  const { data } = useProperties({ search });
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -43,7 +43,7 @@ const ListPropertyScreen = ({ navigation }: Props) => {
               <CustomButton
                 color="blueWhite"
                 Icon={Visibility}
-                onPress={() => navigation.navigate('PropertyTabs')}
+                onPress={() => navigation.navigate('PropertyTabs', { propertyId: value.id })}
               />
             </View>,
           ],

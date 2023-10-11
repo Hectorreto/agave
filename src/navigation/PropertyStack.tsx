@@ -10,7 +10,7 @@ import { Colors } from '../themes/theme';
 
 export type PropertyStackParamList = {
   ListProperties: undefined;
-  PropertyTabs: undefined;
+  PropertyTabs: { propertyId: string };
   CreateProperty: undefined;
 };
 

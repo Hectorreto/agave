@@ -81,13 +81,33 @@ export const createProperty = (property: Property): Promise<void> => {
   });
 };
 
-export const findProperties = (): Promise<Property[]> => {
+type FindPropertyOptions = {
+  filter?: {
+    name?: string;
+  };
+};
+
+export const findProperties = (options: FindPropertyOptions): Promise<Property[]> => {
+  const where: string[] = [];
+  const args: any[] = [];
+
+  if (options.filter?.name) {
+    where.push('name LIKE ? COLLATE NOCASE');
+    args.push(options.filter.name);
+  }
+
+  let whereSql = '';
+  if (where.length) {
+    whereSql = `WHERE ${where.map((value) => `(${value})`).join(' AND ')}`;
+  }
+
   return new Promise((resolve) => {
     database.transaction((transaction) => {
       transaction.executeSql(
         `
           SELECT *
           FROM property
+          ${whereSql}
         `,
         [],
         (_, { rows }) => {
