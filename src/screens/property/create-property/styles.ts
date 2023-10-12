@@ -44,11 +44,6 @@ const styles = StyleSheet.create({
   inputSwitchContainer: {
     gap: 4,
   },
-  inputSwitchInnerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
   saveCancelButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',

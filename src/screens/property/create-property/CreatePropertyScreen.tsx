@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
-import { Platform, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import { newProperty, validateForm } from './helpers';
 import styles from './styles';
@@ -9,11 +9,11 @@ import Upload from '../../../../assets/svg/upload.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputDate from '../../../components/input-date/InputDate';
 import InputSelect from '../../../components/input-select/InputSelect';
+import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { PropertyStackParamList } from '../../../navigation/PropertyStack';
 import { createProperty, Property } from '../../../services/propertyService';
-import { Colors } from '../../../themes/theme';
 
 type Props = NativeStackScreenProps<PropertyStackParamList, 'CreateProperty'>;
 
@@ -120,24 +120,10 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
         </View>
         <View style={styles.inputSwitchContainer}>
           <Text style={styles.inputLabel}>Estado</Text>
-          <View style={styles.inputSwitchInnerContainer}>
-            {Platform.OS === 'ios' ? (
-              <Switch
-                trackColor={{ true: Colors.SECONDARY }}
-                ios_backgroundColor={Colors.NEUTRAL_300}
-                value={Boolean(property.active)}
-                onValueChange={() => setProperty({ ...property, active: property.active ? 0 : 1 })}
-              />
-            ) : (
-              <Switch
-                trackColor={{ true: Colors.SECONDARY_200, false: Colors.NEUTRAL_300 }}
-                thumbColor={property.active ? Colors.SECONDARY : Colors.NEUTRAL_700}
-                value={Boolean(property.active)}
-                onValueChange={() => setProperty({ ...property, active: property.active ? 0 : 1 })}
-              />
-            )}
-            <Text>{property.active ? 'Habilitado' : 'Deshabilitado'}</Text>
-          </View>
+          <InputSwitch
+            value={Boolean(property.active)}
+            onChange={(value) => setProperty({ ...property, active: value ? 1 : 0 })}
+          />
         </View>
       </View>
 

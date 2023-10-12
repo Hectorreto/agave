@@ -26,6 +26,7 @@ const InputDate = ({ label, date, onChange }: Props) => {
             disabled && styles.inputContainerDisabled,
             !disabled && date !== undefined && styles.inputWithValue,
           ]}
+          disabled={!onChange}
           onPress={() => setIsOpen(true)}>
           {date ? (
             <Text style={styles.inputValue}>{formatDate(date)}</Text>

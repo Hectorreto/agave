@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Platform, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
 import Description from '../../../../assets/svg/description.svg';
@@ -8,13 +8,14 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 import InputDate from '../../../components/input-date/InputDate';
 import InputSelect from '../../../components/input-select/InputSelect';
+import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
-import { Colors } from '../../../themes/theme';
+import { PropertyTabsParamList } from '../../../navigation/PropertyTabs';
 
-const PropertyGeneralInfoScreen = () => {
-  const [date, setDate] = useState<Date>();
-  const [active, setActive] = useState(true);
-  const [text, setText] = useState('');
+type Props = MaterialTopTabScreenProps<PropertyTabsParamList, 'PropertyGeneralInfo'>;
+
+const PropertyGeneralInfoScreen = ({ route }: Props) => {
+  const { property } = route.params;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -30,43 +31,38 @@ const PropertyGeneralInfoScreen = () => {
         <InputText
           label="Nombre del predio"
           placeholder="Nombre del predio"
-          value={text}
-          onChange={setText}
+          value={property.name}
         />
-        <InputDate label="Año de plantación" date={date} onChange={setDate} />
+        <InputDate label="Año de plantación" date={new Date(property.plantingYear)} />
         <InputSelect
           label="Tipo de cultivos"
           placeholder="Tipo de cultivos"
-          value={text}
-          onChange={setText}
+          value={property.cropType}
           items={[{ label: 'Agave', value: '1' }]}
         />
-        <InputText label="Ubicación" placeholder="Ubicación" value={text} onChange={setText} />
+        <InputText label="Ubicación" placeholder="Ubicación" value={property.location} />
         <View style={styles.doubleInputContainer}>
           <View style={styles.doubleInputItem}>
-            <InputText label="No. de hectáreas" placeholder="###" value={text} onChange={setText} />
+            <InputText label="No. de hectáreas" placeholder="###" value={property.hectareNumber} />
           </View>
           <View style={styles.doubleInputItem}>
             <InputText
               label="No. de plantas sembradas"
               placeholder="###"
-              value={text}
-              onChange={setText}
+              value={property.plantsPlantedNumber}
             />
           </View>
         </View>
-        <InputText label="Folio" placeholder="Folio" value={text} onChange={setText} />
-        <InputText label="Registro" placeholder="Registro" value={text} onChange={setText} />
+        <InputText label="Folio" placeholder="Folio" value={property.invoice} />
+        <InputText label="Registro" placeholder="Registro" value={property.registry} />
         <InputText
           label="Identificador interno"
           placeholder="Identificador interno"
-          value={text}
-          onChange={setText}
+          value={property.internalIdentifier}
         />
         <InputText
           placeholder="###"
-          value={text}
-          onChange={setText}
+          value={property.boardsPerProperty}
           label="Número de tablas por predio"
         />
         <View style={styles.inputFileContainer}>
@@ -81,24 +77,7 @@ const PropertyGeneralInfoScreen = () => {
         </View>
         <View style={styles.inputSwitchContainer}>
           <Text style={styles.inputLabel}>Estado</Text>
-          <View style={styles.inputSwitchInnerContainer}>
-            {Platform.OS === 'ios' ? (
-              <Switch
-                trackColor={{ true: Colors.SECONDARY }}
-                ios_backgroundColor={Colors.NEUTRAL_300}
-                value={active}
-                onValueChange={() => setActive(!active)}
-              />
-            ) : (
-              <Switch
-                trackColor={{ true: Colors.SECONDARY_200, false: Colors.NEUTRAL_300 }}
-                thumbColor={active ? Colors.SECONDARY : Colors.NEUTRAL_700}
-                value={active}
-                onValueChange={() => setActive(!active)}
-              />
-            )}
-            <Text>{active ? 'Habilitado' : 'Deshabilitado'}</Text>
-          </View>
+          <InputSwitch value={Boolean(property.active)} />
         </View>
       </View>
     </ScrollView>

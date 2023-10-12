@@ -83,6 +83,7 @@ export const createProperty = (property: Property): Promise<void> => {
 
 type FindPropertyOptions = {
   filter?: {
+    id?: string;
     name?: string;
   };
 };
@@ -90,6 +91,11 @@ type FindPropertyOptions = {
 export const findProperties = (options: FindPropertyOptions): Promise<Property[]> => {
   const where: string[] = [];
   const args: any[] = [];
+
+  if (options.filter?.id) {
+    where.push('id = ?');
+    args.push(options.filter.id);
+  }
 
   if (options.filter?.name) {
     where.push('name LIKE ? COLLATE NOCASE');
@@ -109,7 +115,7 @@ export const findProperties = (options: FindPropertyOptions): Promise<Property[]
           FROM property
           ${whereSql}
         `,
-        [],
+        args,
         (_, { rows }) => {
           resolve(rows._array);
         }

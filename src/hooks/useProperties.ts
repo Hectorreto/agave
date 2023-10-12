@@ -8,17 +8,18 @@ type Props = {
   search?: string;
 };
 
-const useProperties = ({ search }: Props) => {
+const useProperties = ({ id, search }: Props) => {
   const [data, setData] = useState<Property[]>([]);
 
   useFocusEffect(
     useCallback(() => {
       findProperties({
         filter: {
+          id,
           name: !search ? undefined : `%${search}%`,
         },
       }).then((value) => setData(value));
-    }, [search])
+    }, [id, search])
   );
 
   return {
