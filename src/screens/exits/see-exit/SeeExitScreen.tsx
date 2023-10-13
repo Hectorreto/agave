@@ -7,6 +7,7 @@ import Divider from '../../../components/divider/Divider';
 import InputCamera from '../../../components/input-camera/InputCamera';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
+import useProperties from '../../../hooks/useProperties';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
 import { Exit, findOneExit } from '../../../services/exitService';
 import { formatDate, formatTime } from '../../../utils/dateUtils';
@@ -16,6 +17,7 @@ type Props = NativeStackScreenProps<ExitStackParamList, 'SeeExit'>;
 const SeeExitScreen = ({ route }: Props) => {
   const id = route.params.id;
   const [exit, setExit] = useState({} as Exit);
+  const { data: properties } = useProperties({});
 
   useEffect(() => {
     findOneExit(id).then((value) => setExit(value));
@@ -27,13 +29,11 @@ const SeeExitScreen = ({ route }: Props) => {
       <InputSelect
         label="Predio"
         placeholder="Selecciona"
-        value={exit.property}
-        items={[
-          { label: 'A', value: 'a' },
-          { label: 'B', value: 'b' },
-          { label: 'C', value: 'c' },
-          { label: 'D', value: 'd' },
-        ]}
+        value={exit.propertyId}
+        items={properties.map((property) => ({
+          label: property.name,
+          value: property.id,
+        }))}
       />
       <InputSelect
         label="Tipo de salida"

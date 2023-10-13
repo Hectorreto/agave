@@ -12,26 +12,28 @@ import Expandable from '../../../components/expandable/Expandable';
 import InputSelect from '../../../components/input-select/InputSelect';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
+import useProperties from '../../../hooks/useProperties';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'CreateExit'>;
 
 const CreateExitScreen = ({ navigation }: Props) => {
   const { showNotification } = useNotification();
-  const [property, setProperty] = useState('');
+  const [propertyId, setPropertyId] = useState('');
   const [items, setItems] = useState([newItem(1)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item>();
+  const { data: properties } = useProperties({});
 
   const handleOnSave = async () => {
-    if (!validateForm(property, items)) return;
+    if (!validateForm(propertyId, items)) return;
     const notification =
       items.length === 1
         ? 'La salida ha sido creada con éxito'
         : 'Las salidas han sido creadas con éxito';
 
     try {
-      await saveItems(property, items);
+      await saveItems(propertyId, items);
       showNotification(notification);
       navigation.navigate('ListExits');
     } catch (error) {
@@ -46,14 +48,12 @@ const CreateExitScreen = ({ navigation }: Props) => {
         <InputSelect
           label="Predio"
           placeholder="Selecciona"
-          value={property}
-          onChange={setProperty}
-          items={[
-            { label: 'A', value: 'a' },
-            { label: 'B', value: 'b' },
-            { label: 'C', value: 'c' },
-            { label: 'D', value: 'd' },
-          ]}
+          value={propertyId}
+          onChange={setPropertyId}
+          items={properties.map((property) => ({
+            label: property.name,
+            value: property.id,
+          }))}
         />
       </View>
 

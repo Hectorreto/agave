@@ -9,9 +9,9 @@ import PropertyBoardScreen from '../screens/property/property-board/PropertyBoar
 import { Property } from '../services/propertyService';
 
 export type PropertyTabsParamList = {
-  PropertyBoard: undefined;
+  PropertyBoard: { property: Property };
   PropertyGeneralInfo: { property: Property };
-  PropertyPlantExits: undefined;
+  PropertyPlantExits: { property: Property };
 };
 
 const Tab = createMaterialTopTabNavigator<PropertyTabsParamList>();
@@ -26,13 +26,25 @@ const PropertyTabs = ({ route }: Props) => {
 
   return (
     <Tab.Navigator tabBar={() => <></>} screenOptions={{ swipeEnabled: false }}>
-      <Tab.Screen name="PropertyBoard" component={PropertyBoardScreen} />
+      <Tab.Screen
+        name="PropertyBoard"
+        component={PropertyBoardScreen}
+        initialParams={{
+          property,
+        }}
+      />
       <Tab.Screen
         name="PropertyGeneralInfo"
         component={PropertyGeneralInfoScreen}
         initialParams={{ property }}
       />
-      <Tab.Screen name="PropertyPlantExits" component={PropertyPlantExitsScreen} />
+      <Tab.Screen
+        name="PropertyPlantExits"
+        component={PropertyPlantExitsScreen}
+        initialParams={{
+          property,
+        }}
+      />
     </Tab.Navigator>
   );
 };

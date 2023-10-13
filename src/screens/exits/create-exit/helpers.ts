@@ -18,23 +18,23 @@ export const newItem = (cnt: number): Item => {
       updatedAt: 0,
       createdBy: '',
       updatedBy: '',
-      property: '',
       type: '',
       plantCount: '',
       notes: '',
       imageUri: '',
       latitude: 0,
       longitude: 0,
+      propertyId: '',
     },
   };
 };
 
-export const validateForm = (property: string, items: Item[]) => {
-  if (!property) return false;
+export const validateForm = (propertyId: string, items: Item[]) => {
+  if (!propertyId) return false;
   return items.every(({ exit }) => exit.type && exit.plantCount && exit.notes && exit.imageUri);
 };
 
-export const saveItems = async (property: string, items: Item[]) => {
+export const saveItems = async (propertyId: string, items: Item[]) => {
   await createExits(
     items.map((item): Exit => {
       const nowTime = new Date().getTime();
@@ -44,13 +44,13 @@ export const saveItems = async (property: string, items: Item[]) => {
         updatedAt: nowTime,
         createdBy: '[Usuario]',
         updatedBy: '[Usuario]',
-        property,
         type: item.exit.type,
         plantCount: item.exit.plantCount,
         notes: item.exit.notes,
         imageUri: item.exit.imageUri,
         latitude: item.exit.latitude,
         longitude: item.exit.longitude,
+        propertyId,
       };
     })
   );

@@ -14,8 +14,9 @@ database.transaction((transaction) => {
       notes TEXT,
       imageUri TEXT,
       latitude REAL,
-      longitude REAL
-    );      
+      longitude REAL,
+      propertyId TEXT
+    )
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {
     console.error(error);
@@ -29,13 +30,13 @@ export type Exit = {
   updatedAt: number;
   createdBy: string;
   updatedBy: string;
-  property: string;
   type: string;
   plantCount: string;
   notes: string;
   imageUri: string;
   latitude: number;
   longitude: number;
+  propertyId: string;
 };
 
 const keys: (keyof Exit)[] = [
@@ -44,13 +45,13 @@ const keys: (keyof Exit)[] = [
   'updatedAt',
   'createdBy',
   'updatedBy',
-  'property',
   'type',
   'plantCount',
   'notes',
   'imageUri',
   'latitude',
   'longitude',
+  'propertyId',
 ];
 
 export const createExits = async (exits: Exit[]): Promise<void> => {
@@ -88,9 +89,8 @@ export type FindExitOptions = {
       lower: Date;
       upper: Date;
     };
-    property?: string;
-    type?: string;
-    plantCount?: string;
+    search?: string;
+    propertyId?: string;
   };
   sorting?: {
     createdAt: 'ASC' | 'DESC';
@@ -107,22 +107,19 @@ export const findExits = (options: FindExitOptions): Promise<Exit[]> => {
     args.push(options.filter.createdAt.upper.getTime());
   }
 
-  // search
-  const whereOr: string[] = [];
-  if (options.filter?.property) {
-    whereOr.push('property LIKE ? COLLATE NOCASE');
-    args.push(options.filter.property);
+  if (options.filter?.search) {
+    const conditions = [
+      'property LIKE ? COLLATE NOCASE',
+      'type LIKE ? COLLATE NOCASE',
+      'plantCount LIKE ? COLLATE NOCASE',
+    ];
+    where.push(conditions.join(' OR '));
+    args.push(options.filter.search, options.filter.search, options.filter.search);
   }
-  if (options.filter?.type) {
-    whereOr.push('type LIKE ? COLLATE NOCASE');
-    args.push(options.filter.type);
-  }
-  if (options.filter?.plantCount) {
-    whereOr.push('plantCount LIKE ? COLLATE NOCASE');
-    args.push(options.filter.plantCount);
-  }
-  if (whereOr.length) {
-    where.push(whereOr.join(' OR '));
+
+  if (options.filter?.propertyId) {
+    where.push('propertyId = ?');
+    args.push(options.filter.propertyId);
   }
 
   let whereSql = '';
