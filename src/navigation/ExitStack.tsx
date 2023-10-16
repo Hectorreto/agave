@@ -10,7 +10,7 @@ import { Colors } from '../themes/theme';
 
 export type ExitStackParamList = {
   ListExits: undefined;
-  CreateExit: undefined;
+  CreateExit?: { propertyId: string };
   SeeExit: { id: string };
 };
 

@@ -17,9 +17,9 @@ import { ExitStackParamList } from '../../../navigation/ExitStack';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'CreateExit'>;
 
-const CreateExitScreen = ({ navigation }: Props) => {
+const CreateExitScreen = ({ navigation, route }: Props) => {
   const { showNotification } = useNotification();
-  const [propertyId, setPropertyId] = useState('');
+  const [propertyId, setPropertyId] = useState(route.params?.propertyId || '');
   const [items, setItems] = useState([newItem(1)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item>();
@@ -35,7 +35,7 @@ const CreateExitScreen = ({ navigation }: Props) => {
     try {
       await saveItems(propertyId, items);
       showNotification(notification);
-      navigation.navigate('ListExits');
+      navigation.goBack();
     } catch (error) {
       console.error(error);
     }

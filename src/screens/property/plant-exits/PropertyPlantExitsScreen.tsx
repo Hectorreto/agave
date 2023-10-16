@@ -49,7 +49,13 @@ const PropertyPlantExitsScreen = ({ route, navigation }: Props) => {
             coordinate={{ latitude: exit.latitude, longitude: exit.longitude }}
             title={exit.type}
             description={formatDateTime(exit.createdAt)}
-            onCalloutPress={() => navigation.navigate('SeeExit', { id: exit.id })}
+            onCalloutPress={() =>
+              navigation.navigate('PropertyStack' as any, {
+                screen: 'SeeExit',
+                params: { id: exit.id },
+                initial: false,
+              })
+            }
           />
         ))}
       </MapView>
@@ -59,8 +65,9 @@ const PropertyPlantExitsScreen = ({ route, navigation }: Props) => {
           text="Nueva salida"
           Icon={AddCircle}
           onPress={() =>
-            (navigation as any).navigate('ExitStack', {
+            navigation.navigate('PropertyStack' as any, {
               screen: 'CreateExit',
+              params: { propertyId: property.id },
               initial: false,
             })
           }
@@ -107,7 +114,13 @@ const PropertyPlantExitsScreen = ({ route, navigation }: Props) => {
               <CustomButton
                 color="blueWhite"
                 Icon={MoreVert}
-                onPress={() => navigation.navigate('SeeExit', { id: exit.id })}
+                onPress={() =>
+                  navigation.navigate('PropertyStack' as any, {
+                    screen: 'SeeExit',
+                    params: { id: exit.id },
+                    initial: false,
+                  })
+                }
               />
             </View>,
           ],
