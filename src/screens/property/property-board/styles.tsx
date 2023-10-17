@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     color: Colors.NEUTRAL,
   },
   cardContainer: {
-    height: 280,
     borderWidth: 1,
     borderColor: Colors.NEUTRAL_300,
     borderRadius: 12,

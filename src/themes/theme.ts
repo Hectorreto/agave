@@ -25,6 +25,10 @@ export const Colors = {
   SECONDARY_200: '#BAF58F',
   ALERT_RED: '#EB5E55',
   ALERT_RED_2: '#F8746B',
+  CHART_C: '#FEF29D',
+  CHART_C1: '#F4E368',
+  CHART_D: '#84C8CD',
+  CHART_D1: '#009AA6',
 };
 
 export const NavigationTheme: Theme = {
