@@ -48,6 +48,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     gap: 4,
   },
+  cardContainerGap16: {
+    gap: 16,
+  },
   cardTitleContainer: {
     paddingTop: 16,
     paddingHorizontal: 16,
@@ -78,6 +81,9 @@ const styles = StyleSheet.create({
   },
   cardDataRightText: {
     color: Colors.NEUTRAL_600,
+  },
+  leftIcon: {
+    marginHorizontal: 4,
   },
 });
 

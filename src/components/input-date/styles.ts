@@ -35,6 +35,9 @@ const styles = StyleSheet.create({
   inputWithValue: {
     borderColor: Colors.PRIMARY_400,
   },
+  textDisabled: {
+    color: Colors.NEUTRAL_700,
+  },
 });
 
 export default styles;

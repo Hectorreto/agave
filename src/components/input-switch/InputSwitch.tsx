@@ -9,6 +9,8 @@ type Props = {
 };
 
 const InputSwitch = ({ value, onChange }: Props) => {
+  const disabled = !onChange;
+
   return (
     <View style={styles.container}>
       {Platform.OS === 'ios' ? (
@@ -17,7 +19,7 @@ const InputSwitch = ({ value, onChange }: Props) => {
           ios_backgroundColor={Colors.NEUTRAL_300}
           value={value}
           onValueChange={onChange}
-          disabled={!onChange}
+          disabled={disabled}
         />
       ) : (
         <Switch
@@ -25,10 +27,12 @@ const InputSwitch = ({ value, onChange }: Props) => {
           thumbColor={value ? Colors.SECONDARY : Colors.NEUTRAL_700}
           value={value}
           onValueChange={onChange}
-          disabled={!onChange}
+          disabled={disabled}
         />
       )}
-      <Text>{value ? 'Habilitado' : 'Deshabilitado'}</Text>
+      <Text style={[disabled && styles.textDisabled]}>
+        {value ? 'Habilitado' : 'Deshabilitado'}
+      </Text>
     </View>
   );
 };

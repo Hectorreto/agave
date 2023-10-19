@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { ReactElement, useRef, useState } from 'react';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -7,7 +7,7 @@ import ArrowDropDown from '../../../assets/svg/arrow_drop_down.svg';
 import { Colors } from '../../themes/theme';
 
 type Props = {
-  label: string;
+  label?: string;
   placeholder: string;
   value: string;
   onChange?: (text: string) => void;
@@ -15,9 +15,10 @@ type Props = {
     label: string;
     value: string;
   }[];
+  iconLeft?: ReactElement;
 };
 
-const InputSelect = ({ label, placeholder, value, onChange, items }: Props) => {
+const InputSelect = ({ label, placeholder, value, onChange, items, iconLeft }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const text = items.find((item) => item.value === value)?.label;
   const disabled = !onChange;
@@ -34,16 +35,18 @@ const InputSelect = ({ label, placeholder, value, onChange, items }: Props) => {
           setPageY(pageY);
         });
       }}>
-      <Text style={styles.inputLabel}>{label}</Text>
+      {Boolean(label) && <Text style={styles.inputLabel}>{label}</Text>}
       <View>
         <TouchableOpacity
           style={[
             styles.inputContainer,
             disabled && styles.inputContainerDisabled,
             !disabled && value !== '' && styles.inputWithValue,
+            iconLeft && { paddingLeft: 0 },
           ]}
           onPress={() => setIsOpen(!isOpen)}
           disabled={disabled}>
+          {iconLeft}
           {text ? (
             <Text
               style={[styles.inputValue, disabled && styles.inputValueDisabled]}
