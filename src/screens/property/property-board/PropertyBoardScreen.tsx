@@ -1,11 +1,16 @@
 import { ScrollView, Text, View } from 'react-native';
-import { BarChart } from 'react-native-gifted-charts';
+import { BarChart, PieChart } from 'react-native-gifted-charts';
 
 import styles from './styles';
 import Eco from '../../../../assets/svg/eco.svg';
 import PestControl from '../../../../assets/svg/pest_control.svg';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 import { Colors } from '../../../themes/theme';
+
+const getColor = (index: number, total: number) => {
+  const h = (236 + (index * 360) / total) % 360;
+  return `hsl(${h}, 75%, 50%)`;
+};
 
 const PropertyBoardScreen = () => {
   const barData = [
@@ -15,6 +20,18 @@ const PropertyBoardScreen = () => {
     { value: 58, label: '2021' },
     { value: 24, label: '2022' },
     { value: 52, label: '2023' },
+  ];
+
+  const pieData = [
+    { value: 25 },
+    { value: 25 },
+    { value: 25 },
+    { value: 25 },
+    { value: 25 },
+    { value: 25 },
+    { value: 25 },
+    { value: 25 },
+    { value: 25 },
   ];
 
   return (
@@ -119,6 +136,38 @@ const PropertyBoardScreen = () => {
       <View style={styles.cardContainer}>
         <View style={styles.cardTitleContainer}>
           <Text style={styles.cardTitle}>Cultivos</Text>
+        </View>
+        <View
+          style={{ marginTop: 30, marginBottom: 40, marginHorizontal: 20, flexDirection: 'row' }}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+            }}>
+            <PieChart
+              data={pieData.map((item, index) => ({
+                value: item.value,
+                color: getColor(index, pieData.length),
+              }))}
+              radius={60}
+              strokeWidth={1}
+              strokeColor={Colors.NEUTRAL}
+            />
+          </View>
+          <View style={{ flex: 1, justifyContent: 'center', gap: 8, paddingLeft: 24 }}>
+            {pieData.map((_value, index) => (
+              <View key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <View
+                  style={{
+                    backgroundColor: getColor(index, pieData.length),
+                    width: 21,
+                    height: 8,
+                  }}
+                />
+                <Text style={{ color: Colors.NEUTRAL_700 }}>Cultivo {index + 1}</Text>
+              </View>
+            ))}
+          </View>
         </View>
       </View>
     </ScrollView>
