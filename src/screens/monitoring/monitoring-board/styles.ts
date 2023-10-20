@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
     height: 223,
   },
   cardContainer: {
-    height: 280,
     borderWidth: 1,
     borderColor: Colors.NEUTRAL_300,
     borderRadius: 12,
@@ -39,6 +38,9 @@ const styles = StyleSheet.create({
   },
   cardDataRightText: {
     color: Colors.NEUTRAL_600,
+  },
+  cardContainerGap16: {
+    gap: 16,
   },
 });
 

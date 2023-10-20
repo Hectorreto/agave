@@ -1,19 +1,17 @@
 import { ScrollView, Text, View } from 'react-native';
-import { BarChart, PieChart, LineChart } from 'react-native-gifted-charts';
 
 import styles from './styles';
 import Eco from '../../../../assets/svg/eco.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import PestControl from '../../../../assets/svg/pest_control.svg';
+import CardSmall from '../../../components/card-small/CardSmall';
+import ChartBar from '../../../components/chart-bar/ChartBar';
+import ChartLine from '../../../components/chart-line/ChartLine';
+import ChartPie from '../../../components/chart-pie/ChartPie';
 import Divider from '../../../components/divider/Divider';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 import InputSelect from '../../../components/input-select/InputSelect';
 import { Colors } from '../../../themes/theme';
-
-const getColor = (index: number, total: number) => {
-  const h = (236 + (index * 360) / total) % 360;
-  return `hsl(${h}, 75%, 50%)`;
-};
 
 const PropertyBoardScreen = () => {
   const barData = [
@@ -83,33 +81,9 @@ const PropertyBoardScreen = () => {
           <Text style={styles.cardTitle}>Hectáreas</Text>
         </View>
         <View style={styles.cardDataContainer}>
-          <View style={styles.cardDataInnerContainer}>
-            <Text style={styles.cardDataLeftText}>3,557</Text>
-            <Text style={styles.cardDataRightText}>hectáreas totales</Text>
-          </View>
+          <CardSmall left="3,557" right="hectáreas totales" />
         </View>
-        <View style={{ marginLeft: 20, marginTop: 30, marginBottom: 40 }}>
-          <BarChart
-            data={barData}
-            frontColor={Colors.CHART_C}
-            barWidth={13.69}
-            barStyle={{
-              borderWidth: 2,
-              borderRadius: 2,
-              borderColor: Colors.CHART_C1,
-            }}
-            disablePress
-            rulesType="solid"
-            rulesColor={Colors.NEUTRAL_200}
-            spacing={13.69 * 2}
-            initialSpacing={13.69}
-            endSpacing={13.69}
-            noOfSections={5}
-            stepHeight={20}
-            xAxisColor={Colors.NEUTRAL_200}
-            yAxisColor={Colors.NEUTRAL_200}
-          />
-        </View>
+        <ChartBar data={barData} frontColor={Colors.CHART_C} borderColor={Colors.CHART_C1} />
       </View>
 
       <View style={styles.cardContainer}>
@@ -117,66 +91,16 @@ const PropertyBoardScreen = () => {
           <Text style={styles.cardTitle}>Plantas</Text>
         </View>
         <View style={styles.cardDataContainer}>
-          <View style={styles.cardDataInnerContainer}>
-            <Text style={styles.cardDataLeftText}>12,759</Text>
-            <Text style={styles.cardDataRightText}>plantas totales</Text>
-          </View>
+          <CardSmall left="12,759" right="plantas totales" />
         </View>
-        <View style={{ marginLeft: 20, marginTop: 30, marginBottom: 40 }}>
-          <BarChart
-            data={barData}
-            frontColor={Colors.CHART_D}
-            barWidth={13.69}
-            barStyle={{
-              borderWidth: 2,
-              borderRadius: 2,
-              borderColor: Colors.CHART_D1,
-            }}
-            disablePress
-            rulesType="solid"
-            rulesColor={Colors.NEUTRAL_200}
-            spacing={13.69 * 2}
-            initialSpacing={13.69}
-            endSpacing={13.69}
-            noOfSections={5}
-            stepHeight={20}
-            xAxisColor={Colors.NEUTRAL_200}
-            yAxisColor={Colors.NEUTRAL_200}
-          />
-        </View>
+        <ChartBar data={barData} frontColor={Colors.CHART_D} borderColor={Colors.CHART_D1} />
       </View>
 
-      <View style={[styles.cardContainer, styles.cardContainerGap16]}>
+      <View style={[styles.cardContainer, styles.cardContainerGap16, { paddingBottom: 30 }]}>
         <View style={styles.cardTitleContainer}>
           <Text style={styles.cardTitle}>Cultivos</Text>
         </View>
-        <View style={{ marginBottom: 10, marginHorizontal: 20, flexDirection: 'row' }}>
-          <View style={{ flex: 1, alignItems: 'center' }}>
-            <PieChart
-              data={pieData.map((item, index) => ({
-                value: item.value,
-                color: getColor(index, pieData.length),
-              }))}
-              radius={60}
-              strokeWidth={1}
-              strokeColor={Colors.NEUTRAL}
-            />
-          </View>
-          <View style={{ flex: 1, justifyContent: 'center', gap: 8, paddingLeft: 24 }}>
-            {pieData.map((_value, index) => (
-              <View key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                <View
-                  style={{
-                    backgroundColor: getColor(index, pieData.length),
-                    width: 21,
-                    height: 8,
-                  }}
-                />
-                <Text style={{ color: Colors.NEUTRAL_700 }}>Cultivo {index + 1}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
+        <ChartPie data={pieData} />
 
         <View style={{ marginHorizontal: 24 }}>
           <Divider />
@@ -195,99 +119,19 @@ const PropertyBoardScreen = () => {
         </View>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
-          <View style={[styles.cardDataInnerContainer, { width: 140 }]}>
-            <Text style={styles.cardDataLeftText}>92</Text>
-            <Text style={styles.cardDataRightText}>calificación promedio</Text>
+          <View style={{ width: 140 }}>
+            <CardSmall left="92" right="calificación promedio" />
           </View>
-          <View style={[styles.cardDataInnerContainer, { width: 140 }]}>
-            <Text style={styles.cardDataLeftText}>84</Text>
-            <Text style={styles.cardDataRightText}>kg de perso promedio</Text>
+          <View style={{ width: 140 }}>
+            <CardSmall left="84" right="kg de perso promedio" />
           </View>
-          <View style={[styles.cardDataInnerContainer, { width: 140 }]}>
-            <Text style={styles.cardDataLeftText}>13%</Text>
-            <Text style={styles.cardDataRightText}>de maleza</Text>
+          <View style={{ width: 140 }}>
+            <CardSmall left="13%" right="de maleza" />
           </View>
         </View>
 
-        <View style={{ marginTop: 25 }}>
-          <View style={{ alignItems: 'center' }}>
-            <View>
-              <LineChart
-                data={lineData}
-                color={Colors.CHART_E1}
-                thickness={2}
-                hideDataPoints
-                initialSpacing={0}
-                endSpacing={0}
-                spacing={40}
-                yAxisColor={Colors.NEUTRAL_200}
-                xAxisColor={Colors.NEUTRAL_200}
-                showVerticalLines
-                verticalLinesColor={Colors.NEUTRAL_200}
-                noOfSections={5}
-                stepHeight={20}
-                rulesType="solid"
-              />
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
-              marginLeft: 48,
-              marginTop: 10,
-            }}>
-            <View
-              style={{
-                backgroundColor: Colors.CHART_E1,
-                width: 21,
-                height: 8,
-              }}
-            />
-            <Text style={{ color: Colors.NEUTRAL_700 }}>peso promedio en kg</Text>
-          </View>
-        </View>
-
-        <View style={{ marginTop: 25, marginBottom: 30 }}>
-          <View style={{ alignItems: 'center' }}>
-            <View>
-              <LineChart
-                data={lineData}
-                color={Colors.CHART_B1}
-                thickness={2}
-                hideDataPoints
-                initialSpacing={0}
-                endSpacing={0}
-                spacing={40}
-                yAxisColor={Colors.NEUTRAL_200}
-                xAxisColor={Colors.NEUTRAL_200}
-                showVerticalLines
-                verticalLinesColor={Colors.NEUTRAL_200}
-                noOfSections={5}
-                stepHeight={20}
-                rulesType="solid"
-              />
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
-              marginLeft: 48,
-              marginTop: 10,
-            }}>
-            <View
-              style={{
-                backgroundColor: Colors.CHART_B1,
-                width: 21,
-                height: 8,
-              }}
-            />
-            <Text style={{ color: Colors.NEUTRAL_700 }}>calificación promedio</Text>
-          </View>
-        </View>
+        <ChartLine data={lineData} color={Colors.CHART_E1} text="peso promedio en kg" />
+        <ChartLine data={lineData} color={Colors.CHART_B1} text="calificación promedio" />
       </View>
     </ScrollView>
   );

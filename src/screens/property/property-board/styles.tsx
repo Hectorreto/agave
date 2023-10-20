@@ -64,24 +64,6 @@ const styles = StyleSheet.create({
   cardDataContainer: {
     alignItems: 'center',
   },
-  cardDataInnerContainer: {
-    height: 56,
-    borderWidth: 1,
-    borderColor: Colors.NEUTRAL_300,
-    borderRadius: 8,
-    gap: 8,
-    paddingHorizontal: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  cardDataLeftText: {
-    color: Colors.PRIMARY,
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  cardDataRightText: {
-    color: Colors.NEUTRAL_600,
-  },
   leftIcon: {
     marginHorizontal: 4,
   },
