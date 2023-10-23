@@ -13,15 +13,16 @@ type Props = {
 };
 
 const RadioButton = ({ label, active, onPress }: Props) => {
+  const disabled = !onPress;
+  const Element = active ? RadioButtonOn : RadioButtonOff;
+  const ElementPressed = active ? RadioButtonOnPressed : RadioButtonOffPressed;
+
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <Pressable style={styles.container} onPress={onPress} disabled={disabled}>
       {({ pressed }) => (
         <>
-          {!active && !pressed && <RadioButtonOff />}
-          {!active && pressed && <RadioButtonOffPressed />}
-          {active && !pressed && <RadioButtonOn />}
-          {active && pressed && <RadioButtonOnPressed />}
-          <Text>{label}</Text>
+          {pressed ? <ElementPressed /> : <Element />}
+          <Text style={[disabled && styles.textDisabled]}>{label}</Text>
         </>
       )}
     </Pressable>
