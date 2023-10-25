@@ -83,9 +83,9 @@ const InputCamera = ({ value, onChange }: Props) => {
       try {
         await handleCameraPermissions();
         await handleLocationPermissions();
+        const location = await getCurrentPositionAsync();
         const result = await launchCameraAsync();
         if (!result.canceled) {
-          const location = await getCurrentPositionAsync();
           onChange(result.assets[0].uri, location.coords.latitude, location.coords.longitude);
         }
       } catch (error) {
