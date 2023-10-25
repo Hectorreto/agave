@@ -2,11 +2,17 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
-import { newMonitoring } from './helpers';
+import Form0 from './Form0';
+import Form1 from './Form1';
+import Form2 from './Form2';
+import Form3 from './Form3';
+import Form4 from './Form4';
+import Form5 from './Form5';
+import Form6 from './Form6';
+import Form7 from './Form7';
+import { newMonitoring, validateMonitoring } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
-import Delete from '../../../../assets/svg/delete.svg';
-import Checkbox from '../../../components/checkbox/Checkbox';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
 import Expandable from '../../../components/expandable/Expandable';
@@ -14,10 +20,9 @@ import InputCamera from '../../../components/input-camera/InputCamera';
 import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import ModalMonitoringForm from '../../../components/modal-monitoring-form/ModalMonitoringForm';
-import RadioButton from '../../../components/radio-button/RadioButton';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
-import { createMonitoring } from '../../../services/monitoringService';
+import { createMonitoring, Monitoring } from '../../../services/monitoringService';
 
 type Props = NativeStackScreenProps<MonitoringStackParamList, 'CreateMonitoring'>;
 
@@ -26,18 +31,9 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
   const [monitoring, setMonitoring] = useState(newMonitoring());
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [form, setForm] = useState<boolean[]>(Array(8).fill(false));
-  const [formCopy, setFormCopy] = useState<boolean[]>([]);
+  const [form, setForm] = useState<(Partial<Monitoring> | undefined)[]>(Array(8).fill(undefined));
   const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
   const [selectedForm, setSelectedForm] = useState({ index: 0, name: '' });
-
-  const handleCheckbox = (index: number) => {
-    return (value: boolean) => {
-      const copy = [...formCopy];
-      copy[index] = value;
-      setFormCopy(copy);
-    };
-  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -65,512 +61,116 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
       </Expandable>
 
       {form[0] && (
-        <Expandable
-          label="Planta"
-          right={
-            <CustomButton
-              color="redWhite"
-              Icon={Delete}
-              onPress={() => {
-                setSelectedForm({ index: 0, name: 'planta' });
-                setIsModalDeleteVisible(true);
-              }}
-            />
-          }>
-          <InputText
-            label="Estimación de rendimiento en kg"
-            placeholder="### kg"
-            value={monitoring.plantPerformanceKg || ''}
-            onChange={(plantPerformanceKg) => setMonitoring({ ...monitoring, plantPerformanceKg })}
-          />
-        </Expandable>
+        <Form0
+          monitoring={form[0]}
+          onChange={(value) => {
+            const copy = [...form];
+            copy[0] = value;
+            setForm(copy);
+          }}
+          onPressDelete={() => {
+            setSelectedForm({ index: 0, name: 'planta' });
+            setIsModalDeleteVisible(true);
+          }}
+        />
       )}
       {form[1] && (
-        <Expandable
-          label="Plaga"
-          right={
-            <CustomButton
-              color="redWhite"
-              Icon={Delete}
-              onPress={() => {
-                setSelectedForm({ index: 1, name: 'plaga' });
-                setIsModalDeleteVisible(true);
-              }}
-            />
-          }>
-          <InputText
-            label="Tipo de plaga"
-            placeholder="Tipo de plaga"
-            value={monitoring.plagueType || ''}
-            onChange={(plagueType) => setMonitoring({ ...monitoring, plagueType })}
-          />
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.plagueIncidence === 'low'}
-                onPress={() => setMonitoring({ ...monitoring, plagueIncidence: 'low' })}
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.plagueIncidence === 'medium'}
-                onPress={() => setMonitoring({ ...monitoring, plagueIncidence: 'medium' })}
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.plagueIncidence === 'high'}
-                onPress={() => setMonitoring({ ...monitoring, plagueIncidence: 'high' })}
-              />
-            </View>
-          </View>
-        </Expandable>
+        <Form1
+          monitoring={form[1]}
+          onChange={(value) => {
+            const copy = [...form];
+            copy[1] = value;
+            setForm(copy);
+          }}
+          onPressDelete={() => {
+            setSelectedForm({ index: 1, name: 'plaga' });
+            setIsModalDeleteVisible(true);
+          }}
+        />
       )}
       {form[2] && (
-        <Expandable
-          label="Enfermedad"
-          right={
-            <CustomButton
-              color="redWhite"
-              Icon={Delete}
-              onPress={() => {
-                setSelectedForm({ index: 2, name: 'enfermedad' });
-                setIsModalDeleteVisible(true);
-              }}
-            />
-          }>
-          <InputText
-            label="Tipo de enfermedad"
-            placeholder="Tipo de enfermedad"
-            value={monitoring.diseaseType || ''}
-            onChange={(diseaseType) => setMonitoring({ ...monitoring, diseaseType })}
-          />
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.diseaseIncidence === 'low'}
-                onPress={() => setMonitoring({ ...monitoring, diseaseIncidence: 'low' })}
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.diseaseIncidence === 'medium'}
-                onPress={() => setMonitoring({ ...monitoring, diseaseIncidence: 'medium' })}
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.diseaseIncidence === 'high'}
-                onPress={() => setMonitoring({ ...monitoring, diseaseIncidence: 'high' })}
-              />
-            </View>
-          </View>
-        </Expandable>
+        <Form2
+          monitoring={form[2]}
+          onChange={(value) => {
+            const copy = [...form];
+            copy[2] = value;
+            setForm(copy);
+          }}
+          onPressDelete={() => {
+            setSelectedForm({ index: 2, name: 'enfermedad' });
+            setIsModalDeleteVisible(true);
+          }}
+        />
       )}
       {form[3] && (
-        <Expandable
-          label="Maleza"
-          right={
-            <CustomButton
-              color="redWhite"
-              Icon={Delete}
-              onPress={() => {
-                setSelectedForm({ index: 3, name: 'maleza' });
-                setIsModalDeleteVisible(true);
-              }}
-            />
-          }>
-          <InputText
-            label="Maleza"
-            placeholder="Maleza"
-            value={monitoring.undergrowthName || ''}
-            onChange={(undergrowthName) => setMonitoring({ ...monitoring, undergrowthName })}
-          />
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioLabel}>Tipo de hoja</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Ancha"
-                active={monitoring.undergrowthLeafType === 'wide'}
-                onPress={() => setMonitoring({ ...monitoring, undergrowthLeafType: 'wide' })}
-              />
-              <RadioButton
-                label="Angosta"
-                active={monitoring.undergrowthLeafType === 'narrow'}
-                onPress={() => setMonitoring({ ...monitoring, undergrowthLeafType: 'narrow' })}
-              />
-              <RadioButton
-                label="Leñosa"
-                active={monitoring.undergrowthLeafType === 'woody'}
-                onPress={() => setMonitoring({ ...monitoring, undergrowthLeafType: 'woody' })}
-              />
-            </View>
-          </View>
-          <InputText
-            label="Altura aproximada en cm"
-            placeholder="Altura"
-            value={monitoring.undergrowthHeight || ''}
-            onChange={(undergrowthHeight) => setMonitoring({ ...monitoring, undergrowthHeight })}
-          />
-        </Expandable>
+        <Form3
+          monitoring={form[3]}
+          onChange={(value) => {
+            const copy = [...form];
+            copy[3] = value;
+            setForm(copy);
+          }}
+          onPressDelete={() => {
+            setSelectedForm({ index: 3, name: 'maleza' });
+            setIsModalDeleteVisible(true);
+          }}
+        />
       )}
       {form[4] && (
-        <Expandable
-          label="Daño fitotóxico"
-          right={
-            <CustomButton
-              color="redWhite"
-              Icon={Delete}
-              onPress={() => {
-                setSelectedForm({ index: 4, name: 'daño fitotóxico' });
-                setIsModalDeleteVisible(true);
-              }}
-            />
-          }>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioTitle}>Herbicidas</Text>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.phytotoxicDamageHerbicideIncidence === 'low'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, phytotoxicDamageHerbicideIncidence: 'low' })
-                }
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.phytotoxicDamageHerbicideIncidence === 'medium'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, phytotoxicDamageHerbicideIncidence: 'medium' })
-                }
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.phytotoxicDamageHerbicideIncidence === 'high'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, phytotoxicDamageHerbicideIncidence: 'high' })
-                }
-              />
-            </View>
-          </View>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioTitle}>Pesticidas</Text>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.phytotoxicDamagePesticideIncidence === 'low'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, phytotoxicDamagePesticideIncidence: 'low' })
-                }
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.phytotoxicDamagePesticideIncidence === 'medium'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, phytotoxicDamagePesticideIncidence: 'medium' })
-                }
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.phytotoxicDamagePesticideIncidence === 'high'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, phytotoxicDamagePesticideIncidence: 'high' })
-                }
-              />
-            </View>
-          </View>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioTitle}>Exceso de sales</Text>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.phytotoxicDamageExcessSaltIncidence === 'low'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, phytotoxicDamageExcessSaltIncidence: 'low' })
-                }
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.phytotoxicDamageExcessSaltIncidence === 'medium'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, phytotoxicDamageExcessSaltIncidence: 'medium' })
-                }
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.phytotoxicDamageExcessSaltIncidence === 'high'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, phytotoxicDamageExcessSaltIncidence: 'high' })
-                }
-              />
-            </View>
-          </View>
-        </Expandable>
+        <Form4
+          monitoring={form[4]}
+          onChange={(value) => {
+            const copy = [...form];
+            copy[4] = value;
+            setForm(copy);
+          }}
+          onPressDelete={() => {
+            setSelectedForm({ index: 4, name: 'daño fitotóxico' });
+            setIsModalDeleteVisible(true);
+          }}
+        />
       )}
       {form[5] && (
-        <Expandable
-          label="Daño ambiental"
-          right={
-            <CustomButton
-              color="redWhite"
-              Icon={Delete}
-              onPress={() => {
-                setSelectedForm({ index: 5, name: 'daño ambiental' });
-                setIsModalDeleteVisible(true);
-              }}
-            />
-          }>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioTitle}>Helada</Text>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.environmentalDamageFrostIncidence === 'low'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageFrostIncidence: 'low' })
-                }
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.environmentalDamageFrostIncidence === 'medium'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageFrostIncidence: 'medium' })
-                }
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.environmentalDamageFrostIncidence === 'high'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageFrostIncidence: 'high' })
-                }
-              />
-            </View>
-          </View>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioTitle}>Estrés</Text>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.environmentalDamageStressIncidence === 'low'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageStressIncidence: 'low' })
-                }
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.environmentalDamageStressIncidence === 'medium'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageStressIncidence: 'medium' })
-                }
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.environmentalDamageStressIncidence === 'high'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageStressIncidence: 'high' })
-                }
-              />
-            </View>
-          </View>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioTitle}>Inundación</Text>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.environmentalDamageFloodIncidence === 'low'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageFloodIncidence: 'low' })
-                }
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.environmentalDamageFloodIncidence === 'medium'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageFloodIncidence: 'medium' })
-                }
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.environmentalDamageFloodIncidence === 'high'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageFloodIncidence: 'high' })
-                }
-              />
-            </View>
-          </View>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioTitle}>Incendio</Text>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.environmentalDamageFireIncidence === 'low'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageFireIncidence: 'low' })
-                }
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.environmentalDamageFireIncidence === 'medium'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageFireIncidence: 'medium' })
-                }
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.environmentalDamageFireIncidence === 'high'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageFireIncidence: 'high' })
-                }
-              />
-            </View>
-          </View>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioTitle}>Granizo</Text>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.environmentalDamageHailIncidence === 'low'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageHailIncidence: 'low' })
-                }
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.environmentalDamageHailIncidence === 'medium'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageHailIncidence: 'medium' })
-                }
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.environmentalDamageHailIncidence === 'high'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageHailIncidence: 'high' })
-                }
-              />
-            </View>
-          </View>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioTitle}>Otros</Text>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.environmentalDamageOtherIncidence === 'low'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageOtherIncidence: 'low' })
-                }
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.environmentalDamageOtherIncidence === 'medium'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageOtherIncidence: 'medium' })
-                }
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.environmentalDamageOtherIncidence === 'high'}
-                onPress={() =>
-                  setMonitoring({ ...monitoring, environmentalDamageOtherIncidence: 'high' })
-                }
-              />
-            </View>
-          </View>
-        </Expandable>
+        <Form5
+          monitoring={form[5]}
+          onChange={(value) => {
+            const copy = [...form];
+            copy[5] = value;
+            setForm(copy);
+          }}
+          onPressDelete={() => {
+            setSelectedForm({ index: 5, name: 'daño ambiental' });
+            setIsModalDeleteVisible(true);
+          }}
+        />
       )}
       {form[6] && (
-        <Expandable
-          label="Colorimetría"
-          right={
-            <CustomButton
-              color="redWhite"
-              Icon={Delete}
-              onPress={() => {
-                setSelectedForm({ index: 6, name: 'colorimetría' });
-                setIsModalDeleteVisible(true);
-              }}
-            />
-          }>
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioLabel}>Incidencia</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.colorimetryIncidence === 'low'}
-                onPress={() => setMonitoring({ ...monitoring, colorimetryIncidence: 'low' })}
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.colorimetryIncidence === 'medium'}
-                onPress={() => setMonitoring({ ...monitoring, colorimetryIncidence: 'medium' })}
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.colorimetryIncidence === 'high'}
-                onPress={() => setMonitoring({ ...monitoring, colorimetryIncidence: 'high' })}
-              />
-            </View>
-          </View>
-          <InputText
-            multiline
-            label="Comentarios"
-            placeholder="Escribe tus comentarios"
-            value={monitoring.colorimetryComments || ''}
-            onChange={(colorimetryComments) =>
-              setMonitoring({ ...monitoring, colorimetryComments })
-            }
-          />
-        </Expandable>
+        <Form6
+          monitoring={form[6]}
+          onChange={(value) => {
+            const copy = [...form];
+            copy[6] = value;
+            setForm(copy);
+          }}
+          onPressDelete={() => {
+            setSelectedForm({ index: 6, name: 'colorimetría' });
+            setIsModalDeleteVisible(true);
+          }}
+        />
       )}
       {form[7] && (
-        <Expandable
-          label="Daño físico"
-          right={
-            <CustomButton
-              color="redWhite"
-              Icon={Delete}
-              onPress={() => {
-                setSelectedForm({ index: 7, name: 'daño físico' });
-                setIsModalDeleteVisible(true);
-              }}
-            />
-          }>
-          <InputText
-            label="Tipo de daño físico"
-            placeholder="Tipo de daño físico"
-            value={monitoring.physicalDamageType || ''}
-            onChange={(physicalDamageType) => setMonitoring({ ...monitoring, physicalDamageType })}
-          />
-          <View style={styles.radioContainer}>
-            <Text style={styles.radioLabel}>Tipo de hoja</Text>
-            <View style={styles.radioInnerContainer}>
-              <RadioButton
-                label="Baja"
-                active={monitoring.physicalDamageLeafType === 'wide'}
-                onPress={() => setMonitoring({ ...monitoring, physicalDamageLeafType: 'wide' })}
-              />
-              <RadioButton
-                label="Media"
-                active={monitoring.physicalDamageLeafType === 'narrow'}
-                onPress={() => setMonitoring({ ...monitoring, physicalDamageLeafType: 'narrow' })}
-              />
-              <RadioButton
-                label="Alta"
-                active={monitoring.physicalDamageLeafType === 'woody'}
-                onPress={() => setMonitoring({ ...monitoring, physicalDamageLeafType: 'woody' })}
-              />
-            </View>
-          </View>
-        </Expandable>
+        <Form7
+          monitoring={form[7]}
+          onChange={(value) => {
+            const copy = [...form];
+            copy[7] = value;
+            setForm(copy);
+          }}
+          onPressDelete={() => {
+            setSelectedForm({ index: 7, name: 'daño físico' });
+            setIsModalDeleteVisible(true);
+          }}
+        />
       )}
 
       <Text style={styles.helper2}>¿Hay una planta dañada?</Text>
@@ -581,7 +181,6 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           Icon={AddCircle}
           onPress={() => {
             setIsModalVisible(true);
-            setFormCopy([...form]);
           }}
         />
       </View>
@@ -638,7 +237,18 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
               text="Guardar"
               onPress={async () => {
                 try {
-                  await createMonitoring(monitoring);
+                  if (!validateMonitoring(monitoring, form)) return;
+                  await createMonitoring({
+                    ...monitoring,
+                    ...form[0],
+                    ...form[1],
+                    ...form[2],
+                    ...form[3],
+                    ...form[4],
+                    ...form[5],
+                    ...form[6],
+                    ...form[7],
+                  });
                   navigation.navigate('ListMonitoring');
                   showNotification('El monitoreo ha sido creado con éxito');
                 } catch (error) {
@@ -650,27 +260,18 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
         </View>
       )}
 
-      <ModalMonitoringForm
-        visible={isModalVisible}
-        title="Agregar formulario"
-        message={
-          <View style={styles.modalForm}>
-            <Checkbox label="De planta" value={formCopy[0]} onChange={handleCheckbox(0)} />
-            <Checkbox label="De plaga" value={formCopy[1]} onChange={handleCheckbox(1)} />
-            <Checkbox label="De enfermedad" value={formCopy[2]} onChange={handleCheckbox(2)} />
-            <Checkbox label="De maleza" value={formCopy[3]} onChange={handleCheckbox(3)} />
-            <Checkbox label="De daño fitotóxico" value={formCopy[4]} onChange={handleCheckbox(4)} />
-            <Checkbox label="De daño ambiental" value={formCopy[5]} onChange={handleCheckbox(5)} />
-            <Checkbox label="De colorimetría" value={formCopy[6]} onChange={handleCheckbox(6)} />
-            <Checkbox label="De daño físico" value={formCopy[7]} onChange={handleCheckbox(7)} />
-          </View>
-        }
-        onCancel={() => setIsModalVisible(false)}
-        onConfirm={() => {
-          setIsModalVisible(false);
-          setForm([...formCopy]);
-        }}
-      />
+      {isModalVisible && (
+        <ModalMonitoringForm
+          visible={isModalVisible}
+          title="Agregar formulario"
+          initialValues={form.map((value) => Boolean(value))}
+          onCancel={() => setIsModalVisible(false)}
+          onConfirm={(values) => {
+            setForm(form.map((value, index) => (values[index] ? value || {} : undefined)));
+            setIsModalVisible(false);
+          }}
+        />
+      )}
 
       <ModalDelete
         visible={isModalDeleteVisible}
@@ -678,15 +279,17 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
         message={
           <Text style={styles.modalDeleteText}>
             ¿Estás seguro de que deseas <Text style={styles.modalDeleteTextBold}>eliminar</Text> el
-            formulario de {selectedForm.name}? Esta acción no se puede deshacer.
+            formulario de <Text style={styles.modalDeleteTextBold}>{selectedForm.name}</Text>? Esta
+            acción no se puede deshacer.
           </Text>
         }
         onCancel={() => setIsModalDeleteVisible(false)}
         onConfirm={() => {
           const copy = [...form];
-          copy[selectedForm.index] = false;
+          copy[selectedForm.index] = undefined;
           setForm(copy);
           setIsModalDeleteVisible(false);
+          showNotification(`El formulario de ${selectedForm.name} ha sido eliminado con éxito`);
         }}
       />
     </ScrollView>

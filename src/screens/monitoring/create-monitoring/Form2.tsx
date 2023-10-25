@@ -1,0 +1,41 @@
+import Delete from '../../../../assets/svg/delete.svg';
+import CustomButton from '../../../components/custom-button/CustomButton';
+import Expandable from '../../../components/expandable/Expandable';
+import InputRadioGroup from '../../../components/input-radio-group/InputRadioGroup';
+import InputText from '../../../components/input-text/InputText';
+import { Monitoring } from '../../../services/monitoringService';
+
+type Props = {
+  monitoring: Partial<Monitoring>;
+  onChange?: (value: Partial<Monitoring>) => void;
+  onPressDelete?: () => void;
+};
+
+const Form2 = ({ monitoring, onChange, onPressDelete }: Props) => {
+  return (
+    <Expandable
+      label="Enfermedad"
+      right={<CustomButton color="redWhite" Icon={Delete} onPress={onPressDelete} />}>
+      <InputText
+        label="Tipo de enfermedad"
+        placeholder="Tipo de enfermedad"
+        value={monitoring.diseaseType || ''}
+        onChange={onChange ? (diseaseType) => onChange({ ...monitoring, diseaseType }) : undefined}
+      />
+      <InputRadioGroup
+        label="Incidencia"
+        items={[
+          { label: 'Baja', value: 'low' },
+          { label: 'Media', value: 'medium' },
+          { label: 'Alta', value: 'high' },
+        ]}
+        value={monitoring.diseaseIncidence || ''}
+        onChange={
+          onChange ? (diseaseIncidence) => onChange({ ...monitoring, diseaseIncidence }) : undefined
+        }
+      />
+    </Expandable>
+  );
+};
+
+export default Form2;

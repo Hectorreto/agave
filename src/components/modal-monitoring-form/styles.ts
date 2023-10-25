@@ -43,6 +43,9 @@ const styles = StyleSheet.create({
     top: 12,
     right: 12,
   },
+  modalForm: {
+    gap: 16,
+  },
 });
 
 export default styles;
