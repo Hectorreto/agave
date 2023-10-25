@@ -1,7 +1,11 @@
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
-import { useEffect, useRef } from 'react';
+import { Asset } from 'expo-asset';
+import { manipulateAsync } from 'expo-image-manipulator';
+import { printAsync } from 'expo-print';
+import { useEffect, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import MapView, { MapMarker, Marker } from 'react-native-maps';
+import ViewShot from 'react-native-view-shot';
 
 import styles from './styles';
 import CardSmall from '../../../components/card-small/CardSmall';
@@ -27,6 +31,42 @@ const lineData = [
 const MonitoringBoardScreen = ({ route }: Props) => {
   const { monitoring } = route.params;
   const markerRef = useRef<MapMarker>(null);
+  const viewShotRef = useRef<ViewShot>(null);
+  const [downloadingPDF, setDownloadingPDF] = useState(false);
+
+  useEffect(() => {
+    if (downloadingPDF) {
+      handleDownloadPDF().catch(console.error);
+    }
+  }, [downloadingPDF]);
+
+  const handleDownloadPDF = async () => {
+    if (!viewShotRef.current?.capture) return;
+    try {
+      const uri = await viewShotRef.current.capture();
+      const asset = Asset.fromURI(uri);
+      const image = await manipulateAsync(asset.localUri ?? asset.uri, [], { base64: true });
+      const html = `
+      <html lang="es">
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+        </head>
+        <body style="justify-content: center; align-items: center; display: flex">
+          <img
+            src="data:image/jpeg;base64,${image.base64}"
+            alt="image"
+            style="height: 99vh;"
+          />
+        </body>
+      </html>
+    `;
+      await printAsync({ html });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDownloadingPDF(false);
+    }
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -43,39 +83,48 @@ const MonitoringBoardScreen = ({ route }: Props) => {
         ]}
         active="MonitoringBoard"
       />
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: monitoring.latitude,
-          longitude: monitoring.longitude,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.05,
-        }}>
-        <Marker
-          ref={markerRef}
-          coordinate={{ latitude: monitoring.latitude, longitude: monitoring.longitude }}
-          title={monitoring.property}
-          description={formatDateTime(monitoring.createdAt)}
-        />
-      </MapView>
-      <View style={[styles.cardContainer, styles.cardContainerGap16]}>
-        <View style={{ alignItems: 'center', marginTop: 16 }}>
-          <View style={{ width: 140 }}>
-            <CardSmall left="92" right="calificación del monitoreo" />
+      <ViewShot ref={viewShotRef} style={{ gap: 16, backgroundColor: Colors.NEUTRAL }}>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: monitoring.latitude,
+            longitude: monitoring.longitude,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.05,
+          }}>
+          <Marker
+            ref={markerRef}
+            coordinate={{ latitude: monitoring.latitude, longitude: monitoring.longitude }}
+            title={monitoring.property}
+            description={formatDateTime(monitoring.createdAt)}
+          />
+        </MapView>
+
+        <View style={[styles.cardContainer, styles.cardContainerGap16]}>
+          <View style={{ alignItems: 'center', marginTop: 16 }}>
+            <View style={{ width: 140 }}>
+              <CardSmall left="92" right="calificación del monitoreo" />
+            </View>
           </View>
-        </View>
 
-        <ChartLine
-          data={lineData}
-          color={Colors.CHART_E1}
-          text="calificaciones de los monitoreos"
-        />
-        <ChartLine data={lineData} color={Colors.CHART_B1} text="rendimiento" />
+          <ChartLine
+            data={lineData}
+            color={Colors.CHART_E1}
+            text="calificaciones de los monitoreos"
+          />
+          <ChartLine data={lineData} color={Colors.CHART_B1} text="rendimiento" />
 
-        <View style={{ alignItems: 'center', marginVertical: 16 }}>
-          <CustomButton color="white" text="Descargar PDF" onPress={() => {}} />
+          {!downloadingPDF && (
+            <View style={{ alignItems: 'center', marginTop: 16 }}>
+              <CustomButton
+                color="white"
+                text="Descargar PDF"
+                onPress={() => setDownloadingPDF(true)}
+              />
+            </View>
+          )}
         </View>
-      </View>
+      </ViewShot>
     </ScrollView>
   );
 };

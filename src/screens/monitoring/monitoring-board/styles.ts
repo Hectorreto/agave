@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.NEUTRAL_300,
     borderRadius: 12,
     gap: 4,
+    paddingBottom: 16,
   },
   cardDataContainer: {
     marginTop: 16,
