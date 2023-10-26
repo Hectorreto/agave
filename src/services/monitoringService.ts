@@ -11,8 +11,8 @@ database.transaction((transaction) => {
       property TEXT,
       quadrantNumber TEXT,
       plantsPerQuadrant TEXT,
-      quadrantQualification TEXT,
-      monitoringQualification TEXT,
+      quadrantQualification REAL,
+      monitoringQualification REAL,
       comments TEXT,
       imageUri TEXT,
       latitude REAL,
@@ -38,7 +38,7 @@ database.transaction((transaction) => {
       colorimetryIncidence TEXT,
       colorimetryComments TEXT,
       physicalDamageType TEXT,
-      physicalDamageLeafType TEXT
+      physicalDamageIncidence TEXT
     )
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {
@@ -56,8 +56,8 @@ export type Monitoring = {
   property: string;
   quadrantNumber: string;
   plantsPerQuadrant: string;
-  quadrantQualification: string;
-  monitoringQualification: string;
+  quadrantQualification: number;
+  monitoringQualification: number;
   comments?: string;
   imageUri: string;
   latitude: number;
@@ -83,7 +83,7 @@ export type Monitoring = {
   colorimetryIncidence?: string;
   colorimetryComments?: string;
   physicalDamageType?: string;
-  physicalDamageLeafType?: string;
+  physicalDamageIncidence?: string;
 };
 
 export const createMonitoring = (monitoring: Monitoring): Promise<void> => {

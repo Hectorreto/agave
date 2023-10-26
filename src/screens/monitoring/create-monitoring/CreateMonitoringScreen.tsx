@@ -10,7 +10,7 @@ import Form4 from './Form4';
 import Form5 from './Form5';
 import Form6 from './Form6';
 import Form7 from './Form7';
-import { newMonitoring, validateMonitoring } from './helpers';
+import { getQuadrantQualification, newMonitoring, validateMonitoring } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
@@ -34,6 +34,8 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
   const [form, setForm] = useState<(Partial<Monitoring> | undefined)[]>(Array(8).fill(undefined));
   const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
   const [selectedForm, setSelectedForm] = useState({ index: 0, name: '' });
+
+  const { quadrantQualification, monitoringQualification } = getQuadrantQualification(form);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -189,26 +191,20 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
         <View style={styles.bottomFormContainer}>
           <Divider />
           <View style={styles.bottomFormInputsContainer}>
-            <Text style={styles.bottomFormTitle}>Cualificación</Text>
+            <Text style={styles.bottomFormTitle}>Calificación</Text>
             <View style={styles.bottomFormDoubleInput}>
               <View style={styles.bottomFormDoubleInputItem}>
                 <InputText
                   label="De cuadrante"
                   placeholder="##"
-                  value={monitoring.quadrantQualification}
-                  onChange={(quadrantQualification) =>
-                    setMonitoring({ ...monitoring, quadrantQualification })
-                  }
+                  value={String(quadrantQualification)}
                 />
               </View>
               <View style={styles.bottomFormDoubleInputItem}>
                 <InputText
                   label="De monitoreo"
                   placeholder="##"
-                  value={monitoring.monitoringQualification}
-                  onChange={(monitoringQualification) =>
-                    setMonitoring({ ...monitoring, monitoringQualification })
-                  }
+                  value={String(monitoringQualification)}
                 />
               </View>
             </View>
@@ -248,6 +244,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
                     ...form[5],
                     ...form[6],
                     ...form[7],
+                    ...{ quadrantQualification, monitoringQualification },
                   });
                   navigation.navigate('ListMonitoring');
                   showNotification('El monitoreo ha sido creado con éxito');

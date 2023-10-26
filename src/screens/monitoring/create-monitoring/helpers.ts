@@ -12,8 +12,8 @@ export const newMonitoring = (): Monitoring => {
     property: '',
     quadrantNumber: '',
     plantsPerQuadrant: '',
-    quadrantQualification: '',
-    monitoringQualification: '',
+    quadrantQualification: 0,
+    monitoringQualification: 0,
     imageUri: '',
     latitude: 0,
     longitude: 0,
@@ -27,9 +27,6 @@ export const validateMonitoring = (
   if (!monitoring.property) return false;
   if (!monitoring.quadrantNumber) return false;
   if (!monitoring.plantsPerQuadrant) return false;
-
-  if (!monitoring.quadrantQualification) return false;
-  if (!monitoring.monitoringQualification) return false;
   if (!monitoring.imageUri) return false;
 
   if (form[0]) {
@@ -74,8 +71,87 @@ export const validateMonitoring = (
 
   if (form[7]) {
     if (!form[7].physicalDamageType) return false;
-    if (!form[7].physicalDamageLeafType) return false;
+    if (!form[7].physicalDamageIncidence) return false;
   }
 
   return true;
+};
+
+export const getQuadrantQualification = (form: (Partial<Monitoring> | undefined)[]) => {
+  let qualification = 39;
+
+  if (form[1]) {
+    if (form[1].plagueIncidence === 'low') qualification -= 1;
+    if (form[1].plagueIncidence === 'medium') qualification -= 2;
+    if (form[1].plagueIncidence === 'high') qualification -= 3;
+  }
+
+  if (form[2]) {
+    if (form[2].diseaseIncidence === 'low') qualification -= 1;
+    if (form[2].diseaseIncidence === 'medium') qualification -= 2;
+    if (form[2].diseaseIncidence === 'high') qualification -= 3;
+  }
+
+  if (form[3]) {
+    if (form[3].undergrowthLeafType === 'wide') qualification -= 1;
+    if (form[3].undergrowthLeafType === 'narrow') qualification -= 1;
+    if (form[3].undergrowthLeafType === 'woody') qualification -= 1;
+  }
+
+  if (form[4]) {
+    if (form[4].phytotoxicDamageHerbicideIncidence === 'low') qualification -= 1;
+    if (form[4].phytotoxicDamageHerbicideIncidence === 'medium') qualification -= 2;
+    if (form[4].phytotoxicDamageHerbicideIncidence === 'high') qualification -= 3;
+
+    if (form[4].phytotoxicDamagePesticideIncidence === 'low') qualification -= 1;
+    if (form[4].phytotoxicDamagePesticideIncidence === 'medium') qualification -= 2;
+    if (form[4].phytotoxicDamagePesticideIncidence === 'high') qualification -= 3;
+
+    if (form[4].phytotoxicDamageExcessSaltIncidence === 'low') qualification -= 1;
+    if (form[4].phytotoxicDamageExcessSaltIncidence === 'medium') qualification -= 2;
+    if (form[4].phytotoxicDamageExcessSaltIncidence === 'high') qualification -= 3;
+  }
+
+  if (form[5]) {
+    if (form[5].environmentalDamageFrostIncidence === 'low') qualification -= 1;
+    if (form[5].environmentalDamageFrostIncidence === 'medium') qualification -= 2;
+    if (form[5].environmentalDamageFrostIncidence === 'high') qualification -= 3;
+
+    if (form[5].environmentalDamageStressIncidence === 'low') qualification -= 1;
+    if (form[5].environmentalDamageStressIncidence === 'medium') qualification -= 2;
+    if (form[5].environmentalDamageStressIncidence === 'high') qualification -= 3;
+
+    if (form[5].environmentalDamageFloodIncidence === 'low') qualification -= 1;
+    if (form[5].environmentalDamageFloodIncidence === 'medium') qualification -= 2;
+    if (form[5].environmentalDamageFloodIncidence === 'high') qualification -= 3;
+
+    if (form[5].environmentalDamageFireIncidence === 'low') qualification -= 1;
+    if (form[5].environmentalDamageFireIncidence === 'medium') qualification -= 2;
+    if (form[5].environmentalDamageFireIncidence === 'high') qualification -= 3;
+
+    if (form[5].environmentalDamageHailIncidence === 'low') qualification -= 1;
+    if (form[5].environmentalDamageHailIncidence === 'medium') qualification -= 2;
+    if (form[5].environmentalDamageHailIncidence === 'high') qualification -= 3;
+
+    if (form[5].environmentalDamageOtherIncidence === 'low') qualification -= 1;
+    if (form[5].environmentalDamageOtherIncidence === 'medium') qualification -= 2;
+    if (form[5].environmentalDamageOtherIncidence === 'high') qualification -= 3;
+  }
+
+  if (form[6]) {
+    if (form[6].colorimetryIncidence === 'low') qualification -= 0;
+    if (form[6].colorimetryIncidence === 'medium') qualification -= 1;
+    if (form[6].colorimetryIncidence === 'high') qualification -= 2;
+  }
+
+  if (form[7]) {
+    if (form[7].physicalDamageIncidence === 'low') qualification -= 1;
+    if (form[7].physicalDamageIncidence === 'medium') qualification -= 2;
+    if (form[7].physicalDamageIncidence === 'high') qualification -= 3;
+  }
+
+  return {
+    quadrantQualification: qualification,
+    monitoringQualification: Math.round((qualification * 100) / 39),
+  };
 };

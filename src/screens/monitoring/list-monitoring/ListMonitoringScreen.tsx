@@ -69,6 +69,7 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
         </View>
       </View>
       <PaginatedTable
+        maxRows={3}
         flex={[1, 0, 0]}
         titles={[
           <Text style={styles.tableTitleText}>Predio</Text>,

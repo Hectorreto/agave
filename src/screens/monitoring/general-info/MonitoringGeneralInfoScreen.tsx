@@ -83,7 +83,7 @@ const MonitoringGeneralInfoScreen = ({ route }: Props) => {
         <Form6 monitoring={monitoring} />
       ) : null}
 
-      {monitoring.physicalDamageType && monitoring.physicalDamageLeafType ? (
+      {monitoring.physicalDamageType && monitoring.physicalDamageIncidence ? (
         <Form7 monitoring={monitoring} />
       ) : null}
 

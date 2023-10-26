@@ -27,16 +27,16 @@ const Form7 = ({ monitoring, onChange, onPressDelete }: Props) => {
         }
       />
       <InputRadioGroup
-        label="Tipo de hoja"
+        label="Incidencia"
         items={[
-          { label: 'Ancha', value: 'wide' },
-          { label: 'Angosta', value: 'narrow' },
-          { label: 'Leñosa', value: 'woody' },
+          { label: 'Baja', value: 'low' },
+          { label: 'Media', value: 'medium' },
+          { label: 'Alta', value: 'high' },
         ]}
-        value={monitoring.physicalDamageLeafType || ''}
+        value={monitoring.physicalDamageIncidence || ''}
         onChange={
           onChange
-            ? (physicalDamageLeafType) => onChange({ ...monitoring, physicalDamageLeafType })
+            ? (physicalDamageIncidence) => onChange({ ...monitoring, physicalDamageIncidence })
             : undefined
         }
       />
