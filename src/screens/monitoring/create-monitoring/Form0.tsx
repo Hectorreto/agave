@@ -1,7 +1,7 @@
 import Delete from '../../../../assets/svg/delete.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Expandable from '../../../components/expandable/Expandable';
-import InputText from '../../../components/input-text/InputText';
+import InputNumber from '../../../components/input-number/InputNumber';
 import { Monitoring } from '../../../services/monitoringService';
 
 type Props = {
@@ -11,19 +11,22 @@ type Props = {
 };
 
 const Form0 = ({ monitoring, onChange, onPressDelete }: Props) => {
+  const handleOnChange = (key: keyof Monitoring) => {
+    if (!onChange) return undefined;
+    return (value: string) => {
+      onChange({ ...monitoring, [key]: value });
+    };
+  };
+
   return (
     <Expandable
       label="Planta"
       right={<CustomButton color="redWhite" Icon={Delete} onPress={onPressDelete} />}>
-      <InputText
+      <InputNumber
         label="Estimación de rendimiento en kg"
         placeholder="### kg"
         value={monitoring.plantPerformanceKg || ''}
-        onChange={
-          onChange
-            ? (plantPerformanceKg) => onChange({ ...monitoring, plantPerformanceKg })
-            : undefined
-        }
+        onChange={handleOnChange('plantPerformanceKg')}
       />
     </Expandable>
   );

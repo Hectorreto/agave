@@ -4,7 +4,7 @@ import { ScrollView, View } from 'react-native';
 import MapView, { MapMarker, Marker } from 'react-native-maps';
 import ViewShot from 'react-native-view-shot';
 
-import { useMonitoringQualification } from './helpers';
+import { useMonitoringLineData } from './helpers';
 import styles from './styles';
 import CardSmall from '../../../components/card-small/CardSmall';
 import ChartLine from '../../../components/chart-line/ChartLine';
@@ -20,7 +20,7 @@ type Props = MaterialTopTabScreenProps<MonitoringTabsParamList, 'MonitoringBoard
 const MonitoringBoardScreen = ({ route }: Props) => {
   const { monitoring } = route.params;
   const markerRef = useRef<MapMarker>(null);
-  const { lineData } = useMonitoringQualification();
+  const { lineData1, lineData2 } = useMonitoringLineData();
   const { viewShotRef, loading: downloadingPDF, generatePDF } = useGeneratePDF();
 
   useEffect(() => {
@@ -66,11 +66,11 @@ const MonitoringBoardScreen = ({ route }: Props) => {
           </View>
 
           <ChartLine
-            data={lineData}
+            data={lineData1}
             color={Colors.CHART_E1}
             text="calificaciones de los monitoreos"
           />
-          <ChartLine data={lineData} color={Colors.CHART_B1} text="rendimiento" />
+          <ChartLine data={lineData2} color={Colors.CHART_B1} text="rendimiento" />
 
           {!downloadingPDF && (
             <View style={{ alignItems: 'center', marginTop: 16 }}>

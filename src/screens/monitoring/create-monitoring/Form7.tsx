@@ -12,6 +12,13 @@ type Props = {
 };
 
 const Form7 = ({ monitoring, onChange, onPressDelete }: Props) => {
+  const handleOnChange = (key: keyof Monitoring) => {
+    if (!onChange) return undefined;
+    return (value: string) => {
+      onChange({ ...monitoring, [key]: value });
+    };
+  };
+
   return (
     <Expandable
       label="Daño físico"
@@ -20,11 +27,7 @@ const Form7 = ({ monitoring, onChange, onPressDelete }: Props) => {
         label="Tipo de daño físico"
         placeholder="Tipo de daño físico"
         value={monitoring.physicalDamageType || ''}
-        onChange={
-          onChange
-            ? (physicalDamageType) => onChange({ ...monitoring, physicalDamageType })
-            : undefined
-        }
+        onChange={handleOnChange('physicalDamageType')}
       />
       <InputRadioGroup
         label="Incidencia"
@@ -34,11 +37,7 @@ const Form7 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.physicalDamageIncidence || ''}
-        onChange={
-          onChange
-            ? (physicalDamageIncidence) => onChange({ ...monitoring, physicalDamageIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('physicalDamageIncidence')}
       />
     </Expandable>
   );

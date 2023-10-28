@@ -12,6 +12,13 @@ type Props = {
 };
 
 const Form2 = ({ monitoring, onChange, onPressDelete }: Props) => {
+  const handleOnChange = (key: keyof Monitoring) => {
+    if (!onChange) return undefined;
+    return (value: string) => {
+      onChange({ ...monitoring, [key]: value });
+    };
+  };
+
   return (
     <Expandable
       label="Enfermedad"
@@ -20,7 +27,7 @@ const Form2 = ({ monitoring, onChange, onPressDelete }: Props) => {
         label="Tipo de enfermedad"
         placeholder="Tipo de enfermedad"
         value={monitoring.diseaseType || ''}
-        onChange={onChange ? (diseaseType) => onChange({ ...monitoring, diseaseType }) : undefined}
+        onChange={handleOnChange('diseaseType')}
       />
       <InputRadioGroup
         label="Incidencia"
@@ -30,9 +37,7 @@ const Form2 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.diseaseIncidence || ''}
-        onChange={
-          onChange ? (diseaseIncidence) => onChange({ ...monitoring, diseaseIncidence }) : undefined
-        }
+        onChange={handleOnChange('diseaseIncidence')}
       />
     </Expandable>
   );

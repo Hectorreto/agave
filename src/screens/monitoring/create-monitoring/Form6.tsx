@@ -12,6 +12,13 @@ type Props = {
 };
 
 const Form6 = ({ monitoring, onChange, onPressDelete }: Props) => {
+  const handleOnChange = (key: keyof Monitoring) => {
+    if (!onChange) return undefined;
+    return (value: string) => {
+      onChange({ ...monitoring, [key]: value });
+    };
+  };
+
   return (
     <Expandable
       label="Colorimetría"
@@ -24,22 +31,14 @@ const Form6 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.colorimetryIncidence || ''}
-        onChange={
-          onChange
-            ? (colorimetryIncidence) => onChange({ ...monitoring, colorimetryIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('colorimetryIncidence')}
       />
       <InputText
         multiline
         label="Comentarios"
         placeholder="Escribe tus comentarios"
         value={monitoring.colorimetryComments || ''}
-        onChange={
-          onChange
-            ? (colorimetryComments) => onChange({ ...monitoring, colorimetryComments })
-            : undefined
-        }
+        onChange={handleOnChange('colorimetryComments')}
       />
     </Expandable>
   );

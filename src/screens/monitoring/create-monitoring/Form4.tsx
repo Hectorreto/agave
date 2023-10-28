@@ -11,6 +11,13 @@ type Props = {
 };
 
 const Form4 = ({ monitoring, onChange, onPressDelete }: Props) => {
+  const handleOnChange = (key: keyof Monitoring) => {
+    if (!onChange) return undefined;
+    return (value: string) => {
+      onChange({ ...monitoring, [key]: value });
+    };
+  };
+
   return (
     <Expandable
       label="Daño fitotóxico"
@@ -24,12 +31,7 @@ const Form4 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.phytotoxicDamageHerbicideIncidence || ''}
-        onChange={
-          onChange
-            ? (phytotoxicDamageHerbicideIncidence) =>
-                onChange({ ...monitoring, phytotoxicDamageHerbicideIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('phytotoxicDamageHerbicideIncidence')}
       />
       <InputRadioGroup
         title="Pesticidas"
@@ -40,12 +42,7 @@ const Form4 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.phytotoxicDamagePesticideIncidence || ''}
-        onChange={
-          onChange
-            ? (phytotoxicDamagePesticideIncidence) =>
-                onChange({ ...monitoring, phytotoxicDamagePesticideIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('phytotoxicDamagePesticideIncidence')}
       />
       <InputRadioGroup
         title="Exceso de sales"
@@ -56,12 +53,7 @@ const Form4 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.phytotoxicDamageExcessSaltIncidence || ''}
-        onChange={
-          onChange
-            ? (phytotoxicDamageExcessSaltIncidence) =>
-                onChange({ ...monitoring, phytotoxicDamageExcessSaltIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('phytotoxicDamageExcessSaltIncidence')}
       />
     </Expandable>
   );

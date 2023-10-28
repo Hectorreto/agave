@@ -3,11 +3,11 @@ import { useMemo } from 'react';
 import useMonitoring from '../../../hooks/useMonitoring';
 import { Monitoring } from '../../../services/monitoringService';
 
-const getLineData = (monitoring: Monitoring[]) => {
+const getGroupsByYear = (monitoring: Monitoring[]) => {
   const byYear = new Map<number, Monitoring[]>();
   const years = monitoring.map((m) => new Date(m.createdAt).getFullYear());
   const currentYear = new Date().getFullYear();
-  years.push(currentYear, currentYear - 5);
+  years.push(currentYear, currentYear - 1);
 
   const lowerYear = Math.min(...years);
   const upperYear = Math.max(...years);
@@ -20,11 +20,15 @@ const getLineData = (monitoring: Monitoring[]) => {
     byYear.get(year)?.push(m);
   });
 
-  const result: { label?: number; value: number }[] = [];
+  return byYear;
+};
 
-  byYear.forEach((group, year) => {
+const getLineData1 = (groups: Map<number, Monitoring[]>) => {
+  const result: { value: number; label?: number }[] = [];
+
+  groups.forEach((group, year) => {
     if (group.length === 0) {
-      result.push({ label: year, value: 0 });
+      result.push({ value: 0, label: year });
     } else {
       const values = group.map((m, index) => {
         if (index === 0) {
@@ -40,12 +44,40 @@ const getLineData = (monitoring: Monitoring[]) => {
   return result;
 };
 
-export const useMonitoringQualification = () => {
+const getLineData2 = (groups: Map<number, Monitoring[]>) => {
+  const result: { value: number; label?: number }[] = [];
+
+  groups.forEach((group, year) => {
+    if (group.length === 0) {
+      result.push({ value: 0, label: year });
+    } else {
+      const values = group.map((m, index) => {
+        const performance = Number(m.plantPerformanceKg) || 0;
+        if (index === 0) {
+          return { value: performance, label: year };
+        } else {
+          return { value: performance };
+        }
+      });
+      result.push(...values);
+    }
+  });
+
+  return result;
+};
+
+export const useMonitoringLineData = () => {
   const { data } = useMonitoring({ createdAtSort: 'ASC' });
 
-  const lineData = useMemo(() => {
-    return getLineData(data);
+  const lineData1 = useMemo(() => {
+    const groups = getGroupsByYear(data);
+    return getLineData1(groups);
   }, [data]);
 
-  return { lineData };
+  const lineData2 = useMemo(() => {
+    const groups = getGroupsByYear(data.filter((v) => v.plantPerformanceKg !== null));
+    return getLineData2(groups);
+  }, [data]);
+
+  return { lineData1, lineData2 };
 };

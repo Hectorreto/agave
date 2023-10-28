@@ -12,6 +12,13 @@ type Props = {
 };
 
 const Form3 = ({ monitoring, onChange, onPressDelete }: Props) => {
+  const handleOnChange = (key: keyof Monitoring) => {
+    if (!onChange) return undefined;
+    return (value: string) => {
+      onChange({ ...monitoring, [key]: value });
+    };
+  };
+
   return (
     <Expandable
       label="Maleza"
@@ -20,9 +27,7 @@ const Form3 = ({ monitoring, onChange, onPressDelete }: Props) => {
         label="Maleza"
         placeholder="Maleza"
         value={monitoring.undergrowthName || ''}
-        onChange={
-          onChange ? (undergrowthName) => onChange({ ...monitoring, undergrowthName }) : undefined
-        }
+        onChange={handleOnChange('undergrowthName')}
       />
       <InputRadioGroup
         label="Tipo de hoja"
@@ -32,21 +37,13 @@ const Form3 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Leñosa', value: 'woody' },
         ]}
         value={monitoring.undergrowthLeafType || ''}
-        onChange={
-          onChange
-            ? (undergrowthLeafType) => onChange({ ...monitoring, undergrowthLeafType })
-            : undefined
-        }
+        onChange={handleOnChange('undergrowthLeafType')}
       />
       <InputText
         label="Altura aproximada en cm"
         placeholder="Altura"
         value={monitoring.undergrowthHeight || ''}
-        onChange={
-          onChange
-            ? (undergrowthHeight) => onChange({ ...monitoring, undergrowthHeight })
-            : undefined
-        }
+        onChange={handleOnChange('undergrowthHeight')}
       />
     </Expandable>
   );

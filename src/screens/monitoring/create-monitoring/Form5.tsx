@@ -11,6 +11,13 @@ type Props = {
 };
 
 const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
+  const handleOnChange = (key: keyof Monitoring) => {
+    if (!onChange) return undefined;
+    return (value: string) => {
+      onChange({ ...monitoring, [key]: value });
+    };
+  };
+
   return (
     <Expandable
       label="Daño ambiental"
@@ -24,12 +31,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.environmentalDamageFrostIncidence || ''}
-        onChange={
-          onChange
-            ? (environmentalDamageFrostIncidence) =>
-                onChange({ ...monitoring, environmentalDamageFrostIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('environmentalDamageFrostIncidence')}
       />
       <InputRadioGroup
         title="Estrés"
@@ -40,12 +42,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.environmentalDamageStressIncidence || ''}
-        onChange={
-          onChange
-            ? (environmentalDamageStressIncidence) =>
-                onChange({ ...monitoring, environmentalDamageStressIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('environmentalDamageStressIncidence')}
       />
       <InputRadioGroup
         title="Inundación"
@@ -56,12 +53,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.environmentalDamageFloodIncidence || ''}
-        onChange={
-          onChange
-            ? (environmentalDamageFloodIncidence) =>
-                onChange({ ...monitoring, environmentalDamageFloodIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('environmentalDamageFloodIncidence')}
       />
       <InputRadioGroup
         title="Incendio"
@@ -72,12 +64,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.environmentalDamageFireIncidence || ''}
-        onChange={
-          onChange
-            ? (environmentalDamageFireIncidence) =>
-                onChange({ ...monitoring, environmentalDamageFireIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('environmentalDamageFireIncidence')}
       />
       <InputRadioGroup
         title="Granizo"
@@ -88,12 +75,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.environmentalDamageHailIncidence || ''}
-        onChange={
-          onChange
-            ? (environmentalDamageHailIncidence) =>
-                onChange({ ...monitoring, environmentalDamageHailIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('environmentalDamageHailIncidence')}
       />
       <InputRadioGroup
         title="Otros"
@@ -104,12 +86,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
           { label: 'Alta', value: 'high' },
         ]}
         value={monitoring.environmentalDamageOtherIncidence || ''}
-        onChange={
-          onChange
-            ? (environmentalDamageOtherIncidence) =>
-                onChange({ ...monitoring, environmentalDamageOtherIncidence })
-            : undefined
-        }
+        onChange={handleOnChange('environmentalDamageOtherIncidence')}
       />
     </Expandable>
   );
