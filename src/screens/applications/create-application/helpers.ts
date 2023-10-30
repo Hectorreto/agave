@@ -9,12 +9,12 @@ export const newApplication = (): Application => {
     updatedAt: 0,
     createdBy: '[Usuario]',
     updatedBy: '[Usuario]',
-    property: '',
     applicationMonth: '',
     state: 'inProcess',
     scheduledDate: 0,
     concept: '',
     containerAmount: '',
     notes: '',
+    propertyId: '',
   };
 };

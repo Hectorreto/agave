@@ -11,6 +11,7 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import useApplications from '../../../hooks/useApplications';
+import useProperties from '../../../hooks/useProperties';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'ListApplications'>;
@@ -33,6 +34,7 @@ const MonthNames = [
 const ListApplicationScreen = ({ navigation }: Props) => {
   const [search, setSearch] = useState('');
   const { data } = useApplications({ search });
+  const { data: properties } = useProperties({});
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -57,7 +59,9 @@ const ListApplicationScreen = ({ navigation }: Props) => {
         rows={data.map((value) => ({
           id: value.id,
           values: [
-            <Text style={styles.dataText}>{value.property}</Text>,
+            <Text style={styles.dataText}>
+              {properties.find((v) => v.id === value.propertyId)?.name}
+            </Text>,
             <Text style={styles.dataText}>{MonthNames[Number(value.applicationMonth)]}</Text>,
             <View
               style={[

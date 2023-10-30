@@ -8,13 +8,13 @@ database.transaction((transaction) => {
       updatedAt INTEGER,
       createdBy TEXT,
       updatedBy TEXT,
-      property TEXT,
       applicationMonth TEXT,
       state TEXT,
       scheduledDate INTEGER,
       concept TEXT,
       containerAmount TEXT,
-      notes TEXT
+      notes TEXT,
+      propertyId TEXT
     );
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {
@@ -29,13 +29,13 @@ export type Application = {
   updatedAt: number;
   createdBy: string;
   updatedBy: string;
-  property: string;
   applicationMonth: string;
   state: 'inProcess' | 'finalized';
   scheduledDate: number;
   concept: string;
   containerAmount: string;
   notes: string;
+  propertyId: string;
 };
 
 const keys: (keyof Application)[] = [
@@ -44,13 +44,13 @@ const keys: (keyof Application)[] = [
   'updatedAt',
   'createdBy',
   'updatedBy',
-  'property',
   'applicationMonth',
   'state',
   'scheduledDate',
   'concept',
   'containerAmount',
   'notes',
+  'propertyId',
 ];
 
 export const createApplication = (application: Application): Promise<void> => {

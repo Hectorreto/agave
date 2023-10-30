@@ -8,15 +8,17 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import InputDate from '../../../components/input-date/InputDate';
 import InputSelect from '../../../components/input-select/InputSelect';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
+import useProperties from '../../../hooks/useProperties';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication1'>;
 
 const CreateApplication1Screen = ({ navigation }: Props) => {
-  const [property, setProperty] = useState('');
+  const [propertyId, setPropertyId] = useState('');
   const [concept, setConcept] = useState('');
   const [month, setMonth] = useState('');
   const [date, setDate] = useState<Date>();
+  const { data: properties } = useProperties({});
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -25,14 +27,12 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
       <InputSelect
         label="Predio"
         placeholder="Selecciona"
-        value={property}
-        onChange={setProperty}
-        items={[
-          { label: 'A', value: 'a' },
-          { label: 'B', value: 'b' },
-          { label: 'C', value: 'c' },
-          { label: 'D', value: 'd' },
-        ]}
+        value={propertyId}
+        onChange={setPropertyId}
+        items={properties.map((property) => ({
+          label: property.name,
+          value: property.id,
+        }))}
       />
       <InputSelect
         label="Concepto"
@@ -77,12 +77,12 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
           color="blue"
           text="Siguiente"
           onPress={() => {
-            if (!property || !concept || !month || !date) return;
+            if (!propertyId || !concept || !month || !date) return;
 
             navigation.navigate('CreateApplication2', {
               application: {
                 ...newApplication(),
-                property,
+                propertyId,
                 concept,
                 applicationMonth: month,
                 scheduledDate: date.getTime(),
