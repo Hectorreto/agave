@@ -8,7 +8,9 @@ import Divider from '../../../components/divider/Divider';
 import Expandable from '../../../components/expandable/Expandable';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 import InputCamera from '../../../components/input-camera/InputCamera';
+import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
+import useProperties from '../../../hooks/useProperties';
 import { MonitoringTabsParamList } from '../../../navigation/MonitoringTabs';
 import Form0 from '../create-monitoring/Form0';
 import Form1 from '../create-monitoring/Form1';
@@ -23,6 +25,7 @@ type Props = MaterialTopTabScreenProps<MonitoringTabsParamList, 'MonitoringGener
 
 const MonitoringGeneralInfoScreen = ({ route }: Props) => {
   const { monitoring } = route.params;
+  const { data: properties } = useProperties({});
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -35,7 +38,15 @@ const MonitoringGeneralInfoScreen = ({ route }: Props) => {
       />
 
       <Expandable label="General">
-        <InputText label="Predio" placeholder="Escribe o selecciona" value={monitoring.property} />
+        <InputSelect
+          label="Predio"
+          placeholder="Selecciona"
+          value={monitoring.propertyId}
+          items={properties.map((property) => ({
+            label: property.name,
+            value: property.id,
+          }))}
+        />
         <InputText
           label="Número de cuadrantes"
           placeholder="Número"

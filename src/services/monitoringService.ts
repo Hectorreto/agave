@@ -8,7 +8,6 @@ database.transaction((transaction) => {
       updatedAt INTEGER,
       createdBy TEXT,
       updatedBy TEXT,
-      property TEXT,
       quadrantNumber TEXT,
       plantsPerQuadrant TEXT,
       quadrantQualification REAL,
@@ -17,6 +16,7 @@ database.transaction((transaction) => {
       imageUri TEXT,
       latitude REAL,
       longitude REAL,
+      propertyId TEXT,
       
       plantPerformanceKg TEXT,
       plagueType TEXT,
@@ -53,7 +53,6 @@ export type Monitoring = {
   updatedAt: number;
   createdBy: string;
   updatedBy: string;
-  property: string;
   quadrantNumber: string;
   plantsPerQuadrant: string;
   quadrantQualification: number;
@@ -62,6 +61,7 @@ export type Monitoring = {
   imageUri: string;
   latitude: number;
   longitude: number;
+  propertyId: string;
 
   plantPerformanceKg?: string;
   plagueType?: string;

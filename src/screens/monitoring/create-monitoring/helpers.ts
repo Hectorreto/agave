@@ -9,7 +9,6 @@ export const newMonitoring = (): Monitoring => {
     updatedAt: 0,
     createdBy: '[Usuario]',
     updatedBy: '[Usuario]',
-    property: '',
     quadrantNumber: '',
     plantsPerQuadrant: '',
     quadrantQualification: 0,
@@ -17,6 +16,7 @@ export const newMonitoring = (): Monitoring => {
     imageUri: '',
     latitude: 0,
     longitude: 0,
+    propertyId: '',
   };
 };
 
@@ -24,7 +24,7 @@ export const validateMonitoring = (
   monitoring: Monitoring,
   form: (Partial<Monitoring> | undefined)[]
 ) => {
-  if (!monitoring.property) return false;
+  if (!monitoring.propertyId) return false;
   if (!monitoring.quadrantNumber) return false;
   if (!monitoring.plantsPerQuadrant) return false;
   if (!monitoring.imageUri) return false;

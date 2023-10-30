@@ -17,10 +17,12 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
 import Expandable from '../../../components/expandable/Expandable';
 import InputCamera from '../../../components/input-camera/InputCamera';
+import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import ModalMonitoringForm from '../../../components/modal-monitoring-form/ModalMonitoringForm';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
+import useProperties from '../../../hooks/useProperties';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
 import { createMonitoring, Monitoring } from '../../../services/monitoringService';
 
@@ -34,6 +36,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
   const [form, setForm] = useState<(Partial<Monitoring> | undefined)[]>(Array(8).fill(undefined));
   const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
   const [selectedForm, setSelectedForm] = useState({ index: 0, name: '' });
+  const { data: properties } = useProperties({});
 
   const { quadrantQualification, monitoringQualification } = getQuadrantQualification(form);
 
@@ -42,11 +45,15 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
       <Text style={styles.helper}>Llena el formulario para crear un nuevo monitoreo</Text>
 
       <Expandable label="General" hideLabelAndShowContent={form.every((value) => !value)}>
-        <InputText
+        <InputSelect
           label="Predio"
-          placeholder="Escribe o selecciona"
-          value={monitoring.property}
-          onChange={(property) => setMonitoring({ ...monitoring, property })}
+          placeholder="Selecciona"
+          value={monitoring.propertyId}
+          onChange={(propertyId) => setMonitoring({ ...monitoring, propertyId })}
+          items={properties.map((property) => ({
+            label: property.name,
+            value: property.id,
+          }))}
         />
         <InputText
           label="Número de cuadrantes"
