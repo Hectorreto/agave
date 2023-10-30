@@ -6,9 +6,10 @@ import { findProperties, Property } from '../services/propertyService';
 type Props = {
   id?: string;
   search?: string;
+  createdAtSort?: 'ASC' | 'DESC';
 };
 
-const useProperties = ({ id, search }: Props) => {
+const useProperties = ({ id, search, createdAtSort }: Props) => {
   const [data, setData] = useState<Property[]>([]);
 
   useFocusEffect(
@@ -18,8 +19,11 @@ const useProperties = ({ id, search }: Props) => {
           id,
           name: !search ? undefined : `%${search}%`,
         },
+        sorting: {
+          createdAt: createdAtSort,
+        },
       }).then((value) => setData(value));
-    }, [id, search])
+    }, [id, search, createdAtSort])
   );
 
   return {

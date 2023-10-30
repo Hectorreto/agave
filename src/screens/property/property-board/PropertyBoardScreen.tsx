@@ -1,5 +1,6 @@
 import { ScrollView, Text, View } from 'react-native';
 
+import { usePropertyBarData, usePropertyPieData } from './helpers';
 import styles from './styles';
 import Eco from '../../../../assets/svg/eco.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
@@ -14,26 +15,8 @@ import InputSelect from '../../../components/input-select/InputSelect';
 import { Colors } from '../../../themes/theme';
 
 const PropertyBoardScreen = () => {
-  const barData = [
-    { value: 38, label: '2018' },
-    { value: 58, label: '2019' },
-    { value: 88, label: '2020' },
-    { value: 58, label: '2021' },
-    { value: 24, label: '2022' },
-    { value: 52, label: '2023' },
-  ];
-
-  const pieData = [
-    { value: 25 },
-    { value: 25 },
-    { value: 25 },
-    { value: 25 },
-    { value: 25 },
-    { value: 25 },
-    { value: 25 },
-    { value: 25 },
-    { value: 25 },
-  ];
+  const { hectareData, hectareTotal, plantData, plantTotal } = usePropertyBarData();
+  const { cropData } = usePropertyPieData();
 
   const lineData = [
     { value: 34 },
@@ -81,9 +64,9 @@ const PropertyBoardScreen = () => {
           <Text style={styles.cardTitle}>Hectáreas</Text>
         </View>
         <View style={styles.cardDataContainer}>
-          <CardSmall left="3,557" right="hectáreas totales" />
+          <CardSmall left={String(hectareTotal)} right="hectáreas totales" />
         </View>
-        <ChartBar data={barData} frontColor={Colors.CHART_C} borderColor={Colors.CHART_C1} />
+        <ChartBar data={hectareData} frontColor={Colors.CHART_C} borderColor={Colors.CHART_C1} />
       </View>
 
       <View style={styles.cardContainer}>
@@ -91,16 +74,16 @@ const PropertyBoardScreen = () => {
           <Text style={styles.cardTitle}>Plantas</Text>
         </View>
         <View style={styles.cardDataContainer}>
-          <CardSmall left="12,759" right="plantas totales" />
+          <CardSmall left={String(plantTotal)} right="plantas totales" />
         </View>
-        <ChartBar data={barData} frontColor={Colors.CHART_D} borderColor={Colors.CHART_D1} />
+        <ChartBar data={plantData} frontColor={Colors.CHART_D} borderColor={Colors.CHART_D1} />
       </View>
 
       <View style={[styles.cardContainer, styles.cardContainerGap16, { paddingBottom: 30 }]}>
         <View style={styles.cardTitleContainer}>
           <Text style={styles.cardTitle}>Cultivos</Text>
         </View>
-        <ChartPie data={pieData} />
+        <ChartPie data={cropData} />
 
         <View style={{ marginHorizontal: 24 }}>
           <Divider />
@@ -123,7 +106,7 @@ const PropertyBoardScreen = () => {
             <CardSmall left="92" right="calificación promedio" />
           </View>
           <View style={{ width: 140 }}>
-            <CardSmall left="84" right="kg de perso promedio" />
+            <CardSmall left="84" right="kg de peso promedio" />
           </View>
           <View style={{ width: 140 }}>
             <CardSmall left="13%" right="de maleza" />

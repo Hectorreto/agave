@@ -21,19 +21,19 @@ const useGeneratePDF = () => {
       const asset = Asset.fromURI(uri);
       const image = await manipulateAsync(asset.localUri ?? asset.uri, [], { base64: true });
       const html = `
-      <html lang="es">
-        <head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-          <title>document</title>
-        </head>
-        <body style="justify-content: center; align-items: center; display: flex">
-          <img
-            src="data:image/jpeg;base64,${image.base64}"
-            alt="image"
-            style="height: 99vh;"
-          />
-        </body>
-      </html>
+        <html lang="es">
+          <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+            <title>document</title>
+          </head>
+          <body style="justify-content: center; align-items: center; display: flex">
+            <img
+              src="data:image/jpeg;base64,${image.base64}"
+              alt="image"
+              style="height: 90vh;"
+            />
+          </body>
+        </html>
     `;
       await printAsync({ html });
     } catch (error) {

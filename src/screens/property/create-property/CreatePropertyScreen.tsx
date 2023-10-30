@@ -8,6 +8,7 @@ import Description from '../../../../assets/svg/description.svg';
 import Upload from '../../../../assets/svg/upload.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputDate from '../../../components/input-date/InputDate';
+import InputNumber from '../../../components/input-number/InputNumber';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
@@ -68,7 +69,7 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
         />
         <View style={styles.doubleInputContainer}>
           <View style={styles.doubleInputItem}>
-            <InputText
+            <InputNumber
               label="No. de hectáreas"
               placeholder="###"
               value={property.hectareNumber}
@@ -76,7 +77,7 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
             />
           </View>
           <View style={styles.doubleInputItem}>
-            <InputText
+            <InputNumber
               label="No. de plantas sembradas"
               placeholder="###"
               value={property.plantsPlantedNumber}

@@ -9,7 +9,7 @@ const getColor = (index: number, total: number) => {
 };
 
 type Props = {
-  data: any[];
+  data: { label: string; value: number }[];
 };
 
 const ChartPie = ({ data }: Props) => {
@@ -27,7 +27,7 @@ const ChartPie = ({ data }: Props) => {
         />
       </View>
       <View style={{ flex: 1, justifyContent: 'center', gap: 8, paddingLeft: 24 }}>
-        {data.map((_value, index) => (
+        {data.map(({ label }, index) => (
           <View key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <View
               style={{
@@ -36,7 +36,7 @@ const ChartPie = ({ data }: Props) => {
                 height: 8,
               }}
             />
-            <Text style={{ color: Colors.NEUTRAL_700 }}>Cultivo {index + 1}</Text>
+            <Text style={{ color: Colors.NEUTRAL_700 }}>{label}</Text>
           </View>
         ))}
       </View>

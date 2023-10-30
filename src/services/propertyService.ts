@@ -86,6 +86,9 @@ type FindPropertyOptions = {
     id?: string;
     name?: string;
   };
+  sorting?: {
+    createdAt?: 'ASC' | 'DESC';
+  };
 };
 
 export const findProperties = (options: FindPropertyOptions): Promise<Property[]> => {
@@ -107,6 +110,14 @@ export const findProperties = (options: FindPropertyOptions): Promise<Property[]
     whereSql = `WHERE ${where.map((value) => `(${value})`).join(' AND ')}`;
   }
 
+  let orderSql = '';
+  if (options.sorting?.createdAt === 'ASC') {
+    orderSql = 'ORDER BY createdAt ASC';
+  }
+  if (options.sorting?.createdAt === 'DESC') {
+    orderSql = 'ORDER BY createdAt DESC';
+  }
+
   return new Promise((resolve) => {
     database.transaction((transaction) => {
       transaction.executeSql(
@@ -114,6 +125,7 @@ export const findProperties = (options: FindPropertyOptions): Promise<Property[]
           SELECT *
           FROM property
           ${whereSql}
+          ${orderSql}
         `,
         args,
         (_, { rows }) => {
