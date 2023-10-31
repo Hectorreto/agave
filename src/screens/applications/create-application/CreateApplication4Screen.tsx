@@ -37,7 +37,7 @@ const CreateApplication4Screen = ({ navigation, route }: Props) => {
 
       {!videoUri && <Text style={styles.helper}>¿Deseas iniciar esta aplicación?</Text>}
 
-      <View style={styles.helperButton}>
+      <View style={[styles.helperButton, { flex: 1 }]}>
         {Boolean(videoUri) && (
           <Video
             style={{ height: 360, width: 300 }}
@@ -55,11 +55,7 @@ const CreateApplication4Screen = ({ navigation, route }: Props) => {
       </View>
 
       <View style={styles.saveCancelButtons}>
-        <CustomButton
-          color="lightBlue"
-          text="Cancelar"
-          onPress={() => navigation.navigate('ListApplications')}
-        />
+        <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
         <CustomButton color="blue" text="Crear" onPress={handleOnSave} />
       </View>
     </ScrollView>

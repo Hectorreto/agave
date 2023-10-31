@@ -85,6 +85,8 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
         submitted={submitted}
       />
       <InputDate label="Fecha programada" date={date} onChange={setDate} submitted={submitted} />
+
+      <View style={{ flex: 1 }} />
       <View style={styles.saveCancelButtons}>
         <CustomButton
           color="lightBlue"

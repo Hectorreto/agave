@@ -11,6 +11,7 @@ import ChartLine from '../../../components/chart-line/ChartLine';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
 import useGeneratePDF from '../../../hooks/useGeneratePDF';
+import useProperties from '../../../hooks/useProperties';
 import { MonitoringTabsParamList } from '../../../navigation/MonitoringTabs';
 import { Colors } from '../../../themes/theme';
 import { formatDateTime } from '../../../utils/dateUtils';
@@ -22,6 +23,8 @@ const MonitoringBoardScreen = ({ route }: Props) => {
   const markerRef = useRef<MapMarker>(null);
   const { lineData1, lineData2 } = useMonitoringLineData();
   const { viewShotRef, loading: downloadingPDF, generatePDF } = useGeneratePDF();
+  const { data: properties } = useProperties({ id: monitoring.propertyId });
+  const property = properties[0];
 
   useEffect(() => {
     setTimeout(() => {
@@ -50,7 +53,7 @@ const MonitoringBoardScreen = ({ route }: Props) => {
           <Marker
             ref={markerRef}
             coordinate={{ latitude: monitoring.latitude, longitude: monitoring.longitude }}
-            title={monitoring.property}
+            title={property?.name}
             description={formatDateTime(monitoring.createdAt)}
           />
         </MapView>

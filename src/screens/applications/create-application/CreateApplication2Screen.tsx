@@ -2,15 +2,19 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import uuid from 'react-native-uuid';
+import ViewShot from 'react-native-view-shot';
 
 import FormProduct from './FormProduct';
 import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
+import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
+import useGeneratePDF from '../../../hooks/useGeneratePDF';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 import { Product } from '../../../services/productService';
+import { Colors } from '../../../themes/theme';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication2'>;
 
@@ -31,6 +35,7 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
   const [submitted, setSubmitted] = useState(false);
+  const { viewShotRef, loading, generatePDF } = useGeneratePDF();
 
   const handleSubmit = () => {
     setSubmitted(true);
@@ -50,6 +55,28 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
       products: productsCopy,
     });
   };
+
+  if (loading) {
+    return (
+      <ViewShot ref={viewShotRef} style={{ flex: 1, backgroundColor: Colors.NEUTRAL }}>
+        <PaginatedTable
+          showFooter={false}
+          flex={[3, 2]}
+          titles={[
+            <Text style={[styles.tableTitleText]}>Producto</Text>,
+            <Text style={styles.tableTitleText}>Cantidad total</Text>,
+          ]}
+          rows={products.map((value) => ({
+            id: value.id,
+            values: [
+              <Text style={styles.dataText}>{value.name}</Text>,
+              <Text style={styles.dataText}>{value.amount}</Text>,
+            ],
+          }))}
+        />
+      </ViewShot>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -93,15 +120,12 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
       ))}
 
       <View style={styles.pdfButton}>
-        <CustomButton color="white" text="Ver receta en PDF" onPress={() => {}} />
+        <CustomButton color="white" text="Ver receta en PDF" onPress={generatePDF} />
       </View>
 
+      <View style={{ flex: 1 }} />
       <View style={styles.saveCancelButtons}>
-        <CustomButton
-          color="lightBlue"
-          text="Cancelar"
-          onPress={() => navigation.navigate('ListApplications')}
-        />
+        <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
         <CustomButton color="blue" text="Siguiente" onPress={handleSubmit} />
       </View>
 
