@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     color: Colors.NEUTRAL_700,
     fontWeight: '600',
   },
+  inputLabelError: {
+    color: Colors.ALERT_RED,
+  },
   textInput: {
     height: 44,
     paddingHorizontal: 16,
@@ -18,6 +21,9 @@ const styles = StyleSheet.create({
     borderColor: Colors.NEUTRAL_400,
     borderRadius: 4,
     backgroundColor: Colors.NEUTRAL,
+  },
+  inputError: {
+    borderColor: Colors.ALERT_RED,
   },
   textInputMultiline: {
     height: 88,

@@ -12,15 +12,18 @@ type Props = {
   value: string;
   onChange: (text: string) => void;
   info?: string;
+  submitted: boolean;
 };
 
-const InputPassword = ({ label, placeholder, value, onChange, info }: Props) => {
+const InputPassword = ({ label, placeholder, value, onChange, info, submitted }: Props) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const isValid = Boolean(value);
+  const showError = submitted && !isValid;
 
   return (
     <View style={styles.container}>
-      <Text style={styles.inputLabel}>{label}</Text>
-      <View style={styles.inputContainer}>
+      <Text style={[styles.inputLabel, showError && styles.inputLabelError]}>{label}</Text>
+      <View style={[styles.inputContainer, showError && styles.inputError]}>
         <TextInput
           style={styles.textInput}
           placeholder={placeholder}

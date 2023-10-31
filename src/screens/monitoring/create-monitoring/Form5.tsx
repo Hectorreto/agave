@@ -8,9 +8,10 @@ type Props = {
   monitoring: Partial<Monitoring>;
   onChange?: (value: Partial<Monitoring>) => void;
   onPressDelete?: () => void;
+  submitted?: boolean;
 };
 
-const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
+const Form5 = ({ monitoring, onChange, onPressDelete, submitted }: Props) => {
   const handleOnChange = (key: keyof Monitoring) => {
     if (!onChange) return undefined;
     return (value: string) => {
@@ -32,6 +33,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
         ]}
         value={monitoring.environmentalDamageFrostIncidence || ''}
         onChange={handleOnChange('environmentalDamageFrostIncidence')}
+        submitted={submitted}
       />
       <InputRadioGroup
         title="Estrés"
@@ -43,6 +45,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
         ]}
         value={monitoring.environmentalDamageStressIncidence || ''}
         onChange={handleOnChange('environmentalDamageStressIncidence')}
+        submitted={submitted}
       />
       <InputRadioGroup
         title="Inundación"
@@ -54,6 +57,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
         ]}
         value={monitoring.environmentalDamageFloodIncidence || ''}
         onChange={handleOnChange('environmentalDamageFloodIncidence')}
+        submitted={submitted}
       />
       <InputRadioGroup
         title="Incendio"
@@ -65,6 +69,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
         ]}
         value={monitoring.environmentalDamageFireIncidence || ''}
         onChange={handleOnChange('environmentalDamageFireIncidence')}
+        submitted={submitted}
       />
       <InputRadioGroup
         title="Granizo"
@@ -76,6 +81,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
         ]}
         value={monitoring.environmentalDamageHailIncidence || ''}
         onChange={handleOnChange('environmentalDamageHailIncidence')}
+        submitted={submitted}
       />
       <InputRadioGroup
         title="Otros"
@@ -87,6 +93,7 @@ const Form5 = ({ monitoring, onChange, onPressDelete }: Props) => {
         ]}
         value={monitoring.environmentalDamageOtherIncidence || ''}
         onChange={handleOnChange('environmentalDamageOtherIncidence')}
+        submitted={submitted}
       />
     </Expandable>
   );

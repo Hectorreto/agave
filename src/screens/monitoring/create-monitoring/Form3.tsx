@@ -9,9 +9,10 @@ type Props = {
   monitoring: Partial<Monitoring>;
   onChange?: (value: Partial<Monitoring>) => void;
   onPressDelete?: () => void;
+  submitted?: boolean;
 };
 
-const Form3 = ({ monitoring, onChange, onPressDelete }: Props) => {
+const Form3 = ({ monitoring, onChange, onPressDelete, submitted }: Props) => {
   const handleOnChange = (key: keyof Monitoring) => {
     if (!onChange) return undefined;
     return (value: string) => {
@@ -28,6 +29,7 @@ const Form3 = ({ monitoring, onChange, onPressDelete }: Props) => {
         placeholder="Maleza"
         value={monitoring.undergrowthName || ''}
         onChange={handleOnChange('undergrowthName')}
+        submitted={submitted}
       />
       <InputRadioGroup
         label="Tipo de hoja"
@@ -38,12 +40,14 @@ const Form3 = ({ monitoring, onChange, onPressDelete }: Props) => {
         ]}
         value={monitoring.undergrowthLeafType || ''}
         onChange={handleOnChange('undergrowthLeafType')}
+        submitted={submitted}
       />
       <InputText
         label="Altura aproximada en cm"
         placeholder="Altura"
         value={monitoring.undergrowthHeight || ''}
         onChange={handleOnChange('undergrowthHeight')}
+        submitted={submitted}
       />
     </Expandable>
   );

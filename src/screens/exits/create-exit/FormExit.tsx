@@ -10,9 +10,10 @@ import InputText from '../../../components/input-text/InputText';
 type Props = {
   item: Item;
   onChange: (exit: Item) => void;
+  submitted: boolean;
 };
 
-const FormExit = ({ item, onChange }: Props) => {
+const FormExit = ({ item, onChange, submitted }: Props) => {
   const [exitType, setExitType] = useState('');
   const [customType, setCustomType] = useState('');
 
@@ -34,6 +35,7 @@ const FormExit = ({ item, onChange }: Props) => {
             { label: 'Para monitoreo', value: 'Para monitoreo' },
             { label: 'Otro', value: 'Otro' },
           ]}
+          submitted={submitted}
         />
         {exitType === 'Otros' && (
           <InputText
@@ -44,6 +46,7 @@ const FormExit = ({ item, onChange }: Props) => {
               setCustomType(type);
               onChange({ ...item, exit: { ...item.exit, type: type || exitType } });
             }}
+            submitted={submitted}
           />
         )}
         <InputText
@@ -53,6 +56,7 @@ const FormExit = ({ item, onChange }: Props) => {
           onChange={(plantCount) => {
             onChange({ ...item, exit: { ...item.exit, plantCount } });
           }}
+          submitted={submitted}
         />
         <InputText
           multiline
@@ -62,6 +66,7 @@ const FormExit = ({ item, onChange }: Props) => {
           onChange={(notes) => {
             onChange({ ...item, exit: { ...item.exit, notes } });
           }}
+          submitted={submitted}
         />
       </View>
       <View style={styles.extraActions}>

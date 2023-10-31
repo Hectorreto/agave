@@ -16,6 +16,21 @@ const FinaliceApplication1Screen = ({ navigation, route }: Props) => {
   const { applicationId } = route.params;
   const { data } = useProducts({ applicationId });
   const [amounts, setAmounts] = useState<string[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    for (let i = 0; i < data.length; i++) {
+      if (!amounts[i]) return;
+    }
+
+    const products = data.map((product, index) => ({
+      ...product,
+      realAmount: amounts[index],
+    }));
+
+    navigation.navigate('FinaliceApplication2', { applicationId, products });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -42,6 +57,7 @@ const FinaliceApplication1Screen = ({ navigation, route }: Props) => {
                   copyAmounts[index] = text;
                   setAmounts(copyAmounts);
                 }}
+                submitted={submitted}
               />
             </View>,
           ],
@@ -56,22 +72,7 @@ const FinaliceApplication1Screen = ({ navigation, route }: Props) => {
           text="Cancelar"
           onPress={() => navigation.navigate('ListApplications')}
         />
-        <CustomButton
-          color="blue"
-          text="Siguiente"
-          onPress={() => {
-            for (let i = 0; i < data.length; i++) {
-              if (!amounts[i]) return;
-            }
-
-            const products = data.map((product, index) => ({
-              ...product,
-              realAmount: amounts[index],
-            }));
-
-            navigation.navigate('FinaliceApplication2', { applicationId, products });
-          }}
-        />
+        <CustomButton color="blue" text="Siguiente" onPress={handleSubmit} />
       </View>
     </ScrollView>
   );

@@ -37,8 +37,32 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
   const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
   const [selectedForm, setSelectedForm] = useState({ index: 0, name: '' });
   const { data: properties } = useProperties({});
+  const [submitted, setSubmitted] = useState(false);
 
   const { quadrantQualification, monitoringQualification } = getQuadrantQualification(form);
+
+  const handleSubmit = async () => {
+    try {
+      setSubmitted(true);
+      if (!validateMonitoring(monitoring, form)) return;
+      await createMonitoring({
+        ...monitoring,
+        ...form[0],
+        ...form[1],
+        ...form[2],
+        ...form[3],
+        ...form[4],
+        ...form[5],
+        ...form[6],
+        ...form[7],
+        ...{ quadrantQualification, monitoringQualification },
+      });
+      navigation.navigate('ListMonitoring');
+      showNotification('El monitoreo ha sido creado con éxito');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -54,18 +78,21 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             label: property.name,
             value: property.id,
           }))}
+          submitted={submitted}
         />
         <InputText
           label="Número de cuadrantes"
           placeholder="Número"
           value={monitoring.quadrantNumber}
           onChange={(quadrantNumber) => setMonitoring({ ...monitoring, quadrantNumber })}
+          submitted={submitted}
         />
         <InputText
           label="Número de plantas por cuadrante"
           placeholder="Número"
           value={monitoring.plantsPerQuadrant}
           onChange={(plantsPerQuadrant) => setMonitoring({ ...monitoring, plantsPerQuadrant })}
+          submitted={submitted}
         />
       </Expandable>
 
@@ -81,6 +108,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             setSelectedForm({ index: 0, name: 'planta' });
             setIsModalDeleteVisible(true);
           }}
+          submitted={submitted}
         />
       )}
       {form[1] && (
@@ -95,6 +123,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             setSelectedForm({ index: 1, name: 'plaga' });
             setIsModalDeleteVisible(true);
           }}
+          submitted={submitted}
         />
       )}
       {form[2] && (
@@ -109,6 +138,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             setSelectedForm({ index: 2, name: 'enfermedad' });
             setIsModalDeleteVisible(true);
           }}
+          submitted={submitted}
         />
       )}
       {form[3] && (
@@ -123,6 +153,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             setSelectedForm({ index: 3, name: 'maleza' });
             setIsModalDeleteVisible(true);
           }}
+          submitted={submitted}
         />
       )}
       {form[4] && (
@@ -137,6 +168,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             setSelectedForm({ index: 4, name: 'daño fitotóxico' });
             setIsModalDeleteVisible(true);
           }}
+          submitted={submitted}
         />
       )}
       {form[5] && (
@@ -151,6 +183,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             setSelectedForm({ index: 5, name: 'daño ambiental' });
             setIsModalDeleteVisible(true);
           }}
+          submitted={submitted}
         />
       )}
       {form[6] && (
@@ -165,6 +198,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             setSelectedForm({ index: 6, name: 'colorimetría' });
             setIsModalDeleteVisible(true);
           }}
+          submitted={submitted}
         />
       )}
       {form[7] && (
@@ -179,6 +213,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             setSelectedForm({ index: 7, name: 'daño físico' });
             setIsModalDeleteVisible(true);
           }}
+          submitted={submitted}
         />
       )}
 
@@ -205,10 +240,18 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             </View>
             <View style={styles.bottomFormDoubleInput}>
               <View style={styles.bottomFormDoubleInputItem}>
-                <InputText placeholder="##" value={String(quadrantQualification)} />
+                <InputText
+                  placeholder="##"
+                  value={String(quadrantQualification)}
+                  submitted={submitted}
+                />
               </View>
               <View style={styles.bottomFormDoubleInputItem}>
-                <InputText placeholder="##" value={String(monitoringQualification)} />
+                <InputText
+                  placeholder="##"
+                  value={String(monitoringQualification)}
+                  submitted={submitted}
+                />
               </View>
             </View>
             <InputText
@@ -231,31 +274,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
 
           <View style={styles.saveCancelButtons}>
             <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
-            <CustomButton
-              color="blue"
-              text="Guardar"
-              onPress={async () => {
-                try {
-                  if (!validateMonitoring(monitoring, form)) return;
-                  await createMonitoring({
-                    ...monitoring,
-                    ...form[0],
-                    ...form[1],
-                    ...form[2],
-                    ...form[3],
-                    ...form[4],
-                    ...form[5],
-                    ...form[6],
-                    ...form[7],
-                    ...{ quadrantQualification, monitoringQualification },
-                  });
-                  navigation.navigate('ListMonitoring');
-                  showNotification('El monitoreo ha sido creado con éxito');
-                } catch (error) {
-                  console.error(error);
-                }
-              }}
-            />
+            <CustomButton color="blue" text="Guardar" onPress={handleSubmit} />
           </View>
         </View>
       )}

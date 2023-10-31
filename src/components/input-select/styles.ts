@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     color: Colors.NEUTRAL_700,
     fontWeight: '600',
   },
+  inputLabelError: {
+    color: Colors.ALERT_RED,
+  },
   inputContainer: {
     height: 44,
     paddingLeft: 16,
@@ -34,6 +37,9 @@ const styles = StyleSheet.create({
   inputPlaceholder: {
     flex: 1,
     color: Colors.NEUTRAL_600,
+  },
+  inputError: {
+    borderColor: Colors.ALERT_RED,
   },
   dropdown: {
     ...shadowStyle,

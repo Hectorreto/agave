@@ -15,6 +15,14 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 const LoginScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    if (!email || !password) return;
+
+    navigation.navigate('HomeDrawer');
+  };
 
   return (
     <View style={styles.container}>
@@ -28,12 +36,14 @@ const LoginScreen = ({ navigation }: Props) => {
           placeholder="Correo electrónico"
           value={email}
           onChange={setEmail}
+          submitted={submitted}
         />
         <InputPassword
           label="Contraseña"
           placeholder="Contraseña"
           value={password}
           onChange={setPassword}
+          submitted={submitted}
         />
         <Divider />
         <View>
@@ -43,11 +53,7 @@ const LoginScreen = ({ navigation }: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <CustomButton
-        color="blue"
-        text="Iniciar sesión"
-        onPress={() => navigation.navigate('HomeDrawer')}
-      />
+      <CustomButton color="blue" text="Iniciar sesión" onPress={handleSubmit} />
       <Versioning />
     </View>
   );

@@ -13,9 +13,17 @@ type Props = {
   onChange: (product: Product) => void;
   onPressAdd: () => void;
   onPressDelete: () => void;
+  submitted: boolean;
 };
 
-const FormProduct = ({ product, canDelete, onChange, onPressAdd, onPressDelete }: Props) => {
+const FormProduct = ({
+  product,
+  canDelete,
+  onChange,
+  onPressAdd,
+  onPressDelete,
+  submitted,
+}: Props) => {
   return (
     <View style={styles.formContainer}>
       <View style={styles.formTopContainer}>
@@ -27,6 +35,7 @@ const FormProduct = ({ product, canDelete, onChange, onPressAdd, onPressDelete }
             onChange={(name) => {
               onChange({ ...product, name });
             }}
+            submitted={submitted}
           />
         </View>
         <View style={styles.formTopButtonContainer}>
@@ -45,6 +54,7 @@ const FormProduct = ({ product, canDelete, onChange, onPressAdd, onPressDelete }
           onChange={(amount) => {
             onChange({ ...product, amount });
           }}
+          submitted={submitted}
         />
       </View>
     </View>

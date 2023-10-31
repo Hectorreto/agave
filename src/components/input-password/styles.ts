@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     color: Colors.NEUTRAL_700,
     fontWeight: '600',
   },
+  inputLabelError: {
+    color: Colors.ALERT_RED,
+  },
   inputContainer: {
     flexDirection: 'row',
     borderWidth: 1,
@@ -24,6 +27,9 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 10,
     marginLeft: 16,
+  },
+  inputError: {
+    borderColor: Colors.ALERT_RED,
   },
   iconContainer: {
     marginLeft: 8,

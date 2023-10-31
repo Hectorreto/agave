@@ -16,12 +16,23 @@ type Props = {
     value: string;
   }[];
   iconLeft?: ReactElement;
+  submitted?: boolean;
 };
 
-const InputSelect = ({ label, placeholder, value, onChange, items, iconLeft }: Props) => {
+const InputSelect = ({
+  label,
+  placeholder,
+  value,
+  onChange,
+  items,
+  iconLeft,
+  submitted,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const text = items.find((item) => item.value === value)?.label;
   const disabled = !onChange;
+  const isValid = Boolean(value);
+  const showError = submitted && !isValid;
 
   const ref = useRef<View>(null);
   const [pageY, setPageY] = useState(0);
@@ -35,7 +46,9 @@ const InputSelect = ({ label, placeholder, value, onChange, items, iconLeft }: P
           setPageY(pageY);
         });
       }}>
-      {Boolean(label) && <Text style={styles.inputLabel}>{label}</Text>}
+      {Boolean(label) && (
+        <Text style={[styles.inputLabel, showError && styles.inputLabelError]}>{label}</Text>
+      )}
       <View>
         <TouchableOpacity
           style={[
@@ -43,6 +56,7 @@ const InputSelect = ({ label, placeholder, value, onChange, items, iconLeft }: P
             disabled && styles.inputContainerDisabled,
             !disabled && value !== '' && styles.inputWithValue,
             iconLeft && { paddingLeft: 0 },
+            showError && styles.inputError,
           ]}
           onPress={() => setIsOpen(!isOpen)}
           disabled={disabled}>

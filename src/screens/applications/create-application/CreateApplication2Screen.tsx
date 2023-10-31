@@ -30,6 +30,26 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
   const [products, setProducts] = useState([newProduct(application.id)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product>();
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    if (!amount || !notes) return;
+    const productsCopy = [...products];
+    const lastProduct = productsCopy[productsCopy.length - 1];
+    if (!lastProduct.name && !lastProduct.amount) productsCopy.pop();
+    if (productsCopy.length === 0) return;
+    if (productsCopy.some((product) => !product.name || !product.amount)) return;
+
+    navigation.navigate('CreateApplication3', {
+      application: {
+        ...application,
+        containerAmount: amount,
+        notes,
+      },
+      products: productsCopy,
+    });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -40,6 +60,7 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
         placeholder="Número"
         value={amount}
         onChange={setAmount}
+        submitted={submitted}
       />
       <InputText
         multiline
@@ -47,6 +68,7 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
         placeholder="Escribe una nota"
         value={notes}
         onChange={setNotes}
+        submitted={submitted}
       />
 
       {products.map((product, index) => (
@@ -66,6 +88,7 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
             setIsModalVisible(true);
             setSelectedProduct(product);
           }}
+          submitted={submitted}
         />
       ))}
 
@@ -79,27 +102,7 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
           text="Cancelar"
           onPress={() => navigation.navigate('ListApplications')}
         />
-        <CustomButton
-          color="blue"
-          text="Siguiente"
-          onPress={() => {
-            if (!amount || !notes) return;
-            const productsCopy = [...products];
-            const lastProduct = productsCopy[productsCopy.length - 1];
-            if (!lastProduct.name && !lastProduct.amount) productsCopy.pop();
-            if (productsCopy.length === 0) return;
-            if (productsCopy.some((product) => !product.name || !product.amount)) return;
-
-            navigation.navigate('CreateApplication3', {
-              application: {
-                ...application,
-                containerAmount: amount,
-                notes,
-              },
-              products: productsCopy,
-            });
-          }}
-        />
+        <CustomButton color="blue" text="Siguiente" onPress={handleSubmit} />
       </View>
 
       <ModalDelete

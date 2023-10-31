@@ -22,8 +22,10 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
   const { showNotification } = useNotification();
   const [property, setProperty] = useState<Property>(newProperty());
   const [plantingYear, setPlantingYear] = useState<Date>();
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleOnSave = async () => {
+  const handleSubmit = async () => {
+    setSubmitted(true);
     if (!validateForm(property, plantingYear)) return;
     const notification = 'El predio ha sido creado con éxito';
 
@@ -45,6 +47,7 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           placeholder="Nombre del predio"
           value={property.name}
           onChange={(name) => setProperty({ ...property, name })}
+          submitted={submitted}
         />
         <InputDate
           label="Año de plantación"
@@ -53,6 +56,7 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
             setPlantingYear(plantingYear);
             setProperty({ ...property, plantingYear: plantingYear.getTime() });
           }}
+          submitted={submitted}
         />
         <InputSelect
           label="Tipo de cultivos"
@@ -60,12 +64,14 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           value={property.cropType}
           onChange={(cropType) => setProperty({ ...property, cropType })}
           items={[{ label: 'Agave', value: '1' }]}
+          submitted={submitted}
         />
         <InputText
           label="Ubicación"
           placeholder="Ubicación"
           value={property.location}
           onChange={(location) => setProperty({ ...property, location })}
+          submitted={submitted}
         />
         <View style={styles.doubleInputContainer}>
           <Text style={styles.doubleInputLabels}>No. de hectáreas</Text>
@@ -77,6 +83,7 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
               placeholder="###"
               value={property.hectareNumber}
               onChange={(hectareNumber) => setProperty({ ...property, hectareNumber })}
+              submitted={submitted}
             />
           </View>
           <View style={styles.doubleInputItem}>
@@ -84,6 +91,7 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
               placeholder="###"
               value={property.plantsPlantedNumber}
               onChange={(plantsPlantedNumber) => setProperty({ ...property, plantsPlantedNumber })}
+              submitted={submitted}
             />
           </View>
         </View>
@@ -92,24 +100,28 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           placeholder="Folio"
           value={property.invoice}
           onChange={(invoice) => setProperty({ ...property, invoice })}
+          submitted={submitted}
         />
         <InputText
           label="Registro"
           placeholder="Registro"
           value={property.registry}
           onChange={(registry) => setProperty({ ...property, registry })}
+          submitted={submitted}
         />
         <InputText
           label="Identificador interno"
           placeholder="Identificador interno"
           value={property.internalIdentifier}
           onChange={(internalIdentifier) => setProperty({ ...property, internalIdentifier })}
+          submitted={submitted}
         />
         <InputText
           placeholder="###"
           value={property.boardsPerProperty}
           onChange={(boardsPerProperty) => setProperty({ ...property, boardsPerProperty })}
           label="Número de tablas por predio"
+          submitted={submitted}
         />
         <View style={styles.inputFileContainer}>
           <Text style={styles.inputLabel}>Análisis de suelo</Text>
@@ -132,7 +144,7 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
 
       <View style={styles.saveCancelButtons}>
         <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
-        <CustomButton color="blue" text="Guardar" onPress={handleOnSave} />
+        <CustomButton color="blue" text="Guardar" onPress={handleSubmit} />
       </View>
     </ScrollView>
   );

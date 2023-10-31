@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     color: Colors.NEUTRAL_700,
     fontWeight: '600',
   },
+  inputLabelError: {
+    color: Colors.ALERT_RED,
+  },
   innerContainer: {
     flexDirection: 'row',
     gap: 16,

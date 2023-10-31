@@ -14,13 +14,17 @@ type Props = {
   items: Item[];
   value: string;
   onChange?: (value: string) => void;
+  submitted?: boolean;
 };
 
-const InputRadioGroup = ({ title, label, items, value, onChange }: Props) => {
+const InputRadioGroup = ({ title, label, items, value, onChange, submitted }: Props) => {
+  const isValid = Boolean(value);
+  const showError = submitted && !isValid;
+
   return (
     <View style={styles.container}>
-      {Boolean(title) && <Text style={styles.title}>{title}</Text>}
-      <Text style={styles.label}>{label}</Text>
+      {Boolean(title) && <Text style={[styles.title]}>{title}</Text>}
+      <Text style={[styles.label, showError && styles.inputLabelError]}>{label}</Text>
       <View style={styles.innerContainer}>
         {items.map((item) => (
           <RadioButton

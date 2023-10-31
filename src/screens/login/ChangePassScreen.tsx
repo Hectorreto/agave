@@ -13,6 +13,12 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ChangePass'>;
 const ChangePassScreen = ({ navigation }: Props) => {
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    if (!password1 || !password2) return;
+  };
 
   return (
     <View style={styles.container}>
@@ -27,15 +33,17 @@ const ChangePassScreen = ({ navigation }: Props) => {
           onChange={setPassword1}
           info="Debe contener al menos un número, una letra mayúscula, una minúscula y un mínimo de 8
             caracteres"
+          submitted={submitted}
         />
         <InputPassword
           label="Confirmar contraseña"
           placeholder="Contraseña"
           value={password2}
           onChange={setPassword2}
+          submitted={submitted}
         />
       </View>
-      <CustomButton color="blue" text="Cambiar contraseña" onPress={() => {}} />
+      <CustomButton color="blue" text="Cambiar contraseña" onPress={handleSubmit} />
       <Versioning />
     </View>
   );

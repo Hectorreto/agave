@@ -8,9 +8,10 @@ type Props = {
   monitoring: Partial<Monitoring>;
   onChange?: (value: Partial<Monitoring>) => void;
   onPressDelete?: () => void;
+  submitted?: boolean;
 };
 
-const Form0 = ({ monitoring, onChange, onPressDelete }: Props) => {
+const Form0 = ({ monitoring, onChange, onPressDelete, submitted }: Props) => {
   const handleOnChange = (key: keyof Monitoring) => {
     if (!onChange) return undefined;
     return (value: string) => {
@@ -27,6 +28,7 @@ const Form0 = ({ monitoring, onChange, onPressDelete }: Props) => {
         placeholder="### kg"
         value={monitoring.plantPerformanceKg || ''}
         onChange={handleOnChange('plantPerformanceKg')}
+        submitted={submitted}
       />
     </Expandable>
   );

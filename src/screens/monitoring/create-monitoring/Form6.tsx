@@ -9,9 +9,10 @@ type Props = {
   monitoring: Partial<Monitoring>;
   onChange?: (value: Partial<Monitoring>) => void;
   onPressDelete?: () => void;
+  submitted?: boolean;
 };
 
-const Form6 = ({ monitoring, onChange, onPressDelete }: Props) => {
+const Form6 = ({ monitoring, onChange, onPressDelete, submitted }: Props) => {
   const handleOnChange = (key: keyof Monitoring) => {
     if (!onChange) return undefined;
     return (value: string) => {
@@ -32,6 +33,7 @@ const Form6 = ({ monitoring, onChange, onPressDelete }: Props) => {
         ]}
         value={monitoring.colorimetryIncidence || ''}
         onChange={handleOnChange('colorimetryIncidence')}
+        submitted={submitted}
       />
       <InputText
         multiline
@@ -39,6 +41,7 @@ const Form6 = ({ monitoring, onChange, onPressDelete }: Props) => {
         placeholder="Escribe tus comentarios"
         value={monitoring.colorimetryComments || ''}
         onChange={handleOnChange('colorimetryComments')}
+        submitted={submitted}
       />
     </Expandable>
   );

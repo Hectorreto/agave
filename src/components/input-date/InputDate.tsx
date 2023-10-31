@@ -10,21 +10,25 @@ type Props = {
   label: string;
   date?: Date;
   onChange?: (date: Date) => void;
+  submitted?: boolean;
 };
 
-const InputDate = ({ label, date, onChange }: Props) => {
+const InputDate = ({ label, date, onChange, submitted }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const disabled = !onChange;
+  const isValid = Boolean(date);
+  const showError = submitted && !isValid;
 
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.inputLabel}>{label}</Text>
+        <Text style={[styles.inputLabel, showError && styles.inputLabelError]}>{label}</Text>
         <TouchableOpacity
           style={[
             styles.input,
             disabled && styles.inputContainerDisabled,
             !disabled && date !== undefined && styles.inputWithValue,
+            showError && styles.inputError,
           ]}
           disabled={!onChange}
           onPress={() => setIsOpen(true)}>

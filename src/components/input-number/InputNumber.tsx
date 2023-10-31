@@ -11,11 +11,22 @@ type Props = {
   onChange?: (text: string) => void;
   multiline?: boolean;
   iconRight?: ReactElement;
+  submitted?: boolean;
 };
 
-const InputNumber = ({ label, placeholder, value, onChange, multiline, iconRight }: Props) => {
+const InputNumber = ({
+  label,
+  placeholder,
+  value,
+  onChange,
+  multiline,
+  iconRight,
+  submitted,
+}: Props) => {
   const disabled = !onChange;
   const ref = useRef<TextInput>(null);
+  const isValid = Boolean(value);
+  const showError = submitted && !isValid;
 
   const handleOnChange = () => {
     if (!onChange) return undefined;
@@ -41,7 +52,9 @@ const InputNumber = ({ label, placeholder, value, onChange, multiline, iconRight
 
   return (
     <View style={styles.container}>
-      {Boolean(label) && <Text style={styles.inputLabel}>{label}</Text>}
+      {Boolean(label) && (
+        <Text style={[styles.inputLabel, showError && styles.inputLabelError]}>{label}</Text>
+      )}
       <View>
         <TextInput
           ref={ref}
@@ -51,6 +64,7 @@ const InputNumber = ({ label, placeholder, value, onChange, multiline, iconRight
             disabled && styles.disabled,
             !disabled && value !== '' && styles.inputWithValue,
             iconRight !== undefined && { paddingRight: 40 },
+            showError && styles.inputError,
           ]}
           placeholder={placeholder}
           placeholderTextColor={Colors.NEUTRAL_600}

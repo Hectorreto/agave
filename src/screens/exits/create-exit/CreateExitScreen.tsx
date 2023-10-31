@@ -23,9 +23,11 @@ const CreateExitScreen = ({ navigation, route }: Props) => {
   const [items, setItems] = useState([newItem(1)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState<Item>();
+  const [submitted, setSubmitted] = useState(false);
   const { data: properties } = useProperties({});
 
-  const handleOnSave = async () => {
+  const handleSubmit = async () => {
+    setSubmitted(true);
     if (!validateForm(propertyId, items)) return;
     const notification =
       items.length === 1
@@ -54,6 +56,7 @@ const CreateExitScreen = ({ navigation, route }: Props) => {
             label: property.name,
             value: property.id,
           }))}
+          submitted={submitted}
         />
       </View>
 
@@ -80,6 +83,7 @@ const CreateExitScreen = ({ navigation, route }: Props) => {
               copy[index] = item;
               setItems(copy);
             }}
+            submitted={submitted}
           />
         </Expandable>
       ))}
@@ -101,7 +105,7 @@ const CreateExitScreen = ({ navigation, route }: Props) => {
         <CustomButton
           color="blue"
           text={items.length === 1 ? 'Guardar' : 'Guardar todas'}
-          onPress={handleOnSave}
+          onPress={handleSubmit}
         />
       </View>
 

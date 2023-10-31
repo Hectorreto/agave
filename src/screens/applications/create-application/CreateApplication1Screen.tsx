@@ -18,7 +18,23 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
   const [concept, setConcept] = useState('');
   const [month, setMonth] = useState('');
   const [date, setDate] = useState<Date>();
+  const [submitted, setSubmitted] = useState(false);
   const { data: properties } = useProperties({});
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    if (!propertyId || !concept || !month || !date) return;
+
+    navigation.navigate('CreateApplication2', {
+      application: {
+        ...newApplication(),
+        propertyId,
+        concept,
+        applicationMonth: month,
+        scheduledDate: date.getTime(),
+      },
+    });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -33,6 +49,7 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
           label: property.name,
           value: property.id,
         }))}
+        submitted={submitted}
       />
       <InputSelect
         label="Concepto"
@@ -45,6 +62,7 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
           { label: 'C', value: 'c' },
           { label: 'D', value: 'd' },
         ]}
+        submitted={submitted}
       />
       <InputSelect
         label="Mes de aplicación"
@@ -65,31 +83,16 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
           { label: 'Noviembre', value: '10' },
           { label: 'Diciembre', value: '11' },
         ]}
+        submitted={submitted}
       />
-      <InputDate label="Fecha programada" date={date} onChange={setDate} />
+      <InputDate label="Fecha programada" date={date} onChange={setDate} submitted={submitted} />
       <View style={styles.saveCancelButtons}>
         <CustomButton
           color="lightBlue"
           text="Cancelar"
           onPress={() => navigation.navigate('ListApplications')}
         />
-        <CustomButton
-          color="blue"
-          text="Siguiente"
-          onPress={() => {
-            if (!propertyId || !concept || !month || !date) return;
-
-            navigation.navigate('CreateApplication2', {
-              application: {
-                ...newApplication(),
-                propertyId,
-                concept,
-                applicationMonth: month,
-                scheduledDate: date.getTime(),
-              },
-            });
-          }}
-        />
+        <CustomButton color="blue" text="Siguiente" onPress={handleSubmit} />
       </View>
     </ScrollView>
   );

@@ -9,9 +9,10 @@ type Props = {
   monitoring: Partial<Monitoring>;
   onChange?: (value: Partial<Monitoring>) => void;
   onPressDelete?: () => void;
+  submitted?: boolean;
 };
 
-const Form2 = ({ monitoring, onChange, onPressDelete }: Props) => {
+const Form2 = ({ monitoring, onChange, onPressDelete, submitted }: Props) => {
   const handleOnChange = (key: keyof Monitoring) => {
     if (!onChange) return undefined;
     return (value: string) => {
@@ -28,6 +29,7 @@ const Form2 = ({ monitoring, onChange, onPressDelete }: Props) => {
         placeholder="Tipo de enfermedad"
         value={monitoring.diseaseType || ''}
         onChange={handleOnChange('diseaseType')}
+        submitted={submitted}
       />
       <InputRadioGroup
         label="Incidencia"
@@ -38,6 +40,7 @@ const Form2 = ({ monitoring, onChange, onPressDelete }: Props) => {
         ]}
         value={monitoring.diseaseIncidence || ''}
         onChange={handleOnChange('diseaseIncidence')}
+        submitted={submitted}
       />
     </Expandable>
   );

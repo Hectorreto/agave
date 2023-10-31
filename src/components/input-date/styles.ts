@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     color: Colors.NEUTRAL_700,
     fontWeight: '600',
   },
+  inputLabelError: {
+    color: Colors.ALERT_RED,
+  },
   input: {
     height: 44,
     paddingLeft: 16,
@@ -21,6 +24,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.NEUTRAL,
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  inputError: {
+    borderColor: Colors.ALERT_RED,
   },
   inputValue: {
     flex: 1,

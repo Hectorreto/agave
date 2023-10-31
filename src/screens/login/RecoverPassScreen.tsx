@@ -12,6 +12,14 @@ type Props = NativeStackScreenProps<RootStackParamList, 'RecoverPass'>;
 
 const RecoverPassScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+    if (!email) return;
+
+    navigation.navigate('ChangePass');
+  };
 
   return (
     <View style={styles.container}>
@@ -27,13 +35,10 @@ const RecoverPassScreen = ({ navigation }: Props) => {
           placeholder="Correo electrónico"
           value={email}
           onChange={setEmail}
+          submitted={submitted}
         />
       </View>
-      <CustomButton
-        color="blue"
-        text="Enviar correo"
-        onPress={() => navigation.navigate('ChangePass')}
-      />
+      <CustomButton color="blue" text="Enviar correo" onPress={handleSubmit} />
       <Versioning />
     </View>
   );
