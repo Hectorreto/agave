@@ -94,7 +94,27 @@ const PropertyBoardScreen = () => {
             <InputSelect
               placeholder="Tipo de cultivo"
               value=""
-              items={[{ label: '1', value: '1' }]}
+              items={[
+                { label: 'Agave', value: 'Agave' },
+                { label: 'Maíz', value: 'Maíz' },
+                { label: 'Trigo', value: 'Trigo' },
+                { label: 'Soya', value: 'Soya' },
+                { label: 'Caña de Azúcar', value: 'Caña de Azúcar' },
+                { label: 'Frijol', value: 'Frijol' },
+                { label: 'Tomate', value: 'Tomate' },
+                { label: 'Pimiento', value: 'Pimiento' },
+                { label: 'Aguacate', value: 'Aguacate' },
+                { label: 'Limón', value: 'Limón' },
+                { label: 'Naranja', value: 'Naranja' },
+                { label: 'Arándano', value: 'Arándano' },
+                { label: 'Fresa', value: 'Fresa' },
+                { label: 'Frambuesa', value: 'Frambuesa' },
+                { label: 'Zarzamora', value: 'Zarzamora' },
+                { label: 'Café', value: 'Café' },
+                { label: 'Uva', value: 'Uva' },
+                { label: 'Cebolla', value: 'Cebolla' },
+                { label: 'Chile', value: 'Chile' },
+              ]}
               onChange={() => {}}
               iconLeft={<FilterAlt style={styles.leftIcon} />}
             />

@@ -10,7 +10,7 @@ export const newProperty = (): Property => {
     createdBy: '[Usuario]',
     updatedBy: '[Usuario]',
     name: '',
-    plantingYear: 0,
+    plantingYear: '',
     cropType: '',
     location: '',
     hectareNumber: '',
@@ -23,10 +23,10 @@ export const newProperty = (): Property => {
   };
 };
 
-export const validateForm = (property: Property, plantingYear?: Date) => {
+export const validateForm = (property: Property) => {
   return (
     property.name &&
-    plantingYear &&
+    property.plantingYear &&
     property.cropType &&
     property.location &&
     property.hectareNumber &&

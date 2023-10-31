@@ -7,7 +7,6 @@ import styles from './styles';
 import Description from '../../../../assets/svg/description.svg';
 import Upload from '../../../../assets/svg/upload.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
-import InputDate from '../../../components/input-date/InputDate';
 import InputNumber from '../../../components/input-number/InputNumber';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputSwitch from '../../../components/input-switch/InputSwitch';
@@ -21,12 +20,11 @@ type Props = NativeStackScreenProps<PropertyStackParamList, 'CreateProperty'>;
 const CreatePropertyScreen = ({ navigation }: Props) => {
   const { showNotification } = useNotification();
   const [property, setProperty] = useState<Property>(newProperty());
-  const [plantingYear, setPlantingYear] = useState<Date>();
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async () => {
     setSubmitted(true);
-    if (!validateForm(property, plantingYear)) return;
+    if (!validateForm(property)) return;
     const notification = 'El predio ha sido creado con éxito';
 
     try {
@@ -49,13 +47,11 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           onChange={(name) => setProperty({ ...property, name })}
           submitted={submitted}
         />
-        <InputDate
+        <InputText
           label="Año de plantación"
-          date={plantingYear}
-          onChange={(plantingYear) => {
-            setPlantingYear(plantingYear);
-            setProperty({ ...property, plantingYear: plantingYear.getTime() });
-          }}
+          placeholder="Año de plantación"
+          value={property.plantingYear}
+          onChange={(plantingYear) => setProperty({ ...property, plantingYear })}
           submitted={submitted}
         />
         <InputSelect
@@ -63,7 +59,27 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           placeholder="Tipo de cultivos"
           value={property.cropType}
           onChange={(cropType) => setProperty({ ...property, cropType })}
-          items={[{ label: 'Agave', value: '1' }]}
+          items={[
+            { label: 'Agave', value: 'Agave' },
+            { label: 'Maíz', value: 'Maíz' },
+            { label: 'Trigo', value: 'Trigo' },
+            { label: 'Soya', value: 'Soya' },
+            { label: 'Caña de Azúcar', value: 'Caña de Azúcar' },
+            { label: 'Frijol', value: 'Frijol' },
+            { label: 'Tomate', value: 'Tomate' },
+            { label: 'Pimiento', value: 'Pimiento' },
+            { label: 'Aguacate', value: 'Aguacate' },
+            { label: 'Limón', value: 'Limón' },
+            { label: 'Naranja', value: 'Naranja' },
+            { label: 'Arándano', value: 'Arándano' },
+            { label: 'Fresa', value: 'Fresa' },
+            { label: 'Frambuesa', value: 'Frambuesa' },
+            { label: 'Zarzamora', value: 'Zarzamora' },
+            { label: 'Café', value: 'Café' },
+            { label: 'Uva', value: 'Uva' },
+            { label: 'Cebolla', value: 'Cebolla' },
+            { label: 'Chile', value: 'Chile' },
+          ]}
           submitted={submitted}
         />
         <InputText

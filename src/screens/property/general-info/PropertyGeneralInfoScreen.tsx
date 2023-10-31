@@ -6,7 +6,6 @@ import Description from '../../../../assets/svg/description.svg';
 import Upload from '../../../../assets/svg/upload.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
-import InputDate from '../../../components/input-date/InputDate';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
@@ -33,12 +32,36 @@ const PropertyGeneralInfoScreen = ({ route }: Props) => {
           placeholder="Nombre del predio"
           value={property.name}
         />
-        <InputDate label="Año de plantación" date={new Date(property.plantingYear)} />
+        <InputText
+          label="Año de plantación"
+          placeholder="Año de plantación"
+          value={property.plantingYear}
+        />
         <InputSelect
           label="Tipo de cultivos"
           placeholder="Tipo de cultivos"
           value={property.cropType}
-          items={[{ label: 'Agave', value: '1' }]}
+          items={[
+            { label: 'Agave', value: 'Agave' },
+            { label: 'Maíz', value: 'Maíz' },
+            { label: 'Trigo', value: 'Trigo' },
+            { label: 'Soya', value: 'Soya' },
+            { label: 'Caña de Azúcar', value: 'Caña de Azúcar' },
+            { label: 'Frijol', value: 'Frijol' },
+            { label: 'Tomate', value: 'Tomate' },
+            { label: 'Pimiento', value: 'Pimiento' },
+            { label: 'Aguacate', value: 'Aguacate' },
+            { label: 'Limón', value: 'Limón' },
+            { label: 'Naranja', value: 'Naranja' },
+            { label: 'Arándano', value: 'Arándano' },
+            { label: 'Fresa', value: 'Fresa' },
+            { label: 'Frambuesa', value: 'Frambuesa' },
+            { label: 'Zarzamora', value: 'Zarzamora' },
+            { label: 'Café', value: 'Café' },
+            { label: 'Uva', value: 'Uva' },
+            { label: 'Cebolla', value: 'Cebolla' },
+            { label: 'Chile', value: 'Chile' },
+          ]}
         />
         <InputText label="Ubicación" placeholder="Ubicación" value={property.location} />
         <View style={styles.doubleInputContainer}>

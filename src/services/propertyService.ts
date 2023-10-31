@@ -10,7 +10,7 @@ database.transaction((transaction) => {
         createdBy TEXT,
         updatedBy TEXT,
         name TEXT,
-        plantingYear INTEGER,
+        plantingYear TEXT,
         cropType TEXT,
         location TEXT,
         hectareNumber TEXT,
@@ -38,7 +38,7 @@ export type Property = {
   createdBy: string;
   updatedBy: string;
   name: string;
-  plantingYear: number;
+  plantingYear: string;
   cropType: string;
   location: string;
   hectareNumber: string;
