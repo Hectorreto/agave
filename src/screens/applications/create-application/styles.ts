@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   },
   helperButton: {
     alignItems: 'center',
+    gap: 8,
   },
   tableTitleText: {
     fontWeight: '600',

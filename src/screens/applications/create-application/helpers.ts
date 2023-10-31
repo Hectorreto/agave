@@ -15,6 +15,7 @@ export const newApplication = (): Application => {
     concept: '',
     containerAmount: '',
     notes: '',
+    videoUri: '',
     propertyId: '',
   };
 };

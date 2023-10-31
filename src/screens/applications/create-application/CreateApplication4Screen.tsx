@@ -1,9 +1,11 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ResizeMode, Video } from 'expo-av';
+import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
-import CameraAlt from '../../../../assets/svg/camera_alt.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
+import InputCameraVideo from '../../../components/input-camera-video/InputCameraVideo';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
@@ -15,10 +17,12 @@ type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplicatio
 const CreateApplication4Screen = ({ navigation, route }: Props) => {
   const { application, products } = route.params;
   const { showNotification } = useNotification();
+  const [videoUri, setVideoUri] = useState('');
 
   const handleOnSave = async () => {
     try {
-      await createApplication(application);
+      if (!videoUri) return;
+      await createApplication({ ...application, videoUri });
       await createProducts(products);
       showNotification('La aplicación ha sido creada con éxito');
       navigation.navigate('ListApplications');
@@ -31,10 +35,23 @@ const CreateApplication4Screen = ({ navigation, route }: Props) => {
     <ScrollView contentContainerStyle={styles.container}>
       <TabIndicator titles={['', '', '', 'Iniciar aplicación']} current={4} />
 
-      <Text style={styles.helper}>¿Deseas iniciar esta aplicación?</Text>
+      {!videoUri && <Text style={styles.helper}>¿Deseas iniciar esta aplicación?</Text>}
 
       <View style={styles.helperButton}>
-        <CustomButton color="blue" text="Iniciar aplicación" Icon={CameraAlt} onPress={() => {}} />
+        {Boolean(videoUri) && (
+          <Video
+            style={{ height: 360, width: 300 }}
+            source={{ uri: videoUri }}
+            useNativeControls
+            resizeMode={ResizeMode.CONTAIN}
+          />
+        )}
+
+        <InputCameraVideo
+          value={videoUri}
+          text={videoUri ? 'Volver a grabar aplicación' : 'Iniciar aplicación'}
+          onChange={setVideoUri}
+        />
       </View>
 
       <View style={styles.saveCancelButtons}>

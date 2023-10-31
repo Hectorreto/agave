@@ -40,7 +40,8 @@
     "react-native-uuid": "^2.0.1",
     "react-native-view-shot": "3.7.0",
     "expo-print": "~12.4.2",
-    "expo-image-manipulator": "~11.3.0"
+    "expo-image-manipulator": "~11.3.0",
+    "expo-av": "~13.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

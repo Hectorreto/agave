@@ -14,6 +14,8 @@ database.transaction((transaction) => {
       concept TEXT,
       containerAmount TEXT,
       notes TEXT,
+      videoUri TEXT,
+      finalizeVideoUri TEXT,
       propertyId TEXT
     );
   `;
@@ -35,23 +37,10 @@ export type Application = {
   concept: string;
   containerAmount: string;
   notes: string;
+  videoUri: string;
+  finalizeVideoUri: string;
   propertyId: string;
 };
-
-const keys: (keyof Application)[] = [
-  'id',
-  'createdAt',
-  'updatedAt',
-  'createdBy',
-  'updatedBy',
-  'applicationMonth',
-  'state',
-  'scheduledDate',
-  'concept',
-  'containerAmount',
-  'notes',
-  'propertyId',
-];
 
 export const createApplication = (application: Application): Promise<void> => {
   const nowTime = new Date().getTime();
@@ -60,6 +49,8 @@ export const createApplication = (application: Application): Promise<void> => {
     createdAt: nowTime,
     updatedAt: nowTime,
   };
+
+  const keys = Object.keys(application) as (keyof Application)[];
   const args = keys.map((key) => applicationCopy[key]);
 
   return new Promise((resolve, reject) => {
@@ -116,7 +107,10 @@ export const findApplications = async (options: FindApplicationOptions): Promise
   });
 };
 
-export const finalizeApplication = (applicationId: string): Promise<void> => {
+export const finalizeApplication = (
+  applicationId: string,
+  finalizeVideoUri: string
+): Promise<void> => {
   return new Promise((resolve, reject) => {
     database.transaction((transaction) => {
       transaction.executeSql(
@@ -124,10 +118,11 @@ export const finalizeApplication = (applicationId: string): Promise<void> => {
           UPDATE application
           SET 
             state = 'finalized',
+            finalizeVideoUri = ?,
             updatedAt = ?
           WHERE id = ?
         `,
-        [new Date().getTime(), applicationId],
+        [finalizeVideoUri, new Date().getTime(), applicationId],
         () => {
           resolve();
         },

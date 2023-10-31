@@ -1,9 +1,11 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ResizeMode, Video } from 'expo-av';
+import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
-import CameraAlt from '../../../../assets/svg/camera_alt.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
+import InputCameraVideo from '../../../components/input-camera-video/InputCameraVideo';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { useNotification } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
@@ -15,10 +17,12 @@ type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplicat
 const FinaliceApplication2Screen = ({ navigation, route }: Props) => {
   const { applicationId, products } = route.params;
   const { showNotification } = useNotification();
+  const [videoUri, setVideoUri] = useState('');
 
   const handleCreate = async () => {
     try {
-      await finalizeApplication(applicationId);
+      if (!videoUri) return;
+      await finalizeApplication(applicationId, videoUri);
       await finalizeProducts(products);
       showNotification('La aplicación ha sido finalizada con éxito');
       navigation.navigate('ListApplications');
@@ -30,14 +34,23 @@ const FinaliceApplication2Screen = ({ navigation, route }: Props) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TabIndicator titles={['Ticket', 'Finalizar aplicación']} current={2} />
-      <Text style={styles.helper}>¿Deseas finalizar esta aplicación?</Text>
+
+      {!videoUri && <Text style={styles.helper}>¿Deseas finalizar esta aplicación?</Text>}
 
       <View style={styles.helperButton}>
-        <CustomButton
-          color="blue"
-          text="Finalizar aplicación"
-          Icon={CameraAlt}
-          onPress={() => {}}
+        {Boolean(videoUri) && (
+          <Video
+            style={{ height: 360, width: 300 }}
+            source={{ uri: videoUri }}
+            useNativeControls
+            resizeMode={ResizeMode.CONTAIN}
+          />
+        )}
+
+        <InputCameraVideo
+          value={videoUri}
+          text={videoUri ? 'Volver a grabar aplicación' : 'Finalizar aplicación'}
+          onChange={setVideoUri}
         />
       </View>
 
