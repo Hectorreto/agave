@@ -21,6 +21,12 @@ const styles = StyleSheet.create({
   doubleInputItem: {
     flex: 1,
   },
+  doubleInputLabels: {
+    flex: 1,
+    textAlignVertical: 'bottom',
+    color: Colors.NEUTRAL_700,
+    fontWeight: '600',
+  },
   inputFileContainer: {
     gap: 4,
   },

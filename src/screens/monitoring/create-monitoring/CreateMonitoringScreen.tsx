@@ -200,19 +200,15 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           <View style={styles.bottomFormInputsContainer}>
             <Text style={styles.bottomFormTitle}>Calificación</Text>
             <View style={styles.bottomFormDoubleInput}>
+              <Text style={styles.doubleInputLabels}>De cuadrante</Text>
+              <Text style={styles.doubleInputLabels}>De monitoreo</Text>
+            </View>
+            <View style={styles.bottomFormDoubleInput}>
               <View style={styles.bottomFormDoubleInputItem}>
-                <InputText
-                  label="De cuadrante"
-                  placeholder="##"
-                  value={String(quadrantQualification)}
-                />
+                <InputText placeholder="##" value={String(quadrantQualification)} />
               </View>
               <View style={styles.bottomFormDoubleInputItem}>
-                <InputText
-                  label="De monitoreo"
-                  placeholder="##"
-                  value={String(monitoringQualification)}
-                />
+                <InputText placeholder="##" value={String(monitoringQualification)} />
               </View>
             </View>
             <InputText

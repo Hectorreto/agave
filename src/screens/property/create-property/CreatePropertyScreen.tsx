@@ -68,9 +68,12 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           onChange={(location) => setProperty({ ...property, location })}
         />
         <View style={styles.doubleInputContainer}>
+          <Text style={styles.doubleInputLabels}>No. de hectáreas</Text>
+          <Text style={styles.doubleInputLabels}>No. de plantas sembradas</Text>
+        </View>
+        <View style={styles.doubleInputContainer}>
           <View style={styles.doubleInputItem}>
             <InputNumber
-              label="No. de hectáreas"
               placeholder="###"
               value={property.hectareNumber}
               onChange={(hectareNumber) => setProperty({ ...property, hectareNumber })}
@@ -78,7 +81,6 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           </View>
           <View style={styles.doubleInputItem}>
             <InputNumber
-              label="No. de plantas sembradas"
               placeholder="###"
               value={property.plantsPlantedNumber}
               onChange={(plantsPlantedNumber) => setProperty({ ...property, plantsPlantedNumber })}

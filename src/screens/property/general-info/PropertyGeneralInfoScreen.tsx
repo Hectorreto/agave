@@ -42,15 +42,15 @@ const PropertyGeneralInfoScreen = ({ route }: Props) => {
         />
         <InputText label="Ubicación" placeholder="Ubicación" value={property.location} />
         <View style={styles.doubleInputContainer}>
+          <Text style={styles.doubleInputLabels}>No. de hectáreas</Text>
+          <Text style={styles.doubleInputLabels}>No. de plantas sembradas</Text>
+        </View>
+        <View style={styles.doubleInputContainer}>
           <View style={styles.doubleInputItem}>
-            <InputText label="No. de hectáreas" placeholder="###" value={property.hectareNumber} />
+            <InputText placeholder="###" value={property.hectareNumber} />
           </View>
           <View style={styles.doubleInputItem}>
-            <InputText
-              label="No. de plantas sembradas"
-              placeholder="###"
-              value={property.plantsPlantedNumber}
-            />
+            <InputText placeholder="###" value={property.plantsPlantedNumber} />
           </View>
         </View>
         <InputText label="Folio" placeholder="Folio" value={property.invoice} />
