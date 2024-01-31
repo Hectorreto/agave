@@ -3,18 +3,31 @@ import { useState } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
+import login from '../../api/login';
 import CustomButton from '../../components/custom-button/CustomButton';
 import Divider from '../../components/divider/Divider';
 import InputEmail from '../../components/input-email/InputEmail';
 import InputPassword from '../../components/input-password/InputPassword';
 import Versioning from '../../components/versioning/Versioning';
+import { useNotification } from '../../contexts/notification-context/NotificationContext';
 import { RootStackParamList } from '../../navigation/RootStack';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 const LoginScreen = ({ navigation }: Props) => {
+  const { showNotification } = useNotification();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const data = await login(email, password);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+      showNotification('Usuario o contraseña incorrectos', 'incorrect');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -43,11 +56,7 @@ const LoginScreen = ({ navigation }: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <CustomButton
-        color="blue"
-        text="Iniciar sesión"
-        onPress={() => navigation.navigate('HomeDrawer')}
-      />
+      <CustomButton color="blue" text="Iniciar sesión" onPress={handleLogin} />
       <Versioning />
     </View>
   );

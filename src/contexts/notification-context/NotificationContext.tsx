@@ -1,11 +1,17 @@
 import React, { createContext, PropsWithChildren, useContext, useState } from 'react';
-import { Animated, Text, TouchableOpacity, View } from 'react-native';
 
-import styles from './styles';
-import CheckCircle from '../../../assets/svg/check_circle_outline.svg';
+import NotificationMessage, {
+  MessageTypes,
+} from '../../components/notification-message/NotificationMessage';
 
 type NotificationContextType = {
-  showNotification: (message: string) => void;
+  showNotification: (message: string, type?: MessageTypes) => void;
+};
+
+type Notification = {
+  id: number;
+  message: string;
+  type: MessageTypes;
 };
 
 const NotificationContext = createContext({} as NotificationContextType);
@@ -15,44 +21,30 @@ export const useNotification = () => {
 };
 
 export const NotificationProvider = ({ children }: PropsWithChildren) => {
-  const [message, setMessage] = useState('');
-  const [fadeAnim] = useState(new Animated.Value(0));
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const lastNotification = notifications[0];
 
-  const hideNotification = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: false,
-    }).start(() => {
-      setMessage('');
+  const showNotification = (message: string, type: MessageTypes = 'correct') => {
+    setNotifications((prev) => {
+      const lastId = prev.length ? Math.max(...prev.map((value) => value.id)) : 0;
+      return [...prev, { id: lastId + 1, message, type }];
     });
   };
 
-  const showNotification = (message: string) => {
-    setMessage(message);
-
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: false,
-    }).start(() => {
-      setTimeout(hideNotification, 3000);
-    });
+  const removeNotification = (id: number) => {
+    setNotifications((prev) => prev.filter((value) => value.id !== id));
   };
 
   return (
     <NotificationContext.Provider value={{ showNotification }}>
       {children}
-      {Boolean(message) && (
-        <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-          <View style={styles.leftContainer}>
-            <CheckCircle />
-            <Text style={styles.message}>{message}</Text>
-          </View>
-          <TouchableOpacity onPress={hideNotification}>
-            <Text style={styles.closeText}>Cerrar</Text>
-          </TouchableOpacity>
-        </Animated.View>
+      {lastNotification && (
+        <NotificationMessage
+          key={lastNotification.id}
+          type={lastNotification.type}
+          message={lastNotification.message}
+          removeNotification={() => removeNotification(lastNotification.id)}
+        />
       )}
     </NotificationContext.Provider>
   );

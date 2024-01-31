@@ -17,10 +17,14 @@ const styles = StyleSheet.create({
     left: 16,
     right: 16,
   },
+  containerIncorrect: {
+    backgroundColor: Colors.ALERT_RED_2,
+  },
   leftContainer: {
     flexDirection: 'row',
     gap: 8,
     flex: 1,
+    alignItems: 'center',
   },
   message: {
     color: Colors.NEUTRAL,
