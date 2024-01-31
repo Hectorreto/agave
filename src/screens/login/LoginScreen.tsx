@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { useContext, useRef, useState } from 'react';
+import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import styles from './styles';
 import login from '../../api/login';
@@ -9,23 +9,33 @@ import Divider from '../../components/divider/Divider';
 import InputEmail from '../../components/input-email/InputEmail';
 import InputPassword from '../../components/input-password/InputPassword';
 import Versioning from '../../components/versioning/Versioning';
-import { useNotification } from '../../contexts/notification-context/NotificationContext';
+import { AuthContext } from '../../contexts/notification-context/AuthContext';
+import { NotificationContext } from '../../contexts/notification-context/NotificationContext';
 import { RootStackParamList } from '../../navigation/RootStack';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 const LoginScreen = ({ navigation }: Props) => {
-  const { showNotification } = useNotification();
+  const { showNotification } = useContext(NotificationContext);
+  const { saveAccessToken } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const refInput2 = useRef<TextInput>(null);
 
   const handleLogin = async () => {
     try {
       const data = await login(email, password);
-      console.log(data);
+      if (data.errorCredentials) {
+        return showNotification('Usuario o contraseña incorrectos', 'incorrect');
+      }
+      if (data.errorRole) {
+        return showNotification('El usuario debe ser de tipo "Operador"', 'incorrect');
+      }
+
+      saveAccessToken(data.accessToken);
     } catch (error) {
       console.error(error);
-      showNotification('Usuario o contraseña incorrectos', 'incorrect');
+      showNotification('Error al iniciar sesión', 'incorrect');
     }
   };
 
@@ -41,12 +51,15 @@ const LoginScreen = ({ navigation }: Props) => {
           placeholder="Correo electrónico"
           value={email}
           onChange={setEmail}
+          nextInputRef={refInput2}
         />
         <InputPassword
           label="Contraseña"
           placeholder="Contraseña"
           value={password}
           onChange={setPassword}
+          inputRef={refInput2}
+          onSubmit={handleLogin}
         />
         <Divider />
         <View>

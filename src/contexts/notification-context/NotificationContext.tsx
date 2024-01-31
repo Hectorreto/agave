@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren, useContext, useState } from 'react';
+import React, { createContext, PropsWithChildren, useState } from 'react';
 
 import NotificationMessage, {
   MessageTypes,
@@ -14,11 +14,7 @@ type Notification = {
   type: MessageTypes;
 };
 
-const NotificationContext = createContext({} as NotificationContextType);
-
-export const useNotification = () => {
-  return useContext(NotificationContext);
-};
+export const NotificationContext = createContext({} as NotificationContextType);
 
 export const NotificationProvider = ({ children }: PropsWithChildren) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);

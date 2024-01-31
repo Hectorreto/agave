@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
@@ -14,13 +14,13 @@ import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import ModalMonitoringForm from '../../../components/modal-monitoring-form/ModalMonitoringForm';
 import RadioButton from '../../../components/radio-button/RadioButton';
-import { useNotification } from '../../../contexts/notification-context/NotificationContext';
+import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
 
 type Props = NativeStackScreenProps<MonitoringStackParamList, 'CreateMonitoring'>;
 
 const CreateMonitoringScreen = ({ navigation }: Props) => {
-  const { showNotification } = useNotification();
+  const { showNotification } = useContext(NotificationContext);
   const [property, setProperty] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form, setForm] = useState<boolean[]>(Array(8).fill(false));

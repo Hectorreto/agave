@@ -12,9 +12,19 @@ type Props = {
   value: string;
   onChange: (text: string) => void;
   info?: string;
+  inputRef?: React.RefObject<TextInput>;
+  onSubmit?: () => void;
 };
 
-const InputPassword = ({ label, placeholder, value, onChange, info }: Props) => {
+const InputPassword = ({
+  label,
+  placeholder,
+  value,
+  onChange,
+  info,
+  inputRef,
+  onSubmit,
+}: Props) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   return (
@@ -30,6 +40,8 @@ const InputPassword = ({ label, placeholder, value, onChange, info }: Props) => 
           autoCapitalize="none"
           value={value}
           onChangeText={onChange}
+          ref={inputRef}
+          onSubmitEditing={onSubmit}
         />
         <TouchableOpacity
           style={styles.iconContainer}

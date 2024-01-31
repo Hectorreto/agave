@@ -1,4 +1,5 @@
 import { DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types';
+import { useContext } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,12 +11,15 @@ import Lock from '../../../assets/svg/header/lock.svg';
 import Logout from '../../../assets/svg/header/logout.svg';
 import MenuOpen from '../../../assets/svg/header/menu_open.svg';
 import Science from '../../../assets/svg/header/science.svg';
+import { AuthContext } from '../../contexts/notification-context/AuthContext';
 
 type Props = {
   navigation: DrawerNavigationHelpers;
 };
 
 const DrawerContent = ({ navigation }: Props) => {
+  const { removeAccessToken } = useContext(AuthContext);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -65,7 +69,7 @@ const DrawerContent = ({ navigation }: Props) => {
           Icon={Logout}
           label="Cerrar sesión"
           onPress={() => {
-            navigation.navigate('Login');
+            removeAccessToken();
           }}
         />
       </View>

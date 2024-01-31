@@ -11,6 +11,9 @@ const login = async (email: string, password: string) => {
         mutation Mutation($loginUserInput: LoginUserInput!) {
           login(loginUserInput: $loginUserInput) {
             access_token
+            user {
+              role
+            }
           }
         }
       `,
@@ -22,8 +25,12 @@ const login = async (email: string, password: string) => {
       },
     }),
   });
-  const data = await response.json();
-  return data.data.login.access_token;
+  const gqlResponse = await response.json();
+  return {
+    errorCredentials: gqlResponse.errors?.[0].code === 401,
+    errorRole: gqlResponse.data?.login.user.role !== 'OPERATOR',
+    accessToken: gqlResponse.data?.login.access_token,
+  };
 };
 
 export default login;

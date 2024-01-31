@@ -1,17 +1,18 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useContext } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import CameraAlt from '../../../../assets/svg/camera_alt.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
-import { useNotification } from '../../../contexts/notification-context/NotificationContext';
+import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplication2'>;
 
 const FinaliceApplication2 = ({ navigation }: Props) => {
-  const { showNotification } = useNotification();
+  const { showNotification } = useContext(NotificationContext);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

@@ -8,9 +8,10 @@ type Props = {
   placeholder: string;
   value: string;
   onChange: (text: string) => void;
+  nextInputRef?: React.RefObject<TextInput>;
 };
 
-const InputEmail = ({ label, placeholder, value, onChange }: Props) => {
+const InputEmail = ({ label, placeholder, value, onChange, nextInputRef }: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.inputLabel}>{label}</Text>
@@ -23,6 +24,9 @@ const InputEmail = ({ label, placeholder, value, onChange }: Props) => {
         keyboardType="email-address"
         value={value}
         onChangeText={onChange}
+        returnKeyType={nextInputRef && 'next'}
+        onSubmitEditing={nextInputRef && (() => nextInputRef.current?.focus())}
+        blurOnSubmit={!nextInputRef}
       />
     </View>
   );

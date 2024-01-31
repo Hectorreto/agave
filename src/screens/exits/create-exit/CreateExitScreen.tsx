@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import uuid from 'react-native-uuid';
 
@@ -11,7 +11,7 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import Expandable from '../../../components/expandable/Expandable';
 import InputSelect from '../../../components/input-select/InputSelect';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
-import { useNotification } from '../../../contexts/notification-context/NotificationContext';
+import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { ExitStackParamList } from '../../../navigation/ExitStack';
 
 type Props = NativeStackScreenProps<ExitStackParamList, 'CreateExit'>;
@@ -35,7 +35,7 @@ const newExit = (cnt: number): Exit => {
 };
 
 const CreateExitScreen = ({ navigation }: Props) => {
-  const { showNotification } = useNotification();
+  const { showNotification } = useContext(NotificationContext);
   const [property, setProperty] = useState('');
   const [exits, setExits] = useState([newExit(1)]);
   const [isModalVisible, setIsModalVisible] = useState(false);
