@@ -14,6 +14,7 @@ type Props = {
   info?: string;
   inputRef?: React.RefObject<TextInput>;
   onSubmit?: () => void;
+  errorMessage?: string;
 };
 
 const InputPassword = ({
@@ -24,13 +25,15 @@ const InputPassword = ({
   info,
   inputRef,
   onSubmit,
+  errorMessage,
 }: Props) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const showError = Boolean(errorMessage);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.inputLabel}>{label}</Text>
-      <View style={styles.inputContainer}>
+      <Text style={[styles.inputLabel, showError && styles.textError]}>{label}</Text>
+      <View style={[styles.inputContainer, showError && styles.textInputError]}>
         <TextInput
           style={styles.textInput}
           placeholder={placeholder}
@@ -55,6 +58,7 @@ const InputPassword = ({
           <Info />
         </View>
       )}
+      {showError && <Text style={styles.textError}>{errorMessage}</Text>}
     </View>
   );
 };
