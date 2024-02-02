@@ -11,6 +11,7 @@ type Props = {
   placeholder: string;
   value: string;
   onChange: (text: string) => void;
+  nextInputRef?: React.RefObject<TextInput>;
   info?: string;
   inputRef?: React.RefObject<TextInput>;
   onSubmit?: () => void;
@@ -22,6 +23,7 @@ const InputPassword = ({
   placeholder,
   value,
   onChange,
+  nextInputRef,
   info,
   inputRef,
   onSubmit,
@@ -44,7 +46,9 @@ const InputPassword = ({
           value={value}
           onChangeText={onChange}
           ref={inputRef}
-          onSubmitEditing={onSubmit}
+          returnKeyType={nextInputRef && 'next'}
+          onSubmitEditing={onSubmit || (nextInputRef && (() => nextInputRef.current?.focus()))}
+          blurOnSubmit={!nextInputRef}
         />
         <TouchableOpacity
           style={styles.iconContainer}

@@ -18,7 +18,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Login'>;
 
 const LoginScreen = ({ navigation }: Props) => {
   const { showNotification } = useContext(NotificationContext);
-  const { saveAccessToken } = useContext(AuthContext);
+  const { saveAuthData } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
@@ -47,7 +47,7 @@ const LoginScreen = ({ navigation }: Props) => {
         return showNotification('El usuario debe ser de tipo "Operador"', 'incorrect');
       }
 
-      saveAccessToken(data.accessToken);
+      saveAuthData(data.accessToken, data.guid);
     } catch (error) {
       console.error(error);
       showNotification('Error al iniciar sesión', 'incorrect');

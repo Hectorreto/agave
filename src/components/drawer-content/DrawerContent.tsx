@@ -18,7 +18,7 @@ type Props = {
 };
 
 const DrawerContent = ({ navigation }: Props) => {
-  const { removeAccessToken } = useContext(AuthContext);
+  const { removeAuthData } = useContext(AuthContext);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,7 +69,7 @@ const DrawerContent = ({ navigation }: Props) => {
           Icon={Logout}
           label="Cerrar sesión"
           onPress={() => {
-            removeAccessToken();
+            removeAuthData();
           }}
         />
       </View>

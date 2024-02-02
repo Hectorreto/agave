@@ -2,29 +2,34 @@ import { FC, PropsWithChildren, createContext, useState } from 'react';
 
 type AuthContextType = {
   accessToken: string;
-  saveAccessToken: (accessToken: string) => void;
-  removeAccessToken: () => void;
+  guid: string;
+  saveAuthData: (accessToken: string, guid: string) => void;
+  removeAuthData: () => void;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [accessToken, setAccessToken] = useState('');
+  const [guid, setGuid] = useState('');
 
-  const saveAccessToken = (accessToken: string) => {
+  const saveAuthData = (accessToken: string, guid: string) => {
     setAccessToken(accessToken);
+    setGuid(guid);
   };
 
-  const removeAccessToken = () => {
+  const removeAuthData = () => {
     setAccessToken('');
+    setGuid('');
   };
 
   return (
     <AuthContext.Provider
       value={{
         accessToken,
-        saveAccessToken,
-        removeAccessToken,
+        guid,
+        saveAuthData,
+        removeAuthData,
       }}>
       {children}
     </AuthContext.Provider>

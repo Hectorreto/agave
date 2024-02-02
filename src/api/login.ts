@@ -8,10 +8,11 @@ const login = async (email: string, password: string) => {
     },
     body: JSON.stringify({
       query: `
-        mutation Mutation($loginUserInput: LoginUserInput!) {
+        mutation Login($loginUserInput: LoginUserInput!) {
           login(loginUserInput: $loginUserInput) {
             access_token
             user {
+              guid
               role
             }
           }
@@ -30,6 +31,7 @@ const login = async (email: string, password: string) => {
     errorCredentials: gqlResponse.errors?.[0].code === 401,
     errorRole: gqlResponse.data?.login.user.role !== 'OPERATOR',
     accessToken: gqlResponse.data?.login.access_token,
+    guid: gqlResponse.data?.login.user.guid,
   };
 };
 

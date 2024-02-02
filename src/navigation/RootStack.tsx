@@ -24,12 +24,12 @@ const RootStack = () => {
       {accessToken ? (
         <Stack.Group>
           <Stack.Screen name="HomeDrawer" component={HomeDrawer} />
+          <Stack.Screen name="ChangePass" component={ChangePassScreen} />
         </Stack.Group>
       ) : (
         <Stack.Group>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="RecoverPass" component={RecoverPassScreen} />
-          <Stack.Screen name="ChangePass" component={ChangePassScreen} />
         </Stack.Group>
       )}
     </Stack.Navigator>
