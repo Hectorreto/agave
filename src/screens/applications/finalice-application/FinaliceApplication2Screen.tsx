@@ -1,13 +1,13 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ResizeMode, Video } from 'expo-av';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputCameraVideo from '../../../components/input-camera-video/InputCameraVideo';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
-import { useNotification } from '../../../contexts/notification-context/NotificationContext';
+import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 import { finalizeApplication } from '../../../services/applicationService';
 import { finalizeProducts } from '../../../services/productService';
@@ -16,7 +16,7 @@ type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplicat
 
 const FinaliceApplication2Screen = ({ navigation, route }: Props) => {
   const { applicationId, products } = route.params;
-  const { showNotification } = useNotification();
+  const { showNotification } = useContext(NotificationContext);
   const [videoUri, setVideoUri] = useState('');
 
   const handleCreate = async () => {

@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import { newProperty, validateForm } from './helpers';
@@ -11,14 +11,14 @@ import InputNumber from '../../../components/input-number/InputNumber';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
-import { useNotification } from '../../../contexts/notification-context/NotificationContext';
+import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { PropertyStackParamList } from '../../../navigation/PropertyStack';
 import { createProperty, Property } from '../../../services/propertyService';
 
 type Props = NativeStackScreenProps<PropertyStackParamList, 'CreateProperty'>;
 
 const CreatePropertyScreen = ({ navigation }: Props) => {
-  const { showNotification } = useNotification();
+  const { showNotification } = useContext(NotificationContext);
   const [property, setProperty] = useState<Property>(newProperty());
   const [submitted, setSubmitted] = useState(false);
 
