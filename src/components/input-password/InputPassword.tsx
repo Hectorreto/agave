@@ -11,19 +11,31 @@ type Props = {
   placeholder: string;
   value: string;
   onChange: (text: string) => void;
+  nextInputRef?: React.RefObject<TextInput>;
   info?: string;
-  submitted: boolean;
+  inputRef?: React.RefObject<TextInput>;
+  onSubmit?: () => void;
+  errorMessage?: string;
 };
 
-const InputPassword = ({ label, placeholder, value, onChange, info, submitted }: Props) => {
+const InputPassword = ({
+  label,
+  placeholder,
+  value,
+  onChange,
+  nextInputRef,
+  info,
+  inputRef,
+  onSubmit,
+  errorMessage,
+}: Props) => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const isValid = Boolean(value);
-  const showError = submitted && !isValid;
+  const showError = Boolean(errorMessage);
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.inputLabel, showError && styles.inputLabelError]}>{label}</Text>
-      <View style={[styles.inputContainer, showError && styles.inputError]}>
+      <Text style={[styles.inputLabel, showError && styles.textError]}>{label}</Text>
+      <View style={[styles.inputContainer, showError && styles.textInputError]}>
         <TextInput
           style={styles.textInput}
           placeholder={placeholder}
@@ -33,6 +45,10 @@ const InputPassword = ({ label, placeholder, value, onChange, info, submitted }:
           autoCapitalize="none"
           value={value}
           onChangeText={onChange}
+          ref={inputRef}
+          returnKeyType={nextInputRef && 'next'}
+          onSubmitEditing={onSubmit || (nextInputRef && (() => nextInputRef.current?.focus()))}
+          blurOnSubmit={!nextInputRef}
         />
         <TouchableOpacity
           style={styles.iconContainer}
@@ -46,6 +62,7 @@ const InputPassword = ({ label, placeholder, value, onChange, info, submitted }:
           <Info />
         </View>
       )}
+      {showError && <Text style={styles.textError}>{errorMessage}</Text>}
     </View>
   );
 };

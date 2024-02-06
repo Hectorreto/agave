@@ -45,6 +45,12 @@ const styles = StyleSheet.create({
     color: '#555',
     flex: 1,
   },
+  textError: {
+    color: Colors.ALERT_RED,
+  },
+  textInputError: {
+    borderColor: Colors.ALERT_RED,
+  },
 });
 
 export default styles;

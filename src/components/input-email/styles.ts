@@ -22,7 +22,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.NEUTRAL,
   },
-  inputError: {
+  textError: {
+    color: Colors.ALERT_RED,
+  },
+  textInputError: {
     borderColor: Colors.ALERT_RED,
   },
 });

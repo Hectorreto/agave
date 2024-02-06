@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import Form0 from './Form0';
@@ -21,7 +21,7 @@ import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import ModalMonitoringForm from '../../../components/modal-monitoring-form/ModalMonitoringForm';
-import { useNotification } from '../../../contexts/notification-context/NotificationContext';
+import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import useProperties from '../../../hooks/useProperties';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
 import { createMonitoring, Monitoring } from '../../../services/monitoringService';
@@ -29,7 +29,7 @@ import { createMonitoring, Monitoring } from '../../../services/monitoringServic
 type Props = NativeStackScreenProps<MonitoringStackParamList, 'CreateMonitoring'>;
 
 const CreateMonitoringScreen = ({ navigation }: Props) => {
-  const { showNotification } = useNotification();
+  const { showNotification } = useContext(NotificationContext);
   const [monitoring, setMonitoring] = useState(newMonitoring());
 
   const [isModalVisible, setIsModalVisible] = useState(false);

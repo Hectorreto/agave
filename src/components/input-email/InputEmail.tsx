@@ -8,18 +8,27 @@ type Props = {
   placeholder: string;
   value: string;
   onChange: (text: string) => void;
-  submitted: boolean;
+  nextInputRef?: React.RefObject<TextInput>;
+  onSubmit?: () => void;
+  errorMessage?: string;
 };
 
-const InputEmail = ({ label, placeholder, value, onChange, submitted }: Props) => {
-  const isValid = Boolean(value);
-  const showError = submitted && !isValid;
+const InputEmail = ({
+  label,
+  placeholder,
+  value,
+  onChange,
+  nextInputRef,
+  onSubmit,
+  errorMessage,
+}: Props) => {
+  const showError = Boolean(errorMessage);
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.inputLabel, showError && styles.inputLabelError]}>{label}</Text>
+      <Text style={[styles.inputLabel, showError && styles.textError]}>{label}</Text>
       <TextInput
-        style={[styles.textInput, showError && styles.inputError]}
+        style={[styles.textInput, showError && styles.textInputError]}
         placeholder={placeholder}
         placeholderTextColor={Colors.NEUTRAL_600}
         autoCapitalize="none"
@@ -27,7 +36,11 @@ const InputEmail = ({ label, placeholder, value, onChange, submitted }: Props) =
         keyboardType="email-address"
         value={value}
         onChangeText={onChange}
+        returnKeyType={nextInputRef && 'next'}
+        onSubmitEditing={onSubmit || (nextInputRef && (() => nextInputRef.current?.focus()))}
+        blurOnSubmit={!nextInputRef}
       />
+      {showError && <Text style={styles.textError}>{errorMessage}</Text>}
     </View>
   );
 };
