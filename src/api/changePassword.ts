@@ -1,8 +1,13 @@
 const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
 
-const changePassword = async (password: string, guid: string, accessToken: string) => {
-  console.log({ password, guid, accessToken });
+type Props = {
+  oldPassword: string;
+  newPassword: string;
+  guid: string;
+  accessToken: string;
+};
 
+const changePassword = async ({ newPassword, oldPassword, guid, accessToken }: Props) => {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
@@ -11,24 +16,29 @@ const changePassword = async (password: string, guid: string, accessToken: strin
     },
     body: JSON.stringify({
       query: `
-        mutation ChangePassword($changePasswordInput: ChangePasswordInput!) {
-          changePassword(changePasswordInput: $changePasswordInput) {
-            success
+        mutation Mutation($updateUserInput: UpdateUserInput!) {
+          updateUser(updateUserInput: $updateUserInput) {
+            updated_date
+            __typename
           }
         }
       `,
       variables: {
-        changePasswordInput: {
-          new_password: password,
-          otp_guid: guid,
+        updateUserInput: {
+          password: newPassword,
+          old_password: oldPassword,
+          guid,
         },
       },
     }),
   });
   const gqlResponse = await response.json();
-  console.log(gqlResponse);
   return {
-    success: false,
+    errorOldPassword: gqlResponse.errors?.[0]?.message === 'La contraseña actual es érronea.',
+    errorSamePassword:
+      gqlResponse.errors?.[0]?.message ===
+      'La nueva contraseña debe ser diferente que la anterior.',
+    success: gqlResponse.data?.updateUser?.updated_date !== undefined,
   };
 };
 

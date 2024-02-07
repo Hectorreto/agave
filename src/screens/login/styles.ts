@@ -4,12 +4,13 @@ import { Colors } from '../../themes/theme';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,
     paddingVertical: 32,
+    paddingBottom: 100,
     gap: 16,
   },
   logo: {

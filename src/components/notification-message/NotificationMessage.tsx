@@ -22,7 +22,7 @@ const NotificationMessage = ({ message, removeNotification, type }: Props) => {
       duration: 300,
       useNativeDriver: false,
     }).start(() => {
-      timeoutId.current = setTimeout(hideNotification, 3000);
+      timeoutId.current = setTimeout(hideNotification, 5000);
     });
   }, []);
 
