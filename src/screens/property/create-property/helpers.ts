@@ -5,6 +5,7 @@ import { Property } from '../../../services/propertyService';
 export const newProperty = (): Property => {
   return {
     id: uuid.v4() as string,
+    guid: '',
     createdAt: 0,
     updatedAt: 0,
     createdBy: '[Usuario]',

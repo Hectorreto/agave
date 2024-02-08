@@ -1,10 +1,15 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
+
 import database from '../../database';
+import getAllProperties from '../api/property/getAllProperties';
 
 database.transaction((transaction) => {
   transaction.executeSql(
     `
       CREATE TABLE IF NOT EXISTS property (
         id TEXT PRIMARY KEY,
+        guid TEXT,
         createdAt INTEGER,
         updatedAt INTEGER,
         createdBy TEXT,
@@ -33,6 +38,7 @@ database.transaction((transaction) => {
 
 export type Property = {
   id: string;
+  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
@@ -134,4 +140,157 @@ export const findProperties = (options: FindPropertyOptions): Promise<Property[]
       );
     });
   });
+};
+
+export const pullProperties = async () => {
+  const lastPullRaw = await AsyncStorage.getItem('propertiesLastPull');
+  const lastPull = lastPullRaw ?? '0';
+
+  const accessToken = await AsyncStorage.getItem('accessToken');
+  if (!accessToken) return;
+
+  const properties = [];
+  for (let skip = 0; true; skip += 10) {
+    const data: any[] = await getAllProperties({
+      accessToken,
+      limit: 10,
+      skip,
+    });
+    if (!data.length) break;
+    properties.push(...data);
+  }
+  const newProperties = properties.filter((property) => property.updated_date > lastPull);
+
+  for (const property of newProperties) {
+    const localProperty = await new Promise((resolve, reject) => {
+      database.transaction((transaction) => {
+        transaction.executeSql(
+          `SELECT guid FROM property WHERE guid = ?`,
+          [property.guid],
+          (_, { rows }) => {
+            resolve(rows._array[0]);
+          },
+          (_, error) => {
+            reject(error);
+            return true;
+          }
+        );
+      });
+    });
+
+    if (!localProperty) {
+      await new Promise((resolve, reject) => {
+        database.transaction((transaction) => {
+          transaction.executeSql(
+            `
+              INSERT INTO property (
+                id,
+                guid,
+                createdAt,
+                updatedAt,
+                createdBy,
+                updatedBy,
+                name,
+                plantingYear,
+                cropType,
+                location,
+                hectareNumber,
+                plantsPlantedNumber,
+                invoice,
+                registry,
+                internalIdentifier,
+                boardsPerProperty,
+                active
+              )
+              VALUES (
+                ?,?,?,?,?,
+                ?,?,?,?,?,
+                ?,?,?,?,?,
+                ?,?
+              )
+            `,
+            [
+              uuid.v4() as string,
+              property.guid,
+              property.created_date,
+              property.updated_date,
+              JSON.stringify(property.created_by),
+              JSON.stringify(property.created_by),
+              property.name,
+              property.plantation_year,
+              JSON.stringify(property.crop_types),
+              JSON.stringify(property.place),
+              property.place.area,
+              property.planted_plants,
+              property.folio,
+              property.registry_number,
+              property.internal_identifier,
+              property.tables_by_property,
+              property.enabled ? 1 : 0,
+            ],
+            () => {
+              resolve(undefined);
+            },
+            (_, error) => {
+              reject(error);
+              return true;
+            }
+          );
+        });
+      });
+    } else {
+      await new Promise((resolve, reject) => {
+        database.transaction((transaction) => {
+          transaction.executeSql(
+            `
+              UPDATE property
+              SET
+                updatedAt = ?,
+                createdBy = ?,
+                updatedBy = ?,
+                name = ?,
+                plantingYear = ?,
+                cropType = ?,
+                location = ?,
+                hectareNumber = ?,
+                plantsPlantedNumber = ?,
+                invoice = ?,
+                registry = ?,
+                internalIdentifier = ?,
+                boardsPerProperty = ?,
+                active = ?
+              WHERE id = ?
+            `,
+            [
+              property.updated_date,
+              JSON.stringify(property.created_by),
+              JSON.stringify(property.created_by),
+              property.name,
+              property.plantation_year,
+              JSON.stringify(property.crop_types),
+              JSON.stringify(property.place),
+              property.place.area,
+              property.planted_plants,
+              property.folio,
+              property.registry_number,
+              property.internal_identifier,
+              property.tables_by_property,
+              property.enabled ? 1 : 0,
+              property.guid,
+            ],
+            () => {
+              resolve(undefined);
+            },
+            (_, error) => {
+              reject(error);
+              return true;
+            }
+          );
+        });
+      });
+    }
+  }
+
+  const now = Date.now();
+  await AsyncStorage.setItem('propertiesLastPull', String(now));
 };
