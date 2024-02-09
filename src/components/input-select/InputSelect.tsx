@@ -1,5 +1,5 @@
-import { ReactElement, useRef, useState } from 'react';
-import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { ReactElement, useState } from 'react';
+import { Modal, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import styles from './styles';
@@ -34,22 +34,12 @@ const InputSelect = ({
   const isValid = Boolean(value);
   const showError = submitted && !isValid;
 
-  const ref = useRef<View>(null);
-  const [pageY, setPageY] = useState(0);
-
   return (
-    <View
-      style={[styles.container, isOpen && { zIndex: (1000 * 1000 * 1000) / (pageY || 1) }]}
-      ref={ref}
-      onLayout={() => {
-        ref.current?.measure((_x, _y, _width, _height, _pageX, pageY) => {
-          setPageY(pageY);
-        });
-      }}>
-      {Boolean(label) && (
-        <Text style={[styles.inputLabel, showError && styles.inputLabelError]}>{label}</Text>
-      )}
-      <View>
+    <>
+      <View style={styles.container}>
+        {Boolean(label) && (
+          <Text style={[styles.inputLabel, showError && styles.inputLabelError]}>{label}</Text>
+        )}
         <TouchableOpacity
           style={[
             styles.inputContainer,
@@ -74,28 +64,34 @@ const InputSelect = ({
           )}
           <ArrowDropDown />
         </TouchableOpacity>
-        <View>
-          {isOpen && onChange && (
-            <ScrollView style={styles.dropdown}>
-              {items.map((item) => (
-                <Pressable
-                  key={item.value}
-                  onPress={() => {
-                    onChange(item.value);
-                    setIsOpen(false);
-                  }}
-                  style={({ pressed }) => [
-                    styles.listItemContainer,
-                    pressed && { backgroundColor: Colors.PRIMARY_100 },
-                  ]}>
-                  <Text style={styles.listItem}>{item.label}</Text>
-                </Pressable>
-              ))}
-            </ScrollView>
-          )}
-        </View>
       </View>
-    </View>
+
+      <Modal
+        transparent
+        onRequestClose={() => setIsOpen(false)}
+        visible={Boolean(isOpen && onChange)}
+        animationType="fade">
+        <View style={styles.backgroundContainer}>
+          <Pressable style={styles.modalOutside} onPress={() => setIsOpen(false)} />
+          <ScrollView style={styles.modal}>
+            {items.map((item) => (
+              <Pressable
+                key={item.value}
+                onPress={() => {
+                  onChange?.(item.value);
+                  setIsOpen(false);
+                }}
+                style={({ pressed }) => [
+                  styles.listItemContainer,
+                  pressed && { backgroundColor: Colors.PRIMARY_100 },
+                ]}>
+                <Text style={styles.listItem}>{item.label}</Text>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </View>
+      </Modal>
+    </>
   );
 };
 

@@ -41,18 +41,17 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: Colors.ALERT_RED,
   },
-  dropdown: {
+  modal: {
     ...shadowStyle,
     borderRadius: 4,
     position: 'absolute',
     backgroundColor: Colors.NEUTRAL,
-    width: '100%',
-    maxHeight: 44 * 4,
+    width: 320,
+    maxHeight: 44 * 10.5,
   },
   listItemContainer: {
     borderRadius: 4,
     height: 44,
-    backgroundColor: Colors.NEUTRAL,
   },
   listItem: {
     paddingHorizontal: 16,
@@ -61,6 +60,17 @@ const styles = StyleSheet.create({
   },
   inputWithValue: {
     borderColor: Colors.PRIMARY_400,
+  },
+  backgroundContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  modalOutside: {
+    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
   },
 });
 
