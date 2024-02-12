@@ -8,7 +8,7 @@ import Description from '../../../../assets/svg/description.svg';
 import Upload from '../../../../assets/svg/upload.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputNumber from '../../../components/input-number/InputNumber';
-import InputSelect from '../../../components/input-select/InputSelect';
+import InputSelectMultiple from '../../../components/input-select-multiple/InputSelectMultiple';
 import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
 import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
@@ -54,11 +54,11 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           onChange={(plantingYear) => setProperty({ ...property, plantingYear })}
           submitted={submitted}
         />
-        <InputSelect
+        <InputSelectMultiple
           label="Tipo de cultivos"
           placeholder="Tipo de cultivos"
-          value={property.cropType}
-          onChange={(cropType) => setProperty({ ...property, cropType })}
+          values={property.cropType ? property.cropType.split(',') : []}
+          onChange={(values) => setProperty({ ...property, cropType: values.join(',') })}
           items={[
             { label: 'Agave', value: 'Agave' },
             { label: 'Maíz', value: 'Maíz' },

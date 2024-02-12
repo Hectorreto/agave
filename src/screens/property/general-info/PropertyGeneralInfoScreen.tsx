@@ -6,7 +6,7 @@ import Description from '../../../../assets/svg/description.svg';
 import Upload from '../../../../assets/svg/upload.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
-import InputSelect from '../../../components/input-select/InputSelect';
+import InputSelectMultiple from '../../../components/input-select-multiple/InputSelectMultiple';
 import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
 import { PropertyTabsParamList } from '../../../navigation/PropertyTabs';
@@ -37,10 +37,10 @@ const PropertyGeneralInfoScreen = ({ route }: Props) => {
           placeholder="Año de plantación"
           value={property.plantingYear}
         />
-        <InputSelect
+        <InputSelectMultiple
           label="Tipo de cultivos"
           placeholder="Tipo de cultivos"
-          value={property.cropType}
+          values={property.cropType ? property.cropType.split(',') : []}
           items={[
             { label: 'Agave', value: 'Agave' },
             { label: 'Maíz', value: 'Maíz' },
