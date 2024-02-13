@@ -47,7 +47,7 @@ const LoginScreen = ({ navigation }: Props) => {
         return showNotification('El usuario debe ser de tipo "Operador"', 'incorrect');
       }
 
-      saveAuthData(data.accessToken, data.guid);
+      await saveAuthData(data.accessToken, data.guid);
     } catch (error) {
       console.error(error);
       showNotification('Error al iniciar sesión', 'incorrect');

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     color: Colors.ALERT_RED,
   },
   textInput: {
-    height: 44,
+    minHeight: 44,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderWidth: 1,
