@@ -6,7 +6,7 @@ type Props = {
   skip: number;
 };
 
-const getAllProperties = async ({ accessToken, limit, skip }: Props) => {
+const getAllApplications = async ({ accessToken, limit, skip }: Props) => {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
@@ -15,8 +15,8 @@ const getAllProperties = async ({ accessToken, limit, skip }: Props) => {
     },
     body: JSON.stringify({
       query: `
-        query Lands($findLandsArgs: FindLandssArgs!) {
-          lands(findLandsArgs: $findLandsArgs) {
+        query Applications($findApplicationsArgs: FindApplicationArgs!) {
+          applications(findApplicationsArgs: $findApplicationsArgs) {
             data {
               guid
               created_date
@@ -29,35 +29,31 @@ const getAllProperties = async ({ accessToken, limit, skip }: Props) => {
                 first_name
                 last_name
               }
-              name
-              plantation_year
-              crop_types {
-                name
+              month
+              status
+              scheduled_date
+              concept
+              bottles
+              notes
+              start_picture {
+                path
+              }
+              completed_picture {
+                path
+              }
+              land {
                 guid
               }
-              place {
-                center {
-                  lat
-                  lng
-                }
-                area
-              }
-              planted_plants
-              folio
-              registry_number
-              internal_identifier
-              tables_by_property
-              enabled
             }
           }
         }
       `,
       variables: {
-        findLandsArgs: {
+        findApplicationsArgs: {
           skip,
           limit,
           sort: {
-            column: 'plantation_year',
+            column: 'scheduled_date',
             order: 'DESC',
           },
         },
@@ -65,7 +61,7 @@ const getAllProperties = async ({ accessToken, limit, skip }: Props) => {
     }),
   });
   const gqlResponse = await response.json();
-  return gqlResponse.data.lands.data;
+  return gqlResponse.data.applications.data;
 };
 
-export default getAllProperties;
+export default getAllApplications;

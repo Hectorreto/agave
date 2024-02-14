@@ -153,8 +153,8 @@ export const pullProperties = async () => {
       limit: 10,
       skip,
     });
-    if (!data.length) break;
     properties.push(...data);
+    if (data.length < 10) break;
   }
 
   for (const property of properties) {
@@ -211,7 +211,7 @@ export const pullProperties = async () => {
               property.created_date,
               property.updated_date,
               JSON.stringify(property.created_by),
-              JSON.stringify(property.created_by),
+              JSON.stringify(property.updated_by),
               property.name,
               property.plantation_year,
               property.crop_types.map((value: any) => value.name).join(','),
