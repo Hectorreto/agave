@@ -263,6 +263,7 @@ export const pullApplications = async () => {
               application.start_picture?.path,
               application.completed_picture?.path,
               application.land?.guid,
+              application.guid,
             ],
             () => {
               resolve(undefined);

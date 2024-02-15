@@ -1,9 +1,14 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
+
 import database from '../../database';
+import getAllMonitoring from '../api/monitoring/getAllMonitoring';
 
 database.transaction((transaction) => {
   const sql = `
     CREATE TABLE IF NOT EXISTS monitoring (
       id TEXT PRIMARY KEY,
+      guid TEXT,
       createdAt INTEGER,
       updatedAt INTEGER,
       createdBy TEXT,
@@ -180,4 +185,234 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
       );
     });
   });
+};
+
+export const pullMonitoring = async () => {
+  const accessToken = await AsyncStorage.getItem('accessToken');
+  if (!accessToken) return;
+
+  const monitoringArray = [];
+  for (let skip = 0; true; skip += 10) {
+    const data: any[] = await getAllMonitoring({
+      accessToken,
+      limit: 10,
+      skip,
+    });
+    monitoringArray.push(...data);
+    if (data.length < 10) break;
+  }
+
+  for (const monitoring of monitoringArray) {
+    const localMonitoring: Monitoring = await new Promise((resolve, reject) => {
+      database.transaction((transaction) => {
+        transaction.executeSql(
+          'SELECT guid, updatedAt FROM monitoring WHERE guid = ?',
+          [monitoring.guid],
+          (_, { rows }) => {
+            resolve(rows._array[0]);
+          },
+          (_, error) => {
+            reject(error);
+            return true;
+          }
+        );
+      });
+    });
+
+    if (!localMonitoring) {
+      await new Promise((resolve, reject) => {
+        database.transaction((transaction) => {
+          transaction.executeSql(
+            `
+              INSERT INTO monitoring (
+                id,
+                guid,
+                createdAt,
+                updatedAt,
+                createdBy,
+                updatedBy,
+                quadrantNumber,
+                plantsPerQuadrant,
+                quadrantQualification,
+                monitoringQualification,
+                comments,
+                imageUri,
+                latitude,
+                longitude,
+                propertyId,
+                
+                plantPerformanceKg,
+                plagueType,
+                plagueIncidence,
+                diseaseType,
+                diseaseIncidence,
+                undergrowthName,
+                undergrowthHeight,
+                undergrowthLeafType,
+                phytotoxicDamageHerbicideIncidence,
+                phytotoxicDamagePesticideIncidence,
+                phytotoxicDamageExcessSaltIncidence,
+                environmentalDamageFrostIncidence,
+                environmentalDamageStressIncidence,
+                environmentalDamageFloodIncidence,
+                environmentalDamageFireIncidence,
+                environmentalDamageHailIncidence,
+                environmentalDamageOtherIncidence,
+                colorimetryIncidence,
+                colorimetryComments,
+                physicalDamageType,
+                physicalDamageIncidence
+              )
+              VALUES (
+                ?,?,?,?,?,
+                ?,?,?,?,?,
+                ?,?,?,?,?,
+                ?,?,?,?,?,
+                ?,?,?,?,?,
+                ?,?,?,?,?,
+                ?,?,?,?,?,
+                ?
+              )
+            `,
+            [
+              uuid.v4() as string,
+              monitoring.guid,
+              monitoring.created_date,
+              monitoring.updated_date,
+              JSON.stringify(monitoring.created_by),
+              JSON.stringify(monitoring.updated_by),
+              monitoring.quadrants,
+              monitoring.plants_by_quadrant,
+              0,
+              monitoring.grade,
+              monitoring.comments,
+              monitoring.picture?.path,
+              0,
+              0,
+              monitoring.land?.guid,
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+            ],
+            () => {
+              resolve(undefined);
+            },
+            (_, error) => {
+              reject(error);
+              return true;
+            }
+          );
+        });
+      });
+    } else {
+      if (monitoring.updated_date < localMonitoring.updatedAt) return;
+
+      await new Promise((resolve, reject) => {
+        database.transaction((transaction) => {
+          transaction.executeSql(
+            `
+              UPDATE monitoring
+              SET 
+                updatedAt = ?,
+                createdBy = ?,
+                updatedBy = ?,
+                quadrantNumber = ?,
+                plantsPerQuadrant = ?,
+                quadrantQualification = ?,
+                monitoringQualification = ?,
+                comments = ?,
+                imageUri = ?,
+                latitude = ?,
+                longitude = ?,
+                propertyId = ?,
+                
+                plantPerformanceKg = ?,
+                plagueType = ?,
+                plagueIncidence = ?,
+                diseaseType = ?,
+                diseaseIncidence = ?,
+                undergrowthName = ?,
+                undergrowthHeight = ?,
+                undergrowthLeafType = ?,
+                phytotoxicDamageHerbicideIncidence = ?,
+                phytotoxicDamagePesticideIncidence = ?,
+                phytotoxicDamageExcessSaltIncidence = ?,
+                environmentalDamageFrostIncidence = ?,
+                environmentalDamageStressIncidence = ?,
+                environmentalDamageFloodIncidence = ?,
+                environmentalDamageFireIncidence = ?,
+                environmentalDamageHailIncidence = ?,
+                environmentalDamageOtherIncidence = ?,
+                colorimetryIncidence = ?,
+                colorimetryComments = ?,
+                physicalDamageType = ?,
+                physicalDamageIncidence = ?
+              WHERE id = ?
+            `,
+            [
+              monitoring.updated_date,
+              JSON.stringify(monitoring.created_by),
+              JSON.stringify(monitoring.updated_by),
+              monitoring.quadrants,
+              monitoring.plants_by_quadrant,
+              0,
+              monitoring.grade,
+              monitoring.comments,
+              monitoring.picture?.path,
+              0,
+              0,
+              monitoring.land?.guid,
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              '',
+              monitoring.guid,
+            ],
+            () => {
+              resolve(undefined);
+            },
+            (_, error) => {
+              reject(error);
+              return true;
+            }
+          );
+        });
+      });
+    }
+  }
 };

@@ -3,6 +3,7 @@ import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 
 import { dropAllTables } from '../../../database';
 import { pullApplications } from '../../services/applicationService';
+import { pullMonitoring } from '../../services/monitoringService';
 import { pullProperties } from '../../services/propertyService';
 
 type AuthContextType = {
@@ -26,6 +27,7 @@ export const AuthProvider = ({ children, onLoad }: Props) => {
     try {
       await pullProperties();
       await pullApplications();
+      await pullMonitoring();
     } catch (error) {
       console.error(error);
     }
