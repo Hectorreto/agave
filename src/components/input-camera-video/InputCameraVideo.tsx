@@ -19,14 +19,17 @@ const InputCameraVideo = ({ onChange, text }: Props) => {
   const handleCameraPermissions = async () => {
     let permissions = await getCameraPermissionsAsync();
     if (permissions.status !== 'granted') {
-      if (permissions.canAskAgain) {
+      try {
         permissions = await requestCameraPermissionsAsync();
-      } else {
-        if (Platform.OS === 'android') {
-          await Linking.openSettings();
-        }
-        if (Platform.OS === 'ios') {
-          await Linking.openURL('app-settings:');
+      } catch (error) {
+        console.error(error);
+        if (!permissions.canAskAgain) {
+          if (Platform.OS === 'android') {
+            await Linking.openSettings();
+          }
+          if (Platform.OS === 'ios') {
+            await Linking.openURL('app-settings:');
+          }
         }
       }
     }

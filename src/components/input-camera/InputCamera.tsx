@@ -39,14 +39,17 @@ const InputCamera = ({ value, onChange }: Props) => {
   const handleCameraPermissions = async () => {
     let permissions = await getCameraPermissionsAsync();
     if (permissions.status !== 'granted') {
-      if (permissions.canAskAgain) {
+      try {
         permissions = await requestCameraPermissionsAsync();
-      } else {
-        if (Platform.OS === 'android') {
-          await Linking.openSettings();
-        }
-        if (Platform.OS === 'ios') {
-          await Linking.openURL('app-settings:');
+      } catch (error) {
+        console.error(error);
+        if (!permissions.canAskAgain) {
+          if (Platform.OS === 'android') {
+            await Linking.openSettings();
+          }
+          if (Platform.OS === 'ios') {
+            await Linking.openURL('app-settings:');
+          }
         }
       }
     }
@@ -59,14 +62,17 @@ const InputCamera = ({ value, onChange }: Props) => {
   const handleLocationPermissions = async () => {
     let permissions = await getForegroundPermissionsAsync();
     if (permissions.status !== 'granted') {
-      if (permissions.canAskAgain) {
+      try {
         permissions = await requestForegroundPermissionsAsync();
-      } else {
-        if (Platform.OS === 'android') {
-          await Linking.openSettings();
-        }
-        if (Platform.OS === 'ios') {
-          await Linking.openURL('app-settings:');
+      } catch (error) {
+        console.error(error);
+        if (!permissions.canAskAgain) {
+          if (Platform.OS === 'android') {
+            await Linking.openSettings();
+          }
+          if (Platform.OS === 'ios') {
+            await Linking.openURL('app-settings:');
+          }
         }
       }
     }
