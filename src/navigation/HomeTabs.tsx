@@ -1,11 +1,9 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import ApplicationStack from './ApplicationStack';
-import ExitStack from './ExitStack';
 import MonitoringStack from './MonitoringStack';
 import PropertyStack from './PropertyStack';
 import Applications from '../../assets/svg/tabs/applications.svg';
-import Exits from '../../assets/svg/tabs/exits.svg';
 import Monitoring from '../../assets/svg/tabs/monitoring.svg';
 import Property from '../../assets/svg/tabs/property.svg';
 import TabBarIcon from '../components/tab-bar-icon/TabBarIcon';
@@ -40,14 +38,14 @@ const HomeTabs = () => {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={Property} />,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="ExitStack"
         component={ExitStack}
         options={{
           tabBarLabel: 'Salidas',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={Exits} />,
         }}
-      />
+      /> */}
       <Tab.Screen
         name="MonitoringStack"
         component={MonitoringStack}
