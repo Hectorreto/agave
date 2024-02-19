@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
-import AddCircle from '../../../../assets/svg/add_circle.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
 import Visibility from '../../../../assets/svg/visibility16x16.svg';
@@ -50,14 +49,14 @@ const ListPropertyScreen = ({ navigation }: Props) => {
         }))}
       />
 
-      <View style={styles.newItemContainer}>
+      {/* <View style={styles.newItemContainer}>
         <CustomButton
           color="blue"
           text="Nuevo predio"
           Icon={AddCircle}
           onPress={() => navigation.navigate('CreateProperty')}
         />
-      </View>
+      </View> */}
     </ScrollView>
   );
 };

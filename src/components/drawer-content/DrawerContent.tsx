@@ -10,7 +10,7 @@ import Lock from '../../../assets/svg/header/lock.svg';
 import Logout from '../../../assets/svg/header/logout.svg';
 import MenuOpen from '../../../assets/svg/header/menu_open.svg';
 import Science from '../../../assets/svg/header/science.svg';
-import Property from '../../../assets/svg/tabs/property.svg';
+import Agriculture from '../../../assets/svg/tabs/applications.svg';
 import { AuthContext } from '../../contexts/notification-context/AuthContext';
 
 type Props = {
@@ -28,7 +28,7 @@ const DrawerContent = ({ navigation }: Props) => {
         </TouchableOpacity>
       </View>
       <View style={styles.primaryContainer}>
-        <DrawerItem
+        {/* <DrawerItem
           Icon={Property}
           label="Agregar nuevo predio"
           onPress={() =>
@@ -37,17 +37,17 @@ const DrawerContent = ({ navigation }: Props) => {
               initial: false,
             })
           }
-        />
-        {/* <DrawerItem
+        /> */}
+        <DrawerItem
           Icon={Agriculture}
           label="Agregar nueva salida"
           onPress={() =>
-            navigation.navigate('ExitStack', {
+            navigation.navigate('PropertyStack', {
               screen: 'CreateExit',
               initial: false,
             })
           }
-        /> */}
+        />
         <DrawerItem
           Icon={Grass}
           label="Agregar nuevo monitoreo"
