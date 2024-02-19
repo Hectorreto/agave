@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import { newProperty, validateForm } from './helpers';
@@ -36,6 +36,13 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
     }
   };
 
+  useEffect(() => {
+    setProperty({
+      ...property,
+      invoice: `${property.plantingYear}-${property.name}-${property.plantsPlantedNumber}-${property.hectareNumber}`,
+    });
+  }, [property.plantingYear, property.name, property.plantsPlantedNumber, property.hectareNumber]);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.helper}>Llena el formulario para crear un nuevo predio</Text>
@@ -51,7 +58,11 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           label="Año de plantación"
           placeholder="Año de plantación"
           value={property.plantingYear}
-          onChange={(plantingYear) => setProperty({ ...property, plantingYear })}
+          onChange={(plantingYear) => {
+            if (plantingYear.match(/^\d{0,4}$/g)) {
+              setProperty({ ...property, plantingYear });
+            }
+          }}
           submitted={submitted}
         />
         <InputSelectMultiple
@@ -115,7 +126,6 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           label="Folio"
           placeholder="Folio"
           value={property.invoice}
-          onChange={(invoice) => setProperty({ ...property, invoice })}
           submitted={submitted}
         />
         <InputText
@@ -132,7 +142,7 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
           onChange={(internalIdentifier) => setProperty({ ...property, internalIdentifier })}
           submitted={submitted}
         />
-        <InputText
+        <InputNumber
           placeholder="###"
           value={property.boardsPerProperty}
           onChange={(boardsPerProperty) => setProperty({ ...property, boardsPerProperty })}
