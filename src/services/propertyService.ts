@@ -57,15 +57,8 @@ export type Property = {
 };
 
 export const createProperty = (property: Property): Promise<void> => {
-  const nowTime = new Date().getTime();
-  const propertyCopy: Property = {
-    ...property,
-    createdAt: nowTime,
-    updatedAt: nowTime,
-  };
-
-  const keys = Object.keys(propertyCopy) as (keyof Property)[];
-  const args: any[] = keys.map((key) => propertyCopy[key]);
+  const keys = Object.keys(property) as (keyof Property)[];
+  const args: any[] = keys.map((key) => property[key]);
 
   return new Promise((resolve, reject) => {
     database.transaction((transaction) => {
@@ -85,6 +78,29 @@ export const createProperty = (property: Property): Promise<void> => {
       );
     });
   });
+};
+
+export const updateProperty = async (property: Property): Promise<void> => {
+  const { id, ...update } = property;
+  const readOnly = false;
+
+  const keys = Object.keys(update);
+  const values = Object.values(update);
+
+  await database.execAsync(
+    [
+      {
+        sql: `
+          UPDATE property
+          SET
+            ${keys.map((key) => `${key} = ?`).join(',')}
+          WHERE id = ?
+        `,
+        args: [values, id],
+      },
+    ],
+    readOnly
+  );
 };
 
 type FindPropertyOptions = {
@@ -146,145 +162,33 @@ export const pullProperties = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
 
-  const properties = [];
-  for (let skip = 0; true; skip += 10) {
-    const data: any[] = await getAllProperties({
+  const properties: Property[] = [];
+  for (let skip = 0; true; skip += 50) {
+    const data = await getAllProperties({
       accessToken,
-      limit: 10,
+      limit: 50,
       skip,
     });
     properties.push(...data);
-    if (data.length < 10) break;
+    if (data.length < 50) break;
   }
 
   for (const property of properties) {
-    const localProperty: Property = await new Promise((resolve, reject) => {
-      database.transaction((transaction) => {
-        transaction.executeSql(
-          `SELECT guid, updatedAt FROM property WHERE guid = ?`,
-          [property.guid],
-          (_, { rows }) => {
-            resolve(rows._array[0]);
-          },
-          (_, error) => {
-            reject(error);
-            return true;
-          }
-        );
-      });
-    });
+    const queryLocalProperty: any = await database.execAsync(
+      [{ sql: 'SELECT * FROM property WHERE guid = ?', args: [property.guid] }],
+      true
+    );
+    const localProperty: Property = queryLocalProperty[0].rows[0];
 
     if (!localProperty) {
-      await new Promise((resolve, reject) => {
-        database.transaction((transaction) => {
-          transaction.executeSql(
-            `
-              INSERT INTO property (
-                id,
-                guid,
-                createdAt,
-                updatedAt,
-                createdBy,
-                updatedBy,
-                name,
-                plantingYear,
-                cropType,
-                location,
-                hectareNumber,
-                plantsPlantedNumber,
-                invoice,
-                registry,
-                internalIdentifier,
-                boardsPerProperty,
-                active
-              )
-              VALUES (
-                ?,?,?,?,?,
-                ?,?,?,?,?,
-                ?,?,?,?,?,
-                ?,?
-              )
-            `,
-            [
-              uuid.v4() as string,
-              property.guid,
-              property.created_date,
-              property.updated_date,
-              JSON.stringify(property.created_by),
-              JSON.stringify(property.updated_by),
-              property.name,
-              property.plantation_year,
-              property.crop_types.map((value: any) => value.name).join(','),
-              JSON.stringify(property.place),
-              property.place.area,
-              property.planted_plants,
-              property.folio,
-              property.registry_number,
-              property.internal_identifier,
-              property.tables_by_property,
-              property.enabled ? 1 : 0,
-            ],
-            () => {
-              resolve(undefined);
-            },
-            (_, error) => {
-              reject(error);
-              return true;
-            }
-          );
-        });
+      await createProperty({
+        ...property,
+        id: uuid.v4() as string,
       });
-    } else {
-      if (property.updated_date < localProperty.updatedAt) return;
-
-      await new Promise((resolve, reject) => {
-        database.transaction((transaction) => {
-          transaction.executeSql(
-            `
-              UPDATE property
-              SET
-                updatedAt = ?,
-                createdBy = ?,
-                updatedBy = ?,
-                name = ?,
-                plantingYear = ?,
-                cropType = ?,
-                location = ?,
-                hectareNumber = ?,
-                plantsPlantedNumber = ?,
-                invoice = ?,
-                registry = ?,
-                internalIdentifier = ?,
-                boardsPerProperty = ?,
-                active = ?
-              WHERE id = ?
-            `,
-            [
-              property.updated_date,
-              JSON.stringify(property.created_by),
-              JSON.stringify(property.created_by),
-              property.name,
-              property.plantation_year,
-              property.crop_types.map((value: any) => value.name).join(','),
-              JSON.stringify(property.place),
-              property.place.area,
-              property.planted_plants,
-              property.folio,
-              property.registry_number,
-              property.internal_identifier,
-              property.tables_by_property,
-              property.enabled ? 1 : 0,
-              property.guid,
-            ],
-            () => {
-              resolve(undefined);
-            },
-            (_, error) => {
-              reject(error);
-              return true;
-            }
-          );
-        });
+    } else if (property.updatedAt > localProperty.updatedAt) {
+      await updateProperty({
+        ...property,
+        id: localProperty.id,
       });
     }
   }

@@ -25,11 +25,15 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
   const handleSubmit = async () => {
     setSubmitted(true);
     if (!validateForm(property)) return;
-    const notification = 'El predio ha sido creado con éxito';
 
     try {
-      await createProperty(property);
-      showNotification(notification);
+      const nowTime = Date.now();
+      await createProperty({
+        ...property,
+        createdAt: nowTime,
+        updatedAt: nowTime,
+      });
+      showNotification('El predio ha sido creado con éxito');
       navigation.navigate('ListProperties');
     } catch (error) {
       console.error(error);
