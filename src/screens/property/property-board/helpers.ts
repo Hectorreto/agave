@@ -56,51 +56,12 @@ export const usePropertyBarData = () => {
     return getHectareData(data);
   }, [data]);
 
-  const hectareTotal = useMemo(() => {
-    let sum = 0;
-    data.forEach((v) => {
-      sum += Number(v.hectareNumber) || 0;
-    });
-    return sum;
-  }, [data]);
-
   const plantData = useMemo(() => {
     return getPlantData(data);
   }, [data]);
 
-  const plantTotal = useMemo(() => {
-    let sum = 0;
-    data.forEach((v) => {
-      sum += Number(v.plantsPlantedNumber) || 0;
-    });
-    return sum;
-  }, [data]);
-
   return {
     hectareData,
-    hectareTotal,
     plantData,
-    plantTotal,
-  };
-};
-
-export const usePropertyPieData = () => {
-  const { data } = useProperties({ createdAtSort: 'ASC' });
-
-  const cropData = useMemo(() => {
-    const types = data.map((v) => v.cropType);
-    const count: { [key: string]: number } = {};
-    types.forEach((type) => {
-      if (!count[type]) count[type] = 0;
-      count[type]++;
-    });
-    return Object.entries(count).map(([year, cnt]) => ({
-      label: year,
-      value: cnt,
-    }));
-  }, [data]);
-
-  return {
-    cropData,
   };
 };

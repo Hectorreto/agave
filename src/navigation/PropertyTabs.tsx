@@ -29,9 +29,7 @@ const PropertyTabs = ({ route }: Props) => {
       <Tab.Screen
         name="PropertyBoard"
         component={PropertyBoardScreen}
-        initialParams={{
-          property,
-        }}
+        initialParams={{ property }}
       />
       <Tab.Screen
         name="PropertyGeneralInfo"
@@ -41,9 +39,7 @@ const PropertyTabs = ({ route }: Props) => {
       <Tab.Screen
         name="PropertyPlantExits"
         component={PropertyPlantExitsScreen}
-        initialParams={{
-          property,
-        }}
+        initialParams={{ property }}
       />
     </Tab.Navigator>
   );

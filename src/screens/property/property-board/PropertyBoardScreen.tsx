@@ -1,22 +1,29 @@
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
-import { usePropertyBarData, usePropertyPieData } from './helpers';
+import { usePropertyBarData } from './helpers';
 import styles from './styles';
-import Eco from '../../../../assets/svg/eco.svg';
+// import Eco from '../../../../assets/svg/eco.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
-import PestControl from '../../../../assets/svg/pest_control.svg';
+// import PestControl from '../../../../assets/svg/pest_control.svg';
 import CardSmall from '../../../components/card-small/CardSmall';
 import ChartBar from '../../../components/chart-bar/ChartBar';
 import ChartLine from '../../../components/chart-line/ChartLine';
 import ChartPie from '../../../components/chart-pie/ChartPie';
 import Divider from '../../../components/divider/Divider';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
-import InputSelect from '../../../components/input-select/InputSelect';
+import InputSelectMultiple from '../../../components/input-select-multiple/InputSelectMultiple';
+import { PropertyTabsParamList } from '../../../navigation/PropertyTabs';
 import { Colors } from '../../../themes/theme';
 
-const PropertyBoardScreen = () => {
-  const { hectareData, hectareTotal, plantData, plantTotal } = usePropertyBarData();
-  const { cropData } = usePropertyPieData();
+type Props = MaterialTopTabScreenProps<PropertyTabsParamList, 'PropertyBoard'>;
+
+const PropertyBoardScreen = ({ route }: Props) => {
+  const { property } = route.params;
+  const { hectareData, plantData } = usePropertyBarData();
+  const cropTypes = property.cropType.split(',');
+  const [cropTypeFilter, setCropTypeFilter] = useState<string[]>([]);
 
   const lineData = [
     { value: 34 },
@@ -38,7 +45,7 @@ const PropertyBoardScreen = () => {
         ]}
         active="PropertyBoard"
       />
-      <View style={styles.indicatorsContainer}>
+      {/* <View style={styles.indicatorsContainer}>
         <View style={styles.indicator}>
           <View style={styles.indicatorIcon}>
             <PestControl />
@@ -57,14 +64,14 @@ const PropertyBoardScreen = () => {
             <Text style={styles.indicatorText2}>en los últimos 30 días</Text>
           </View>
         </View>
-      </View>
+      </View> */}
 
       <View style={styles.cardContainer}>
         <View style={styles.cardTitleContainer}>
           <Text style={styles.cardTitle}>Hectáreas</Text>
         </View>
         <View style={styles.cardDataContainer}>
-          <CardSmall left={String(hectareTotal)} right="hectáreas totales" />
+          <CardSmall left={property.hectareNumber} right="hectáreas totales" />
         </View>
         <ChartBar data={hectareData} frontColor={Colors.CHART_C} borderColor={Colors.CHART_C1} />
       </View>
@@ -74,7 +81,7 @@ const PropertyBoardScreen = () => {
           <Text style={styles.cardTitle}>Plantas</Text>
         </View>
         <View style={styles.cardDataContainer}>
-          <CardSmall left={String(plantTotal)} right="plantas totales" />
+          <CardSmall left={property.plantsPlantedNumber} right="plantas totales" />
         </View>
         <ChartBar data={plantData} frontColor={Colors.CHART_D} borderColor={Colors.CHART_D1} />
       </View>
@@ -83,7 +90,12 @@ const PropertyBoardScreen = () => {
         <View style={styles.cardTitleContainer}>
           <Text style={styles.cardTitle}>Cultivos</Text>
         </View>
-        <ChartPie data={cropData} />
+        <ChartPie
+          data={cropTypes.map((value) => ({
+            label: value,
+            value: 1,
+          }))}
+        />
 
         <View style={{ marginHorizontal: 24 }}>
           <Divider />
@@ -91,31 +103,14 @@ const PropertyBoardScreen = () => {
 
         <View style={{ alignItems: 'center' }}>
           <View style={{ width: 200 }}>
-            <InputSelect
+            <InputSelectMultiple
               placeholder="Tipo de cultivo"
-              value=""
-              items={[
-                { label: 'Agave', value: 'Agave' },
-                { label: 'Maíz', value: 'Maíz' },
-                { label: 'Trigo', value: 'Trigo' },
-                { label: 'Soya', value: 'Soya' },
-                { label: 'Caña de Azúcar', value: 'Caña de Azúcar' },
-                { label: 'Frijol', value: 'Frijol' },
-                { label: 'Tomate', value: 'Tomate' },
-                { label: 'Pimiento', value: 'Pimiento' },
-                { label: 'Aguacate', value: 'Aguacate' },
-                { label: 'Limón', value: 'Limón' },
-                { label: 'Naranja', value: 'Naranja' },
-                { label: 'Arándano', value: 'Arándano' },
-                { label: 'Fresa', value: 'Fresa' },
-                { label: 'Frambuesa', value: 'Frambuesa' },
-                { label: 'Zarzamora', value: 'Zarzamora' },
-                { label: 'Café', value: 'Café' },
-                { label: 'Uva', value: 'Uva' },
-                { label: 'Cebolla', value: 'Cebolla' },
-                { label: 'Chile', value: 'Chile' },
-              ]}
-              onChange={() => {}}
+              values={cropTypeFilter}
+              onChange={setCropTypeFilter}
+              items={cropTypes.map((value) => ({
+                label: value,
+                value,
+              }))}
               iconLeft={<FilterAlt style={styles.leftIcon} />}
             />
           </View>
@@ -123,13 +118,13 @@ const PropertyBoardScreen = () => {
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
           <View style={{ width: 140 }}>
-            <CardSmall left="92" right="calificación promedio" />
+            <CardSmall left="0" right="calificación promedio" />
           </View>
           <View style={{ width: 140 }}>
-            <CardSmall left="84" right="kg de peso promedio" />
+            <CardSmall left="0" right="kg de peso promedio" />
           </View>
           <View style={{ width: 140 }}>
-            <CardSmall left="13%" right="de maleza" />
+            <CardSmall left="0%" right="de maleza" />
           </View>
         </View>
 

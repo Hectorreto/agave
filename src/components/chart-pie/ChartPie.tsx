@@ -4,6 +4,23 @@ import { PieChart } from 'react-native-gifted-charts';
 import { Colors } from '../../themes/theme';
 
 const getColor = (index: number, total: number) => {
+  const chartColors = [
+    Colors.CHART_A,
+    Colors.CHART_B1,
+    Colors.CHART_C1,
+    Colors.CHART_D1,
+    Colors.CHART_E1,
+    Colors.CHART_A1,
+    Colors.CHART_B,
+    Colors.CHART_C,
+    Colors.CHART_D,
+    Colors.CHART_E,
+  ];
+
+  if (index < chartColors.length) {
+    return chartColors[index];
+  }
+
   const h = (236 + (index * 360) / total) % 360;
   return `hsl(${h}, 75%, 50%)`;
 };
