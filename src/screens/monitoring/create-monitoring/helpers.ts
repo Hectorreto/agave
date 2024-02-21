@@ -139,9 +139,9 @@ export const getQuadrantQualification = (form: (Partial<Monitoring> | undefined)
   }
 
   if (form[6]) {
-    if (form[6].colorimetryIncidence === 'low') qualification -= 0;
-    if (form[6].colorimetryIncidence === 'medium') qualification -= 1;
-    if (form[6].colorimetryIncidence === 'high') qualification -= 2;
+    if (form[6].colorimetryIncidence === 'good') qualification -= 0;
+    if (form[6].colorimetryIncidence === 'regular') qualification -= 1;
+    if (form[6].colorimetryIncidence === 'bad') qualification -= 2;
   }
 
   if (form[7]) {

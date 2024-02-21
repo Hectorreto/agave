@@ -3,7 +3,7 @@ import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 
 import { dropAllTables } from '../../../database';
 import { syncApplications } from '../../services/applicationService';
-import { pullMonitoring } from '../../services/monitoringService';
+import { syncMonitoring } from '../../services/monitoringService';
 import { pullProperties } from '../../services/propertyService';
 
 type AuthContextType = {
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children, onLoad }: Props) => {
     try {
       await pullProperties();
       await syncApplications();
-      await pullMonitoring();
+      await syncMonitoring();
     } catch (error) {
       console.error(error);
     }
@@ -45,12 +45,12 @@ export const AuthProvider = ({ children, onLoad }: Props) => {
   }, []);
 
   const saveAuthData = async (accessToken: string, guid: string) => {
-    setAccessToken(accessToken);
-    setGuid(guid);
     try {
       await AsyncStorage.setItem('accessToken', accessToken);
       await AsyncStorage.setItem('guid', guid);
       await syncDatabase();
+      setAccessToken(accessToken);
+      setGuid(guid);
     } catch (error) {
       console.error(error);
     }

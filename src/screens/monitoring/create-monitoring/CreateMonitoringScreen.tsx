@@ -17,6 +17,7 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
 import Expandable from '../../../components/expandable/Expandable';
 import InputCamera from '../../../components/input-camera/InputCamera';
+import InputNumber from '../../../components/input-number/InputNumber';
 import InputSelect from '../../../components/input-select/InputSelect';
 import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
@@ -83,18 +84,26 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           }))}
           submitted={submitted}
         />
-        <InputText
+        <InputNumber
           label="Número de cuadrantes"
           placeholder="Número"
           value={monitoring.quadrantNumber}
-          onChange={(quadrantNumber) => setMonitoring({ ...monitoring, quadrantNumber })}
+          onChange={(value) => {
+            if (value.match(/^\d*$/g)) {
+              setMonitoring({ ...monitoring, quadrantNumber: value });
+            }
+          }}
           submitted={submitted}
         />
-        <InputText
+        <InputNumber
           label="Número de plantas por cuadrante"
           placeholder="Número"
           value={monitoring.plantsPerQuadrant}
-          onChange={(plantsPerQuadrant) => setMonitoring({ ...monitoring, plantsPerQuadrant })}
+          onChange={(value) => {
+            if (value.match(/^\d*$/g)) {
+              setMonitoring({ ...monitoring, plantsPerQuadrant: value });
+            }
+          }}
           submitted={submitted}
         />
       </Expandable>

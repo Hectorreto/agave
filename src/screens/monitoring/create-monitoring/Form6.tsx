@@ -25,11 +25,11 @@ const Form6 = ({ monitoring, onChange, onPressDelete, submitted }: Props) => {
       label="Colorimetría"
       right={<CustomButton color="redWhite" Icon={Delete} onPress={onPressDelete} />}>
       <InputRadioGroup
-        label="Incidencia"
+        label="Colorimetría"
         items={[
-          { label: 'Baja', value: 'low' },
-          { label: 'Media', value: 'medium' },
-          { label: 'Alta', value: 'high' },
+          { label: 'Buena', value: 'good' },
+          { label: 'Regular', value: 'regular' },
+          { label: 'Mala', value: 'bad' },
         ]}
         value={monitoring.colorimetryIncidence || ''}
         onChange={handleOnChange('colorimetryIncidence')}

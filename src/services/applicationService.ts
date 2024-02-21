@@ -75,7 +75,7 @@ export const createApplication = (application: Application): Promise<void> => {
   });
 };
 
-export const updateApplication = async (application: Application) => {
+export const updateApplication = async (application: Partial<Application>) => {
   const { id, ...update } = application;
   const readOnly = false;
 
@@ -90,7 +90,7 @@ export const updateApplication = async (application: Application) => {
           SET ${keys.map((key) => `${key} = ?`).join(',')}
           WHERE id = ?
         `,
-        args: [values, id],
+        args: [...values, id],
       },
     ],
     readOnly
@@ -222,15 +222,10 @@ const pushApplications = async (remoteApplications: Application[], accessToken: 
         property,
       });
 
-      await database.execAsync(
-        [
-          {
-            sql: `UPDATE application SET guid = ? WHERE id = ?`,
-            args: [guid, localApplication.id],
-          },
-        ],
-        false
-      );
+      await updateApplication({
+        id: localApplication.id,
+        guid,
+      });
     }
   }
 };

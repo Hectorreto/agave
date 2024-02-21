@@ -1,8 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 
+import { findProperties } from './propertyService';
 import database from '../../database';
 import getAllMonitoring from '../api/monitoring/getAllMonitoring';
+import postMonitoring from '../api/monitoring/postMonitoring';
 
 database.transaction((transaction) => {
   const sql = `
@@ -116,7 +118,7 @@ export const createMonitoring = (monitoring: Monitoring): Promise<void> => {
   });
 };
 
-export const updateMonitoring = async (monitoring: Monitoring) => {
+export const updateMonitoring = async (monitoring: Partial<Monitoring>) => {
   const { id, ...update } = monitoring;
   const readOnly = false;
 
@@ -203,37 +205,69 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
   });
 };
 
-export const pullMonitoring = async () => {
+export const syncMonitoring = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
 
-  const monitoringArray: Monitoring[] = [];
+  const remoteMonitoring: Monitoring[] = [];
   for (let skip = 0; true; skip += 50) {
     const data: any[] = await getAllMonitoring({
       accessToken,
       limit: 50,
       skip,
     });
-    monitoringArray.push(...data);
+    remoteMonitoring.push(...data);
     if (data.length < 50) break;
   }
 
-  for (const monitoring of monitoringArray) {
+  await pullMonitoring(remoteMonitoring);
+  await pushMonitoring(remoteMonitoring, accessToken);
+};
+
+const pullMonitoring = async (remoteMonitoringArray: Monitoring[]) => {
+  for (const remoteMonitoring of remoteMonitoringArray) {
     const queryLocalMonitoring: any = await database.execAsync(
-      [{ sql: 'SELECT * FROM monitoring WHERE guid = ?', args: [monitoring.guid] }],
+      [{ sql: 'SELECT * FROM monitoring WHERE guid = ?', args: [remoteMonitoring.guid] }],
       true
     );
     const localMonitoring: Monitoring = queryLocalMonitoring[0].rows[0];
 
     if (!localMonitoring) {
       await createMonitoring({
-        ...monitoring,
+        ...remoteMonitoring,
         id: uuid.v4() as string,
       });
-    } else if (monitoring.updatedAt > localMonitoring.updatedAt) {
+    } else if (remoteMonitoring.updatedAt > localMonitoring.updatedAt) {
       await updateMonitoring({
-        ...monitoring,
+        ...remoteMonitoring,
         id: localMonitoring.id,
+      });
+    }
+  }
+};
+
+const pushMonitoring = async (remoteMonitoringArray: Monitoring[], accessToken: string) => {
+  const localMonitoringArray = await findMonitoring({});
+  const localProperties = await findProperties({});
+
+  for (const localMonitoring of localMonitoringArray) {
+    const remoteMonitoring = remoteMonitoringArray.find((v) => v.guid === localMonitoring.guid);
+
+    if (!remoteMonitoring) {
+      const property = localProperties.find(
+        (v) => v.id === localMonitoring.propertyId || v.guid === localMonitoring.propertyId
+      );
+      if (!property) return;
+
+      const guid = await postMonitoring({
+        accessToken,
+        monitoring: localMonitoring,
+        property,
+      });
+
+      await updateMonitoring({
+        id: localMonitoring.id,
+        guid,
       });
     }
   }
