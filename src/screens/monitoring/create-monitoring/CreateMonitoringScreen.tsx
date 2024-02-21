@@ -45,6 +45,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
     try {
       setSubmitted(true);
       if (!validateMonitoring(monitoring, form)) return;
+      const nowTime = Date.now();
       await createMonitoring({
         ...monitoring,
         ...form[0],
@@ -56,6 +57,8 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
         ...form[6],
         ...form[7],
         ...{ quadrantQualification, monitoringQualification },
+        createdAt: nowTime,
+        updatedAt: nowTime,
       });
       navigation.navigate('ListMonitoring');
       showNotification('El monitoreo ha sido creado con éxito');

@@ -42,7 +42,11 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
             key={monitoring.id}
             ref={markerRefs.get(monitoring.id)}
             coordinate={{ latitude: monitoring.latitude, longitude: monitoring.longitude }}
-            title={properties.find((v) => v.id === monitoring.propertyId)?.name}
+            title={
+              properties.find(
+                (v) => v.id === monitoring.propertyId || v.guid === monitoring.propertyId
+              )?.name
+            }
             description={formatDateTime(monitoring.createdAt)}
             onCalloutPress={() =>
               navigation.navigate('SeeMonitoring', { monitoringId: monitoring.id })
@@ -98,7 +102,10 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
           values: [
             <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToMonitoring(value)}>
               <Text style={styles.dataText}>
-                {properties.find((v) => v.id === value.propertyId)?.name}
+                {
+                  properties.find((v) => v.id === value.propertyId || v.guid === value.propertyId)
+                    ?.name
+                }
               </Text>
             </TouchableOpacity>,
             <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToMonitoring(value)}>

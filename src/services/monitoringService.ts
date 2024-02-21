@@ -54,6 +54,7 @@ database.transaction((transaction) => {
 
 export type Monitoring = {
   id: string;
+  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
@@ -92,15 +93,8 @@ export type Monitoring = {
 };
 
 export const createMonitoring = (monitoring: Monitoring): Promise<void> => {
-  const nowTime = new Date().getTime();
-  const monitoringCopy = {
-    ...monitoring,
-    createdAt: nowTime,
-    updatedAt: nowTime,
-  };
-
-  const keys = Object.keys(monitoringCopy) as (keyof Monitoring)[];
-  const args: any[] = keys.map((key) => monitoringCopy[key]);
+  const keys = Object.keys(monitoring);
+  const values = Object.values(monitoring);
 
   return new Promise((resolve, reject) => {
     database.transaction((transaction) => {
@@ -109,7 +103,7 @@ export const createMonitoring = (monitoring: Monitoring): Promise<void> => {
           INSERT INTO monitoring (${keys.join(',')})
           VALUES (${keys.map(() => '?').join(',')})
         `,
-        args,
+        values,
         () => {
           resolve();
         },
@@ -120,6 +114,28 @@ export const createMonitoring = (monitoring: Monitoring): Promise<void> => {
       );
     });
   });
+};
+
+export const updateMonitoring = async (monitoring: Monitoring) => {
+  const { id, ...update } = monitoring;
+  const readOnly = false;
+
+  const keys = Object.keys(update);
+  const values = Object.values(update);
+
+  await database.execAsync(
+    [
+      {
+        sql: `
+          UPDATE monitoring
+          SET ${keys.map((key) => `${key} = ?`).join(',')}
+          WHERE id = ?
+        `,
+        args: [values, id],
+      },
+    ],
+    readOnly
+  );
 };
 
 type FindMonitoringOptions = {
@@ -191,227 +207,38 @@ export const pullMonitoring = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
 
-  const monitoringArray = [];
-  for (let skip = 0; true; skip += 10) {
+  const monitoringArray: Monitoring[] = [];
+  for (let skip = 0; true; skip += 50) {
     const data: any[] = await getAllMonitoring({
       accessToken,
-      limit: 10,
+      limit: 50,
       skip,
     });
     monitoringArray.push(...data);
-    if (data.length < 10) break;
+    if (data.length < 50) break;
   }
 
   for (const monitoring of monitoringArray) {
-    const localMonitoring: Monitoring = await new Promise((resolve, reject) => {
-      database.transaction((transaction) => {
-        transaction.executeSql(
-          'SELECT guid, updatedAt FROM monitoring WHERE guid = ?',
-          [monitoring.guid],
-          (_, { rows }) => {
-            resolve(rows._array[0]);
-          },
-          (_, error) => {
-            reject(error);
-            return true;
-          }
-        );
-      });
-    });
+    const queryLocalMonitoring: any = await database.execAsync(
+      [
+        {
+          sql: 'SELECT * FROM monitoring WHERE guid = ?',
+          args: [monitoring.guid],
+        },
+      ],
+      true
+    );
+    const localMonitoring: Monitoring = queryLocalMonitoring[0].rows[0];
 
     if (!localMonitoring) {
-      await new Promise((resolve, reject) => {
-        database.transaction((transaction) => {
-          transaction.executeSql(
-            `
-              INSERT INTO monitoring (
-                id,
-                guid,
-                createdAt,
-                updatedAt,
-                createdBy,
-                updatedBy,
-                quadrantNumber,
-                plantsPerQuadrant,
-                quadrantQualification,
-                monitoringQualification,
-                comments,
-                imageUri,
-                latitude,
-                longitude,
-                propertyId,
-                
-                plantPerformanceKg,
-                plagueType,
-                plagueIncidence,
-                diseaseType,
-                diseaseIncidence,
-                undergrowthName,
-                undergrowthHeight,
-                undergrowthLeafType,
-                phytotoxicDamageHerbicideIncidence,
-                phytotoxicDamagePesticideIncidence,
-                phytotoxicDamageExcessSaltIncidence,
-                environmentalDamageFrostIncidence,
-                environmentalDamageStressIncidence,
-                environmentalDamageFloodIncidence,
-                environmentalDamageFireIncidence,
-                environmentalDamageHailIncidence,
-                environmentalDamageOtherIncidence,
-                colorimetryIncidence,
-                colorimetryComments,
-                physicalDamageType,
-                physicalDamageIncidence
-              )
-              VALUES (
-                ?,?,?,?,?,
-                ?,?,?,?,?,
-                ?,?,?,?,?,
-                ?,?,?,?,?,
-                ?,?,?,?,?,
-                ?,?,?,?,?,
-                ?,?,?,?,?,
-                ?
-              )
-            `,
-            [
-              uuid.v4() as string,
-              monitoring.guid,
-              monitoring.created_date,
-              monitoring.updated_date,
-              JSON.stringify(monitoring.created_by),
-              JSON.stringify(monitoring.updated_by),
-              monitoring.quadrants,
-              monitoring.plants_by_quadrant,
-              0,
-              monitoring.grade,
-              monitoring.comments,
-              monitoring.picture?.path,
-              0,
-              0,
-              monitoring.land?.guid,
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-            ],
-            () => {
-              resolve(undefined);
-            },
-            (_, error) => {
-              reject(error);
-              return true;
-            }
-          );
-        });
+      await createMonitoring({
+        ...monitoring,
+        id: uuid.v4() as string,
       });
-    } else {
-      if (monitoring.updated_date < localMonitoring.updatedAt) return;
-
-      await new Promise((resolve, reject) => {
-        database.transaction((transaction) => {
-          transaction.executeSql(
-            `
-              UPDATE monitoring
-              SET 
-                updatedAt = ?,
-                createdBy = ?,
-                updatedBy = ?,
-                quadrantNumber = ?,
-                plantsPerQuadrant = ?,
-                quadrantQualification = ?,
-                monitoringQualification = ?,
-                comments = ?,
-                imageUri = ?,
-                latitude = ?,
-                longitude = ?,
-                propertyId = ?,
-                
-                plantPerformanceKg = ?,
-                plagueType = ?,
-                plagueIncidence = ?,
-                diseaseType = ?,
-                diseaseIncidence = ?,
-                undergrowthName = ?,
-                undergrowthHeight = ?,
-                undergrowthLeafType = ?,
-                phytotoxicDamageHerbicideIncidence = ?,
-                phytotoxicDamagePesticideIncidence = ?,
-                phytotoxicDamageExcessSaltIncidence = ?,
-                environmentalDamageFrostIncidence = ?,
-                environmentalDamageStressIncidence = ?,
-                environmentalDamageFloodIncidence = ?,
-                environmentalDamageFireIncidence = ?,
-                environmentalDamageHailIncidence = ?,
-                environmentalDamageOtherIncidence = ?,
-                colorimetryIncidence = ?,
-                colorimetryComments = ?,
-                physicalDamageType = ?,
-                physicalDamageIncidence = ?
-              WHERE id = ?
-            `,
-            [
-              monitoring.updated_date,
-              JSON.stringify(monitoring.created_by),
-              JSON.stringify(monitoring.updated_by),
-              monitoring.quadrants,
-              monitoring.plants_by_quadrant,
-              0,
-              monitoring.grade,
-              monitoring.comments,
-              monitoring.picture?.path,
-              0,
-              0,
-              monitoring.land?.guid,
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              '',
-              monitoring.guid,
-            ],
-            () => {
-              resolve(undefined);
-            },
-            (_, error) => {
-              reject(error);
-              return true;
-            }
-          );
-        });
+    } else if (monitoring.updatedAt > localMonitoring.updatedAt) {
+      await updateMonitoring({
+        ...monitoring,
+        id: localMonitoring.id,
       });
     }
   }

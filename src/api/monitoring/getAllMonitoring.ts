@@ -1,3 +1,5 @@
+import { Monitoring } from '../../services/monitoringService';
+
 const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
 
 type Props = {
@@ -57,7 +59,25 @@ const getAllMonitoring = async ({ accessToken, limit, skip }: Props) => {
     }),
   });
   const gqlResponse = await response.json();
-  return gqlResponse.data.monitorings.data;
+  const data: any[] = gqlResponse.data.monitorings.data;
+
+  return data.map<Monitoring>((value) => ({
+    id: '',
+    guid: value.guid,
+    createdAt: value.created_date,
+    updatedAt: value.updated_date,
+    createdBy: JSON.stringify(value.created_by),
+    updatedBy: JSON.stringify(value.updated_by),
+    quadrantNumber: value.quadrants,
+    plantsPerQuadrant: value.plants_by_quadrant,
+    quadrantQualification: 0,
+    monitoringQualification: value.grade,
+    comments: value.comments,
+    imageUri: value.picture?.path,
+    latitude: 0,
+    longitude: 0,
+    propertyId: value.land?.guid,
+  }));
 };
 
 export default getAllMonitoring;

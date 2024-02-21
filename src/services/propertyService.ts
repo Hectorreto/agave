@@ -57,8 +57,8 @@ export type Property = {
 };
 
 export const createProperty = (property: Property): Promise<void> => {
-  const keys = Object.keys(property) as (keyof Property)[];
-  const args: any[] = keys.map((key) => property[key]);
+  const keys = Object.keys(property);
+  const values = Object.values(property);
 
   return new Promise((resolve, reject) => {
     database.transaction((transaction) => {
@@ -67,7 +67,7 @@ export const createProperty = (property: Property): Promise<void> => {
           INSERT INTO property (${keys.join(',')})
           VALUES (${keys.map(() => '?').join(',')})
         `,
-        args,
+        values,
         () => {
           resolve();
         },
@@ -92,8 +92,7 @@ export const updateProperty = async (property: Property): Promise<void> => {
       {
         sql: `
           UPDATE property
-          SET
-            ${keys.map((key) => `${key} = ?`).join(',')}
+          SET ${keys.map((key) => `${key} = ?`).join(',')}
           WHERE id = ?
         `,
         args: [values, id],
