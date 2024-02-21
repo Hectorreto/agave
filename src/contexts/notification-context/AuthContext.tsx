@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 
 import { dropAllTables } from '../../../database';
-import { pullApplications } from '../../services/applicationService';
+import { syncApplications } from '../../services/applicationService';
 import { pullMonitoring } from '../../services/monitoringService';
 import { pullProperties } from '../../services/propertyService';
 
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children, onLoad }: Props) => {
   const syncDatabase = async () => {
     try {
       await pullProperties();
-      await pullApplications();
+      await syncApplications();
       await pullMonitoring();
     } catch (error) {
       console.error(error);

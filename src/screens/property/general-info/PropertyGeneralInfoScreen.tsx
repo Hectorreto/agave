@@ -10,11 +10,23 @@ import InputSelectMultiple from '../../../components/input-select-multiple/Input
 import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
 import { PropertyTabsParamList } from '../../../navigation/PropertyTabs';
+import { Property } from '../../../services/propertyService';
 
 type Props = MaterialTopTabScreenProps<PropertyTabsParamList, 'PropertyGeneralInfo'>;
 
+const getLocation = (property: Property) => {
+  try {
+    const data = JSON.parse(property.location);
+    return `${data.center.lat}, ${data.center.lng}`;
+  } catch (error) {
+    console.error(error);
+    return '';
+  }
+};
+
 const PropertyGeneralInfoScreen = ({ route }: Props) => {
   const { property } = route.params;
+  const location = getLocation(property);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -63,7 +75,7 @@ const PropertyGeneralInfoScreen = ({ route }: Props) => {
             { label: 'Chile', value: 'Chile' },
           ]}
         />
-        <InputText label="Ubicación" placeholder="Ubicación" value={property.location} />
+        <InputText label="Ubicación" placeholder="Ubicación" value={location} />
         <View style={styles.doubleInputContainer}>
           <Text style={styles.doubleInputLabels}>No. de hectáreas</Text>
           <Text style={styles.doubleInputLabels}>No. de plantas sembradas</Text>

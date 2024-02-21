@@ -57,9 +57,9 @@ const CreateApplication1Screen = ({ navigation }: Props) => {
         value={concept}
         onChange={setConcept}
         items={[
-          { label: 'Nutrición', value: 'Nutrición' },
-          { label: 'Maleza', value: 'Maleza' },
-          { label: 'Fitosanitaria', value: 'Fitosanitaria' },
+          { label: 'Nutrición', value: 'nutrition' },
+          { label: 'Maleza', value: 'undergrowth' },
+          { label: 'Fitosanitaria', value: 'phytosanitary' },
         ]}
         submitted={submitted}
       />

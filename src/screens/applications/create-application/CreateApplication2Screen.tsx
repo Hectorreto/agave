@@ -7,6 +7,7 @@ import ViewShot from 'react-native-view-shot';
 import FormProduct from './FormProduct';
 import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
+import InputNumber from '../../../components/input-number/InputNumber';
 import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
@@ -82,11 +83,15 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
     <ScrollView contentContainerStyle={styles.container}>
       <TabIndicator titles={['', 'Receta', '', '']} current={2} />
 
-      <InputText
+      <InputNumber
         label="No. de tambos a aplicar"
         placeholder="Número"
         value={amount}
-        onChange={setAmount}
+        onChange={(value) => {
+          if (value.match(/^\d*$/g)) {
+            setAmount(value);
+          }
+        }}
         submitted={submitted}
       />
       <InputText

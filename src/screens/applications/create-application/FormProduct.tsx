@@ -4,6 +4,7 @@ import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import RemoveCircle from '../../../../assets/svg/remove_circle.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
+import InputNumber from '../../../components/input-number/InputNumber';
 import InputText from '../../../components/input-text/InputText';
 import { Product } from '../../../services/productService';
 
@@ -47,12 +48,14 @@ const FormProduct = ({
         </View>
       </View>
       <View style={styles.formBottomContainer}>
-        <InputText
+        <InputNumber
           label="Dosis por tambo (en litros)"
           placeholder="Dosis"
           value={product.amount}
-          onChange={(amount) => {
-            onChange({ ...product, amount });
+          onChange={(value) => {
+            if (value.match(/^\d*$/g)) {
+              onChange({ ...product, amount: value });
+            }
           }}
           submitted={submitted}
         />

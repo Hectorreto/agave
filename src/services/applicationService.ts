@@ -1,8 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 
+import { findProducts } from './productService';
+import { findProperties } from './propertyService';
 import database from '../../database';
 import getAllApplications from '../api/application/getAllApplications';
+import postApplication from '../api/application/postApplication';
 
 database.transaction((transaction) => {
   const sql = `
@@ -156,38 +159,78 @@ export const finalizeApplication = (
   });
 };
 
-export const pullApplications = async () => {
+export const syncApplications = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
 
-  const applications: Application[] = [];
+  const remoteApplications: Application[] = [];
   for (let skip = 0; true; skip += 50) {
     const data: any[] = await getAllApplications({
       accessToken,
       limit: 50,
       skip,
     });
-    applications.push(...data);
+    remoteApplications.push(...data);
     if (data.length < 50) break;
   }
 
-  for (const application of applications) {
+  await pullApplications(remoteApplications);
+  await pushApplications(remoteApplications, accessToken);
+};
+
+const pullApplications = async (remoteApplications: Application[]) => {
+  for (const remoteApplication of remoteApplications) {
     const queryLocalApplication: any = await database.execAsync(
-      [{ sql: 'SELECT * FROM application WHERE guid = ?', args: [application.guid] }],
+      [{ sql: 'SELECT * FROM application WHERE guid = ?', args: [remoteApplication.guid] }],
       true
     );
     const localApplication: Application = queryLocalApplication[0].rows[0];
 
     if (!localApplication) {
       await createApplication({
-        ...application,
+        ...remoteApplication,
         id: uuid.v4() as string,
       });
-    } else if (application.updatedAt > localApplication.updatedAt) {
+    } else if (remoteApplication.updatedAt > localApplication.updatedAt) {
       await updateApplication({
-        ...application,
+        ...remoteApplication,
         id: localApplication.id,
       });
+    }
+  }
+};
+
+const pushApplications = async (remoteApplications: Application[], accessToken: string) => {
+  const localApplications = await findApplications({});
+  const localProducts = await findProducts({});
+  const localProperties = await findProperties({});
+
+  for (const localApplication of localApplications) {
+    const remoteApplication = remoteApplications.find((v) => v.guid === localApplication.guid);
+
+    if (!remoteApplication) {
+      const products = localProducts.filter((v) => v.applicationId === localApplication.id);
+      const property = localProperties.find(
+        (v) => v.id === localApplication.propertyId || v.guid === localApplication.propertyId
+      );
+      if (!property) continue;
+
+      const guid = await postApplication({
+        accessToken,
+        application: localApplication,
+        products,
+        property,
+      });
+
+      await database.execAsync(
+        [
+          {
+            sql: `UPDATE application SET guid = ? WHERE id = ?`,
+            args: [guid, localApplication.id],
+          },
+        ],
+        false
+      );
     }
   }
 };
