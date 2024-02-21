@@ -5,12 +5,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import DrawerItem from './DrawerItem';
 import styles from './styles';
+import Agriculture from '../../../assets/svg/header/agriculture.svg';
 import Grass from '../../../assets/svg/header/grass.svg';
 import Lock from '../../../assets/svg/header/lock.svg';
 import Logout from '../../../assets/svg/header/logout.svg';
 import MenuOpen from '../../../assets/svg/header/menu_open.svg';
 import Science from '../../../assets/svg/header/science.svg';
-import Agriculture from '../../../assets/svg/tabs/applications.svg';
 import { AuthContext } from '../../contexts/notification-context/AuthContext';
 
 type Props = {

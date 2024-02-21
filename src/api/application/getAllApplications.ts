@@ -1,3 +1,5 @@
+import { Application } from '../../services/applicationService';
+
 const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
 
 type Props = {
@@ -61,7 +63,31 @@ const getAllApplications = async ({ accessToken, limit, skip }: Props) => {
     }),
   });
   const gqlResponse = await response.json();
-  return gqlResponse.data.applications.data;
+  const data: any[] = gqlResponse.data.applications.data;
+
+  const statusTypes: any = {
+    SCHEDULED: 'scheduled',
+    IN_PROGRESS: 'inProcess',
+    COMPLETED: 'finalized',
+  };
+
+  return data.map<Application>((value) => ({
+    id: '',
+    guid: value.guid,
+    createdAt: value.created_date,
+    updatedAt: value.updated_date,
+    createdBy: JSON.stringify(value.created_by),
+    updatedBy: JSON.stringify(value.updated_by),
+    applicationMonth: value.month,
+    state: statusTypes[value.status],
+    scheduledDate: value.scheduled_date,
+    concept: value.concept,
+    containerAmount: value.bottles,
+    notes: value.notes,
+    videoUri: value.start_picture?.path,
+    finalizeVideoUri: value.completed_picture?.path,
+    propertyId: value.land?.guid,
+  }));
 };
 
 export default getAllApplications;

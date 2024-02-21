@@ -32,12 +32,13 @@ database.transaction((transaction) => {
 
 export type Application = {
   id: string;
+  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
   updatedBy: string;
   applicationMonth: string;
-  state: 'inProcess' | 'finalized';
+  state: 'scheduled' | 'inProcess' | 'finalized';
   scheduledDate: number;
   concept: string;
   containerAmount: string;
@@ -48,15 +49,8 @@ export type Application = {
 };
 
 export const createApplication = (application: Application): Promise<void> => {
-  const nowTime = new Date().getTime();
-  const applicationCopy = {
-    ...application,
-    createdAt: nowTime,
-    updatedAt: nowTime,
-  };
-
-  const keys = Object.keys(application) as (keyof Application)[];
-  const args = keys.map((key) => applicationCopy[key]);
+  const keys = Object.keys(application);
+  const values = Object.values(application);
 
   return new Promise((resolve, reject) => {
     database.transaction((transaction) => {
@@ -65,7 +59,7 @@ export const createApplication = (application: Application): Promise<void> => {
           INSERT INTO application (${keys.join(',')})
           VALUES (${keys.map(() => '?').join(',')})
         `,
-        args,
+        values,
         () => {
           resolve();
         },
@@ -76,6 +70,28 @@ export const createApplication = (application: Application): Promise<void> => {
       );
     });
   });
+};
+
+export const updateApplication = async (application: Application) => {
+  const { id, ...update } = application;
+  const readOnly = false;
+
+  const keys = Object.keys(update);
+  const values = Object.values(update);
+
+  await database.execAsync(
+    [
+      {
+        sql: `
+          UPDATE application
+          SET ${keys.map((key) => `${key} = ?`).join(',')}
+          WHERE id = ?
+        `,
+        args: [values, id],
+      },
+    ],
+    readOnly
+  );
 };
 
 export type FindApplicationOptions = {
@@ -144,136 +160,33 @@ export const pullApplications = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
 
-  const applications = [];
-  for (let skip = 0; true; skip += 10) {
+  const applications: Application[] = [];
+  for (let skip = 0; true; skip += 50) {
     const data: any[] = await getAllApplications({
       accessToken,
-      limit: 10,
+      limit: 50,
       skip,
     });
     applications.push(...data);
-    if (data.length < 10) break;
+    if (data.length < 50) break;
   }
 
   for (const application of applications) {
-    const localApplication: Application = await new Promise((resolve, reject) => {
-      database.transaction((transaction) => {
-        transaction.executeSql(
-          `SELECT guid, updatedAt FROM application WHERE guid = ?`,
-          [application.guid],
-          (_, { rows }) => {
-            resolve(rows._array[0]);
-          },
-          (_, error) => {
-            reject(error);
-            return true;
-          }
-        );
-      });
-    });
+    const queryLocalApplication: any = await database.execAsync(
+      [{ sql: 'SELECT * FROM application WHERE guid = ?', args: [application.guid] }],
+      true
+    );
+    const localApplication: Application = queryLocalApplication[0].rows[0];
 
     if (!localApplication) {
-      await new Promise((resolve, reject) => {
-        database.transaction((transaction) => {
-          transaction.executeSql(
-            `
-              INSERT INTO application (
-                id,
-                guid,
-                createdAt,
-                updatedAt,
-                createdBy,
-                updatedBy,
-                applicationMonth,
-                state,
-                scheduledDate,
-                concept,
-                containerAmount,
-                notes,
-                videoUri,
-                finalizeVideoUri,
-                propertyId
-              )
-              VALUES (
-                ?,?,?,?,?,
-                ?,?,?,?,?,
-                ?,?,?,?,?
-              )
-            `,
-            [
-              uuid.v4() as string,
-              application.guid,
-              application.created_date,
-              application.updated_date,
-              JSON.stringify(application.created_by),
-              JSON.stringify(application.updated_by),
-              application.month,
-              application.status,
-              application.scheduled_date,
-              application.concept,
-              application.bottles,
-              application.notes,
-              application.start_picture?.path,
-              application.completed_picture?.path,
-              application.land?.guid,
-            ],
-            () => {
-              resolve(undefined);
-            },
-            (_, error) => {
-              reject(error);
-              return true;
-            }
-          );
-        });
+      await createApplication({
+        ...application,
+        id: uuid.v4() as string,
       });
-    } else {
-      if (application.updated_date < localApplication.updatedAt) return;
-
-      await new Promise((resolve, reject) => {
-        database.transaction((transaction) => {
-          transaction.executeSql(
-            `
-              UPDATE application
-              SET
-                updatedAt = ?,
-                createdBy = ?,
-                updatedBy = ?,
-                applicationMonth = ?,
-                state = ?,
-                scheduledDate = ?,
-                concept = ?,
-                containerAmount = ?,
-                notes = ?,
-                videoUri = ?,
-                finalizeVideoUri = ?,
-                propertyId = ?
-              WHERE id = ?
-            `,
-            [
-              application.updated_date,
-              JSON.stringify(application.created_by),
-              JSON.stringify(application.updated_by),
-              application.month,
-              application.status,
-              application.scheduled_date,
-              application.concept,
-              application.bottles,
-              application.notes,
-              application.start_picture?.path,
-              application.completed_picture?.path,
-              application.land?.guid,
-              application.guid,
-            ],
-            () => {
-              resolve(undefined);
-            },
-            (_, error) => {
-              reject(error);
-              return true;
-            }
-          );
-        });
+    } else if (application.updatedAt > localApplication.updatedAt) {
+      await updateApplication({
+        ...application,
+        id: localApplication.id,
       });
     }
   }

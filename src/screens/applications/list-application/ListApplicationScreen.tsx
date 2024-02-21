@@ -60,7 +60,10 @@ const ListApplicationScreen = ({ navigation }: Props) => {
           id: value.id,
           values: [
             <Text style={styles.dataText}>
-              {properties.find((v) => v.id === value.propertyId)?.name}
+              {
+                properties.find((v) => v.id === value.propertyId || v.guid === value.propertyId)
+                  ?.name
+              }
             </Text>,
             <Text style={styles.dataText}>{MonthNames[Number(value.applicationMonth)]}</Text>,
             <View
@@ -70,6 +73,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
               ]}>
               {value.state === 'inProcess' && <Text>En proceso</Text>}
               {value.state === 'finalized' && <Text>Finalizado</Text>}
+              {value.state === 'scheduled' && <Text>Programado</Text>}
             </View>,
             <View style={styles.moreButton}>
               {value.state === 'inProcess' && (
@@ -82,6 +86,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
                 />
               )}
               {value.state === 'finalized' && <CustomButton color="white" Icon={Create} />}
+              {value.state === 'scheduled' && <CustomButton color="white" Icon={Create} />}
             </View>,
           ],
         }))}

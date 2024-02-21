@@ -22,7 +22,13 @@ const CreateApplication4Screen = ({ navigation, route }: Props) => {
   const handleOnSave = async () => {
     try {
       if (!videoUri) return;
-      await createApplication({ ...application, videoUri });
+      const nowTime = Date.now();
+      await createApplication({
+        ...application,
+        videoUri,
+        createdAt: nowTime,
+        updatedAt: nowTime,
+      });
       await createProducts(products);
       showNotification('La aplicación ha sido creada con éxito');
       navigation.navigate('ListApplications');

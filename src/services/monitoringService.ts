@@ -220,12 +220,7 @@ export const pullMonitoring = async () => {
 
   for (const monitoring of monitoringArray) {
     const queryLocalMonitoring: any = await database.execAsync(
-      [
-        {
-          sql: 'SELECT * FROM monitoring WHERE guid = ?',
-          args: [monitoring.guid],
-        },
-      ],
+      [{ sql: 'SELECT * FROM monitoring WHERE guid = ?', args: [monitoring.guid] }],
       true
     );
     const localMonitoring: Monitoring = queryLocalMonitoring[0].rows[0];
