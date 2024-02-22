@@ -14,7 +14,7 @@ const useApplications = ({ search }: Props) => {
     useCallback(() => {
       findApplications({
         filter: {
-          property: !search ? undefined : `%${search}%`,
+          search: !search ? undefined : `%${search}%`,
         },
       }).then((value) => setData(value));
     }, [search])

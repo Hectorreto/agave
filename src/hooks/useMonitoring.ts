@@ -24,7 +24,7 @@ const useMonitoring = ({ id, date, search, createdAtSort }: Props) => {
                 lower: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
                 upper: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
               },
-          property: !search ? undefined : `%${search}%`,
+          search: !search ? undefined : `%${search}%`,
         },
         sorting: {
           createdAt: createdAtSort,

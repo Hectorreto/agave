@@ -22,7 +22,7 @@ const ListPropertyScreen = ({ navigation }: Props) => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.filterAndSearchContainer}>
         <FilterAlt />
-        <View style={{ width: 260 }}>
+        <View style={{ width: 270 }}>
           <InputText
             placeholder="Nombre, registro o identificador..."
             value={search}

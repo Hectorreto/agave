@@ -70,6 +70,7 @@ export type Monitoring = {
   latitude: number;
   longitude: number;
   propertyId: string;
+  propertyName: string;
 
   plantPerformanceKg?: string;
   plagueType?: string;
@@ -147,7 +148,7 @@ type FindMonitoringOptions = {
       lower: Date;
       upper: Date;
     };
-    property?: string;
+    search?: string;
   };
   sorting?: {
     createdAt?: 'ASC' | 'DESC';
@@ -169,9 +170,9 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
     args.push(options.filter.createdAt.upper.getTime());
   }
 
-  if (options.filter?.property) {
-    where.push('property LIKE ? COLLATE NOCASE');
-    args.push(options.filter.property);
+  if (options.filter?.search) {
+    where.push('propertyName LIKE ? COLLATE NOCASE');
+    args.push(options.filter.search);
   }
 
   let whereSql = '';
@@ -191,8 +192,11 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
     database.transaction((transaction) => {
       transaction.executeSql(
         `
-          SELECT *
+          SELECT monitoring.*, property.name AS propertyName
           FROM monitoring
+          LEFT JOIN property ON 
+            property.id   = monitoring.propertyId OR
+            property.guid = monitoring.propertyId
           ${whereSql}
           ${orderSql}
         `,

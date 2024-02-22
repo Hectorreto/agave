@@ -49,6 +49,7 @@ export type Application = {
   videoUri: string;
   finalizeVideoUri: string;
   propertyId: string;
+  propertyName: string;
 };
 
 export const createApplication = (application: Application): Promise<void> => {
@@ -99,7 +100,7 @@ export const updateApplication = async (application: Partial<Application>) => {
 
 export type FindApplicationOptions = {
   filter?: {
-    property?: string;
+    search?: string;
   };
 };
 
@@ -107,9 +108,9 @@ export const findApplications = async (options: FindApplicationOptions): Promise
   const where: string[] = [];
   const args: any[] = [];
 
-  if (options.filter?.property) {
-    where.push('property LIKE ? COLLATE NOCASE');
-    args.push(options.filter.property);
+  if (options.filter?.search) {
+    where.push('propertyName LIKE ? COLLATE NOCASE');
+    args.push(options.filter.search);
   }
 
   let whereSql = '';
@@ -120,8 +121,11 @@ export const findApplications = async (options: FindApplicationOptions): Promise
   return new Promise((resolve) => {
     database.transaction((transaction) => {
       const sql = `
-        SELECT *
+        SELECT application.*, property.name AS propertyName
         FROM application
+        LEFT JOIN property ON
+          property.id   = application.propertyId OR
+          property.guid = application.propertyId
         ${whereSql}
       `;
       transaction.executeSql(sql, args, (_, { rows }) => {

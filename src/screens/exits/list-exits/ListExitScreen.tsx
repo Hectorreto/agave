@@ -62,7 +62,7 @@ const ListExitScreen = ({ navigation }: Props) => {
 
       <View style={styles.filterAndSearchContainer}>
         <FilterAlt />
-        <View style={{ width: 260 }}>
+        <View style={{ width: 270 }}>
           <InputText
             placeholder="Predio o lugar..."
             value={search}

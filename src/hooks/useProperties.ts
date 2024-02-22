@@ -17,7 +17,7 @@ const useProperties = ({ id, search, createdAtSort }: Props) => {
       findProperties({
         filter: {
           id,
-          name: !search ? undefined : `%${search}%`,
+          search: !search ? undefined : `%${search}%`,
         },
         sorting: {
           createdAt: createdAtSort,

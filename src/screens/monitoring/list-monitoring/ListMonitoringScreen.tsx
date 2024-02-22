@@ -17,7 +17,6 @@ import FilterDate from '../../../components/filter-date/FilterDate';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import useMonitoring from '../../../hooks/useMonitoring';
-import useProperties from '../../../hooks/useProperties';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
 import { Colors } from '../../../themes/theme';
 import { GUADALAJARA_REGION } from '../../../utils/constants';
@@ -31,7 +30,6 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
   const [createdAtSort, setCreatedAtSort] = useState<'ASC' | 'DESC'>('DESC');
   const { data } = useMonitoring({ date, search, createdAtSort });
   const { mapRef, markerRefs, moveMapToMonitoring } = useMapData(data);
-  const { data: properties } = useProperties({});
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -46,11 +44,7 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
             key={monitoring.id}
             ref={markerRefs.get(monitoring.id)}
             coordinate={{ latitude: monitoring.latitude, longitude: monitoring.longitude }}
-            title={
-              properties.find(
-                (v) => v.id === monitoring.propertyId || v.guid === monitoring.propertyId
-              )?.name
-            }
+            title={monitoring.propertyName}
             description={formatDateTime(monitoring.createdAt)}
             onCalloutPress={() =>
               navigation.navigate('SeeMonitoring', { monitoringId: monitoring.id })
@@ -69,7 +63,7 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
       <Divider />
       <View style={styles.filterAndSearchContainer}>
         <FilterAlt />
-        <View style={{ width: 260 }}>
+        <View style={{ width: 270 }}>
           <InputText
             placeholder="Predio o lugar..."
             value={search}
@@ -105,12 +99,7 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
           id: value.id,
           values: [
             <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToMonitoring(value)}>
-              <Text style={styles.dataText}>
-                {
-                  properties.find((v) => v.id === value.propertyId || v.guid === value.propertyId)
-                    ?.name
-                }
-              </Text>
+              <Text style={styles.dataText}>{value.propertyName}</Text>
             </TouchableOpacity>,
             <TouchableOpacity style={styles.rowButton} onPress={() => moveMapToMonitoring(value)}>
               <Text style={styles.formattedDate}>{formatDate(value.createdAt)}</Text>

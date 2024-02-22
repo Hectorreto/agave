@@ -105,7 +105,7 @@ export const updateProperty = async (property: Property): Promise<void> => {
 type FindPropertyOptions = {
   filter?: {
     id?: string;
-    name?: string;
+    search?: string;
   };
   sorting?: {
     createdAt?: 'ASC' | 'DESC';
@@ -121,9 +121,21 @@ export const findProperties = (options: FindPropertyOptions): Promise<Property[]
     args.push(options.filter.id);
   }
 
-  if (options.filter?.name) {
-    where.push('name LIKE ? COLLATE NOCASE');
-    args.push(options.filter.name);
+  if (options.filter?.search) {
+    where.push(
+      [
+        'name LIKE ? COLLATE NOCASE',
+        'registry LIKE ? COLLATE NOCASE',
+        'internalIdentifier LIKE ? COLLATE NOCASE',
+        'plantingYear LIKE ? COLLATE NOCASE',
+      ].join(' OR ')
+    );
+    args.push(
+      options.filter.search,
+      options.filter.search,
+      options.filter.search,
+      options.filter.search
+    );
   }
 
   let whereSql = '';
