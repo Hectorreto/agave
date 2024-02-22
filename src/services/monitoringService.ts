@@ -160,7 +160,7 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
   const args: any[] = [];
 
   if (options.filter?.id) {
-    where.push('id = ?');
+    where.push('monitoring.id = ?');
     args.push(options.filter.id);
   }
 
@@ -201,6 +201,10 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
         args,
         (_, { rows }) => {
           resolve(rows._array);
+        },
+        (_, error) => {
+          console.error(error);
+          return false;
         }
       );
     });

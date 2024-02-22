@@ -15,6 +15,7 @@ import useProperties from '../../../hooks/useProperties';
 import { MonitoringTabsParamList } from '../../../navigation/MonitoringTabs';
 import { Colors } from '../../../themes/theme';
 import { formatDateTime } from '../../../utils/dateUtils';
+import { formatNumber } from '../../../utils/numberUtils';
 
 type Props = MaterialTopTabScreenProps<MonitoringTabsParamList, 'MonitoringBoard'>;
 
@@ -61,12 +62,10 @@ const MonitoringBoardScreen = ({ route }: Props) => {
 
         <View style={[styles.cardContainer, styles.cardContainerGap16]}>
           <View style={{ alignItems: 'center', marginTop: 16 }}>
-            <View style={{ width: 150 }}>
-              <CardSmall
-                left={String(monitoring.monitoringQualification)}
-                right="calificación del monitoreo"
-              />
-            </View>
+            <CardSmall
+              left={formatNumber(monitoring.monitoringQualification)}
+              right={'calificación\ndel monitoreo'}
+            />
           </View>
 
           <ChartLine

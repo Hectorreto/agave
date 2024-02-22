@@ -49,14 +49,10 @@ const styles = StyleSheet.create({
     width: 320,
     maxHeight: 44 * 10.5,
   },
-  listItemContainer: {
-    // borderRadius: 4,
-    height: 44,
-  },
   listItem: {
+    height: 44,
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    color: Colors.PRIMARY_800,
+    justifyContent: 'center',
   },
   inputWithValue: {
     borderColor: Colors.PRIMARY_400,

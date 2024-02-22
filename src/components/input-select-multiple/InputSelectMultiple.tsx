@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import styles from './styles';
 import ArrowDropDown from '../../../assets/svg/arrow_drop_down.svg';
-import { Colors } from '../../themes/theme';
+import Checkbox from '../checkbox/Checkbox';
 
 type Props = {
   label?: string;
@@ -70,30 +70,26 @@ const InputSelectMultiple = ({
         <View style={styles.backgroundContainer}>
           <Pressable style={styles.modalOutside} onPress={() => setIsOpen(false)} />
           <ScrollView style={styles.modal}>
-            {items.map((item) => (
-              <Pressable
-                key={item.value}
-                onPress={() => {
-                  if (!onChange) return;
+            {items.map((item) => {
+              const enabled = values.indexOf(item.value) !== -1;
 
-                  if (values.indexOf(item.value) === -1) {
-                    onChange([...values, item.value]);
-                  } else {
-                    onChange(values.filter((value) => value !== item.value));
-                  }
-                }}
-                style={({ pressed }) => [
-                  styles.listItemContainer,
-                  values.indexOf(item.value) !== -1 && {
-                    backgroundColor: Colors.PRIMARY_100,
-                  },
-                  pressed && {
-                    backgroundColor: Colors.PRIMARY_200,
-                  },
-                ]}>
-                <Text style={styles.listItem}>{item.label}</Text>
-              </Pressable>
-            ))}
+              return (
+                <View key={item.value} style={styles.listItem}>
+                  <Checkbox
+                    label={item.label}
+                    value={enabled}
+                    onChange={() => {
+                      if (!onChange) return;
+                      if (enabled) {
+                        onChange(values.filter((value) => value !== item.value));
+                      } else {
+                        onChange([...values, item.value].sort());
+                      }
+                    }}
+                  />
+                </View>
+              );
+            })}
           </ScrollView>
         </View>
       </Modal>

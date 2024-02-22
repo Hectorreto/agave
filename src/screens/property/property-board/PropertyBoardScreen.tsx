@@ -16,6 +16,7 @@ import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderT
 import InputSelectMultiple from '../../../components/input-select-multiple/InputSelectMultiple';
 import { PropertyTabsParamList } from '../../../navigation/PropertyTabs';
 import { Colors } from '../../../themes/theme';
+import { formatNumber } from '../../../utils/numberUtils';
 
 type Props = MaterialTopTabScreenProps<PropertyTabsParamList, 'PropertyBoard'>;
 
@@ -71,7 +72,7 @@ const PropertyBoardScreen = ({ route }: Props) => {
           <Text style={styles.cardTitle}>Hectáreas</Text>
         </View>
         <View style={styles.cardDataContainer}>
-          <CardSmall left={property.hectareNumber} right="hectáreas totales" />
+          <CardSmall left={formatNumber(property.hectareNumber)} right="hectáreas totales" />
         </View>
         <ChartBar data={hectareData} frontColor={Colors.CHART_C} borderColor={Colors.CHART_C1} />
       </View>
@@ -81,7 +82,7 @@ const PropertyBoardScreen = ({ route }: Props) => {
           <Text style={styles.cardTitle}>Plantas</Text>
         </View>
         <View style={styles.cardDataContainer}>
-          <CardSmall left={property.plantsPlantedNumber} right="plantas totales" />
+          <CardSmall left={formatNumber(property.plantsPlantedNumber)} right="plantas totales" />
         </View>
         <ChartBar data={plantData} frontColor={Colors.CHART_D} borderColor={Colors.CHART_D1} />
       </View>
@@ -117,13 +118,13 @@ const PropertyBoardScreen = ({ route }: Props) => {
         </View>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
-          <View style={{ width: 140 }}>
-            <CardSmall left="0" right="calificación promedio" />
+          <View style={{ minWidth: 140 }}>
+            <CardSmall left="99.99" right={'calificación\npromedio'} />
           </View>
-          <View style={{ width: 140 }}>
-            <CardSmall left="0" right="kg de peso promedio" />
+          <View style={{ minWidth: 140 }}>
+            <CardSmall left="99.99" right={'kg de peso\npromedio'} />
           </View>
-          <View style={{ width: 140 }}>
+          <View style={{ minWidth: 140 }}>
             <CardSmall left="0%" right="de maleza" />
           </View>
         </View>
