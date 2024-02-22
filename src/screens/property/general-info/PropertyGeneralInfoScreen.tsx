@@ -1,5 +1,13 @@
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Linking,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 import styles from './styles';
 import Description from '../../../../assets/svg/description.svg';
@@ -75,7 +83,30 @@ const PropertyGeneralInfoScreen = ({ route }: Props) => {
             { label: 'Chile', value: 'Chile' },
           ]}
         />
-        <InputText label="Ubicación" placeholder="Ubicación" value={location} />
+        <Pressable
+          onPress={() => {
+            try {
+              const location = JSON.parse(property.location);
+              const lat = location.center.lat;
+              const lng = location.center.lng;
+
+              const scheme = Platform.select({ ios: 'maps://0,0?q=', android: 'geo:0,0?q=' });
+              const latLng = `${lat},${lng}`;
+              const label = property.name;
+              const url = Platform.select({
+                ios: `${scheme}${label}@${latLng}`,
+                android: `${scheme}${latLng}(${label})`,
+              });
+
+              if (url) {
+                Linking.openURL(url);
+              }
+            } catch (error) {
+              console.error(error);
+            }
+          }}>
+          <InputText label="Ubicación" placeholder="Ubicación" value={location} />
+        </Pressable>
         <View style={styles.doubleInputContainer}>
           <Text style={styles.doubleInputLabels}>No. de hectáreas</Text>
           <Text style={styles.doubleInputLabels}>No. de plantas sembradas</Text>
