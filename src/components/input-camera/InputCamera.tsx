@@ -13,6 +13,7 @@ import { Image, Linking, Platform, View } from 'react-native';
 
 import CameraAlt from '../../../assets/svg/camera_alt.svg';
 import CustomButton from '../custom-button/CustomButton';
+const IMAGE_MAX_SIZE = 300;
 
 type Props = {
   value: string;
@@ -20,19 +21,19 @@ type Props = {
 };
 
 const InputCamera = ({ value, onChange }: Props) => {
-  const [height, setHeight] = useState(100);
-  const [width, setWidth] = useState(100);
+  const [height, setHeight] = useState(IMAGE_MAX_SIZE);
+  const [width, setWidth] = useState(IMAGE_MAX_SIZE);
 
   useEffect(() => {
     if (value) {
       Image.getSize(value, (width, height) => {
-        const scale = 100 / Math.max(width, height);
+        const scale = IMAGE_MAX_SIZE / Math.max(width, height);
         setHeight(height * scale);
         setWidth(width * scale);
       });
     } else {
-      setHeight(100);
-      setWidth(100);
+      setHeight(IMAGE_MAX_SIZE);
+      setWidth(IMAGE_MAX_SIZE);
     }
   }, [value]);
 
@@ -102,12 +103,14 @@ const InputCamera = ({ value, onChange }: Props) => {
 
   return (
     <View style={{ gap: 10 }}>
-      <CustomButton
-        color="blue"
-        text={value ? 'Cambiar foto' : 'Subir foto'}
-        Icon={CameraAlt}
-        onPress={handleOnPress()}
-      />
+      <View style={{ alignItems: 'flex-start' }}>
+        <CustomButton
+          color="blue"
+          text={value ? 'Cambiar foto' : 'Subir foto'}
+          Icon={CameraAlt}
+          onPress={handleOnPress()}
+        />
+      </View>
       {Boolean(value && height && width) && (
         <Image source={{ uri: value }} height={height} width={width} />
       )}
