@@ -44,6 +44,16 @@ export const AuthProvider = ({ children, onLoad }: Props) => {
     reloadAuthData().finally(onLoad);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      syncDatabase().catch(console.error);
+    }, 5 * 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   const saveAuthData = async (accessToken: string, guid: string) => {
     try {
       await AsyncStorage.setItem('accessToken', accessToken);
