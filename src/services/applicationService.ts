@@ -1,8 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from 'react-native-uuid';
 
 import { findProducts } from './productService';
-import { findProperties } from './propertyService';
 import database from '../../database';
 import getAllApplications from '../api/application/getAllApplications';
 import postApplication from '../api/application/postApplication';
@@ -11,7 +9,6 @@ database.transaction((transaction) => {
   const sql = `
     CREATE TABLE IF NOT EXISTS application (
       id TEXT PRIMARY KEY,
-      guid TEXT,
       createdAt INTEGER,
       updatedAt INTEGER,
       createdBy TEXT,
@@ -24,7 +21,11 @@ database.transaction((transaction) => {
       notes TEXT,
       videoUri TEXT,
       finalizeVideoUri TEXT,
-      propertyId TEXT
+      propertyId TEXT,
+      
+      FOREIGN KEY(propertyId) REFERENCES property(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
     );
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {
@@ -35,7 +36,6 @@ database.transaction((transaction) => {
 
 export type Application = {
   id: string;
-  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
@@ -49,7 +49,7 @@ export type Application = {
   videoUri: string;
   finalizeVideoUri: string;
   propertyId: string;
-  propertyName: string;
+  propertyName?: string;
 };
 
 export const createApplication = (application: Application): Promise<void> => {
@@ -123,9 +123,7 @@ export const findApplications = async (options: FindApplicationOptions): Promise
       const sql = `
         SELECT application.*, property.name AS propertyName
         FROM application
-        LEFT JOIN property ON
-          property.id   = application.propertyId OR
-          property.guid = application.propertyId
+        LEFT JOIN property ON property.id = application.propertyId
         ${whereSql}
       `;
       transaction.executeSql(sql, args, (_, { rows }) => {
@@ -185,21 +183,15 @@ export const syncApplications = async () => {
 const pullApplications = async (remoteApplications: Application[]) => {
   for (const remoteApplication of remoteApplications) {
     const queryLocalApplication: any = await database.execAsync(
-      [{ sql: 'SELECT * FROM application WHERE guid = ?', args: [remoteApplication.guid] }],
+      [{ sql: 'SELECT * FROM application WHERE id = ?', args: [remoteApplication.id] }],
       true
     );
     const localApplication: Application = queryLocalApplication[0].rows[0];
 
     if (!localApplication) {
-      await createApplication({
-        ...remoteApplication,
-        id: uuid.v4() as string,
-      });
+      await createApplication(remoteApplication);
     } else if (remoteApplication.updatedAt > localApplication.updatedAt) {
-      await updateApplication({
-        ...remoteApplication,
-        id: localApplication.id,
-      });
+      await updateApplication(remoteApplication);
     }
   }
 };
@@ -207,29 +199,23 @@ const pullApplications = async (remoteApplications: Application[]) => {
 const pushApplications = async (remoteApplications: Application[], accessToken: string) => {
   const localApplications = await findApplications({});
   const localProducts = await findProducts({});
-  const localProperties = await findProperties({});
 
   for (const localApplication of localApplications) {
-    const remoteApplication = remoteApplications.find((v) => v.guid === localApplication.guid);
+    const remoteApplication = remoteApplications.find((v) => v.id === localApplication.id);
 
     if (!remoteApplication) {
       const products = localProducts.filter((v) => v.applicationId === localApplication.id);
-      const property = localProperties.find(
-        (v) => v.id === localApplication.propertyId || v.guid === localApplication.propertyId
-      );
-      if (!property) continue;
 
       const guid = await postApplication({
         accessToken,
         application: localApplication,
         products,
-        property,
       });
 
-      await updateApplication({
-        id: localApplication.id,
-        guid,
-      });
+      await database.execAsync(
+        [{ sql: 'UPDATE application SET id = ? WHERE id = ?', args: [guid, localApplication.id] }],
+        false
+      );
     }
   }
 };

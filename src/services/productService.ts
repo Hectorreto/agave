@@ -7,7 +7,11 @@ database.transaction((transaction) => {
       name TEXT,
       amount TEXT,
       realAmount TEXT,
-      applicationId TEXT
+      applicationId TEXT,
+
+      FOREIGN KEY(applicationId) REFERENCES application(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
     );
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {

@@ -26,10 +26,6 @@ type Props = MaterialTopTabScreenProps<MonitoringTabsParamList, 'MonitoringGener
 const MonitoringGeneralInfoScreen = ({ route }: Props) => {
   const { monitoring } = route.params;
   const { data: properties } = useProperties({});
-  const property = properties.find(
-    (v) => v.id === monitoring.propertyId || v.guid === monitoring.propertyId
-  );
-  const propertyId = property?.id ?? '';
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -45,7 +41,7 @@ const MonitoringGeneralInfoScreen = ({ route }: Props) => {
         <InputSelect
           label="Predio"
           placeholder="Selecciona"
-          value={propertyId}
+          value={monitoring.propertyId}
           items={properties.map((property) => ({
             label: property.name,
             value: property.id,

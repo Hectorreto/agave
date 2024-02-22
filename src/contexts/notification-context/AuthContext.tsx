@@ -4,7 +4,7 @@ import { PropsWithChildren, createContext, useEffect, useState } from 'react';
 import { dropAllTables } from '../../../database';
 import { syncApplications } from '../../services/applicationService';
 import { syncMonitoring } from '../../services/monitoringService';
-import { pullProperties } from '../../services/propertyService';
+import { syncProperties } from '../../services/propertyService';
 
 type AuthContextType = {
   accessToken: string;
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children, onLoad }: Props) => {
 
   const syncDatabase = async () => {
     try {
-      await pullProperties();
+      await syncProperties();
       await syncApplications();
       await syncMonitoring();
     } catch (error) {

@@ -72,8 +72,7 @@ const getAllApplications = async ({ accessToken, limit, skip }: Props) => {
   };
 
   return data.map<Application>((value) => ({
-    id: '',
-    guid: value.guid,
+    id: value.guid,
     createdAt: value.created_date,
     updatedAt: value.updated_date,
     createdBy: JSON.stringify(value.created_by),

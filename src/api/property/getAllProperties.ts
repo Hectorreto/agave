@@ -70,8 +70,7 @@ const getAllProperties = async ({ accessToken, limit, skip }: Props) => {
   const data: any[] = gqlResponse.data.lands.data;
 
   return data.map<Property>((value) => ({
-    id: '',
-    guid: value.guid,
+    id: value.guid,
     createdAt: value.created_date,
     updatedAt: value.updated_date,
     createdBy: JSON.stringify(value.created_by),

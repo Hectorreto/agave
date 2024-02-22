@@ -1,12 +1,10 @@
 import { Monitoring } from '../../services/monitoringService';
-import { Property } from '../../services/propertyService';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
 
 type Props = {
   accessToken: string;
   monitoring: Monitoring;
-  property: Property;
 };
 
 const incidenceTypes: any = {
@@ -37,7 +35,7 @@ const getQuality = (value?: string) => {
   return qualityTypes[value];
 };
 
-const postMonitoring = async ({ accessToken, monitoring, property }: Props) => {
+const postMonitoring = async ({ accessToken, monitoring }: Props) => {
   const formData = [];
   if (monitoring.plantPerformanceKg) {
     formData.push({
@@ -228,7 +226,7 @@ const postMonitoring = async ({ accessToken, monitoring, property }: Props) => {
       `,
       variables: {
         createMonitoringInput: {
-          land_guid: property.guid,
+          land_guid: monitoring.propertyId,
           plants_by_quadrant: Number(monitoring.plantsPerQuadrant),
           quadrants: Number(monitoring.quadrantNumber),
           scheduled_date: Date.now(),
@@ -248,7 +246,6 @@ const postMonitoring = async ({ accessToken, monitoring, property }: Props) => {
     }),
   });
   const gqlResponse = await response.json();
-  console.log(gqlResponse);
   return gqlResponse.data.createMonitoring.guid;
 };
 

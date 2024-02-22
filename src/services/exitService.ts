@@ -15,7 +15,11 @@ database.transaction((transaction) => {
       imageUri TEXT,
       latitude REAL,
       longitude REAL,
-      propertyId TEXT
+      propertyId TEXT,
+
+      FOREIGN KEY(propertyId) REFERENCES property(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
     )
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {

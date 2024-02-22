@@ -1,17 +1,15 @@
 import { Application } from '../../services/applicationService';
 import { Product } from '../../services/productService';
-import { Property } from '../../services/propertyService';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
 
 type Props = {
   accessToken: string;
   application: Application;
-  property: Property;
   products: Product[];
 };
 
-const postApplication = async ({ accessToken, application, property, products }: Props) => {
+const postApplication = async ({ accessToken, application, products }: Props) => {
   const conceptTypes: any = {
     nutrition: 'NUTRITION',
     undergrowth: 'UNDERGROWTH',
@@ -36,7 +34,7 @@ const postApplication = async ({ accessToken, application, property, products }:
       variables: {
         createApplicationInput: {
           concept: conceptTypes[application.concept],
-          land_guid: property.guid,
+          land_guid: application.propertyId,
           month: Number(application.applicationMonth),
           scheduled_date: application.scheduledDate,
           bottles: Number(application.containerAmount),

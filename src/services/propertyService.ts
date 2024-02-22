@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from 'react-native-uuid';
 
 import database from '../../database';
 import getAllProperties from '../api/property/getAllProperties';
@@ -9,7 +8,6 @@ database.transaction((transaction) => {
     `
       CREATE TABLE IF NOT EXISTS property (
         id TEXT PRIMARY KEY,
-        guid TEXT,
         createdAt INTEGER,
         updatedAt INTEGER,
         createdBy TEXT,
@@ -38,7 +36,6 @@ database.transaction((transaction) => {
 
 export type Property = {
   id: string;
-  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
@@ -169,38 +166,36 @@ export const findProperties = (options: FindPropertyOptions): Promise<Property[]
   });
 };
 
-export const pullProperties = async () => {
+export const syncProperties = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
 
-  const properties: Property[] = [];
+  const remoteProperties: Property[] = [];
   for (let skip = 0; true; skip += 50) {
     const data = await getAllProperties({
       accessToken,
       limit: 50,
       skip,
     });
-    properties.push(...data);
+    remoteProperties.push(...data);
     if (data.length < 50) break;
   }
 
-  for (const property of properties) {
+  await pullProperties(remoteProperties);
+};
+
+export const pullProperties = async (remoteProperties: Property[]) => {
+  for (const remoteProperty of remoteProperties) {
     const queryLocalProperty: any = await database.execAsync(
-      [{ sql: 'SELECT * FROM property WHERE guid = ?', args: [property.guid] }],
+      [{ sql: 'SELECT * FROM property WHERE id = ?', args: [remoteProperty.id] }],
       true
     );
     const localProperty: Property = queryLocalProperty[0].rows[0];
 
     if (!localProperty) {
-      await createProperty({
-        ...property,
-        id: uuid.v4() as string,
-      });
-    } else if (property.updatedAt > localProperty.updatedAt) {
-      await updateProperty({
-        ...property,
-        id: localProperty.id,
-      });
+      await createProperty(remoteProperty);
+    } else if (remoteProperty.updatedAt > localProperty.updatedAt) {
+      await updateProperty(remoteProperty);
     }
   }
 };

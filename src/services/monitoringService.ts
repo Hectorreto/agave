@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import uuid from 'react-native-uuid';
 
-import { findProperties } from './propertyService';
 import database from '../../database';
 import getAllMonitoring from '../api/monitoring/getAllMonitoring';
 import postMonitoring from '../api/monitoring/postMonitoring';
@@ -10,7 +8,6 @@ database.transaction((transaction) => {
   const sql = `
     CREATE TABLE IF NOT EXISTS monitoring (
       id TEXT PRIMARY KEY,
-      guid TEXT,
       createdAt INTEGER,
       updatedAt INTEGER,
       createdBy TEXT,
@@ -45,7 +42,11 @@ database.transaction((transaction) => {
       colorimetryIncidence TEXT,
       colorimetryComments TEXT,
       physicalDamageType TEXT,
-      physicalDamageIncidence TEXT
+      physicalDamageIncidence TEXT,
+
+      FOREIGN KEY(propertyId) REFERENCES property(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
     )
   `;
   transaction.executeSql(sql, [], undefined, (_, error) => {
@@ -56,7 +57,6 @@ database.transaction((transaction) => {
 
 export type Monitoring = {
   id: string;
-  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
@@ -70,7 +70,7 @@ export type Monitoring = {
   latitude: number;
   longitude: number;
   propertyId: string;
-  propertyName: string;
+  propertyName?: string;
 
   plantPerformanceKg?: string;
   plagueType?: string;
@@ -194,9 +194,7 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
         `
           SELECT monitoring.*, property.name AS propertyName
           FROM monitoring
-          LEFT JOIN property ON 
-            property.id   = monitoring.propertyId OR
-            property.guid = monitoring.propertyId
+          LEFT JOIN property ON property.id = monitoring.propertyId
           ${whereSql}
           ${orderSql}
         `,
@@ -231,48 +229,35 @@ export const syncMonitoring = async () => {
 const pullMonitoring = async (remoteMonitoringArray: Monitoring[]) => {
   for (const remoteMonitoring of remoteMonitoringArray) {
     const queryLocalMonitoring: any = await database.execAsync(
-      [{ sql: 'SELECT * FROM monitoring WHERE guid = ?', args: [remoteMonitoring.guid] }],
+      [{ sql: 'SELECT * FROM monitoring WHERE id = ?', args: [remoteMonitoring.id] }],
       true
     );
     const localMonitoring: Monitoring = queryLocalMonitoring[0].rows[0];
 
     if (!localMonitoring) {
-      await createMonitoring({
-        ...remoteMonitoring,
-        id: uuid.v4() as string,
-      });
+      await createMonitoring(remoteMonitoring);
     } else if (remoteMonitoring.updatedAt > localMonitoring.updatedAt) {
-      await updateMonitoring({
-        ...remoteMonitoring,
-        id: localMonitoring.id,
-      });
+      await updateMonitoring(remoteMonitoring);
     }
   }
 };
 
 const pushMonitoring = async (remoteMonitoringArray: Monitoring[], accessToken: string) => {
   const localMonitoringArray = await findMonitoring({});
-  const localProperties = await findProperties({});
 
   for (const localMonitoring of localMonitoringArray) {
-    const remoteMonitoring = remoteMonitoringArray.find((v) => v.guid === localMonitoring.guid);
+    const remoteMonitoring = remoteMonitoringArray.find((v) => v.id === localMonitoring.id);
 
     if (!remoteMonitoring) {
-      const property = localProperties.find(
-        (v) => v.id === localMonitoring.propertyId || v.guid === localMonitoring.propertyId
-      );
-      if (!property) return;
-
       const guid = await postMonitoring({
         accessToken,
         monitoring: localMonitoring,
-        property,
       });
 
-      await updateMonitoring({
-        id: localMonitoring.id,
-        guid,
-      });
+      await database.execAsync(
+        [{ sql: 'UPDATE monitoring SET id = ? WHERE id = ?', args: [guid, localMonitoring.id] }],
+        false
+      );
     }
   }
 };
