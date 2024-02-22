@@ -1,7 +1,7 @@
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
@@ -36,12 +36,16 @@ const PropertyPlantExitsScreen = ({ route, navigation }: Props) => {
         items={[
           { label: 'Tablero', screen: 'PropertyBoard' },
           { label: 'Información general', screen: 'PropertyGeneralInfo' },
-          { label: 'Salidas de plantas', screen: 'PropertyPlantExits' },
+          // { label: 'Salidas de plantas', screen: 'PropertyPlantExits' },
         ]}
         active="PropertyPlantExits"
       />
       <FilterDate date={date} onChange={setDate} />
-      <MapView ref={mapRef} style={styles.map} initialRegion={GUADALAJARA_REGION}>
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        ref={mapRef}
+        style={styles.map}
+        initialRegion={GUADALAJARA_REGION}>
         {data.map((exit) => (
           <Marker
             key={exit.id}

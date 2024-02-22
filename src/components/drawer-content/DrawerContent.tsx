@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import DrawerItem from './DrawerItem';
 import styles from './styles';
-import Agriculture from '../../../assets/svg/header/agriculture.svg';
 import Grass from '../../../assets/svg/header/grass.svg';
 import Lock from '../../../assets/svg/header/lock.svg';
 import Logout from '../../../assets/svg/header/logout.svg';
@@ -38,7 +37,7 @@ const DrawerContent = ({ navigation }: Props) => {
             })
           }
         /> */}
-        <DrawerItem
+        {/* <DrawerItem
           Icon={Agriculture}
           label="Agregar nueva salida"
           onPress={() =>
@@ -47,7 +46,7 @@ const DrawerContent = ({ navigation }: Props) => {
               initial: false,
             })
           }
-        />
+        /> */}
         <DrawerItem
           Icon={Grass}
           label="Agregar nuevo monitoreo"

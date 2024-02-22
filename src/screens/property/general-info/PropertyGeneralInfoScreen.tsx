@@ -34,7 +34,7 @@ const PropertyGeneralInfoScreen = ({ route }: Props) => {
         items={[
           { label: 'Tablero', screen: 'PropertyBoard' },
           { label: 'Información general', screen: 'PropertyGeneralInfo' },
-          { label: 'Salidas de plantas', screen: 'PropertyPlantExits' },
+          // { label: 'Salidas de plantas', screen: 'PropertyPlantExits' },
         ]}
         active="PropertyGeneralInfo"
       />

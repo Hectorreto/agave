@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 import { useMapData } from './helpers';
 import styles from './styles';
@@ -34,7 +34,11 @@ const ListExitScreen = ({ navigation }: Props) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <FilterDate date={date} onChange={setDate} />
-      <MapView ref={mapRef} style={styles.map} initialRegion={GUADALAJARA_REGION}>
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        ref={mapRef}
+        style={styles.map}
+        initialRegion={GUADALAJARA_REGION}>
         {data.map((exit) => (
           <Marker
             key={exit.id}

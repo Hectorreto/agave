@@ -1,7 +1,7 @@
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { useEffect, useRef } from 'react';
 import { ScrollView, View } from 'react-native';
-import MapView, { MapMarker, Marker } from 'react-native-maps';
+import MapView, { MapMarker, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import ViewShot from 'react-native-view-shot';
 
 import { useMonitoringLineData } from './helpers';
@@ -43,6 +43,7 @@ const MonitoringBoardScreen = ({ route }: Props) => {
       />
       <ViewShot ref={viewShotRef} style={{ gap: 16, backgroundColor: Colors.NEUTRAL }}>
         <MapView
+          provider={PROVIDER_GOOGLE}
           style={styles.map}
           initialRegion={{
             latitude: monitoring.latitude,
