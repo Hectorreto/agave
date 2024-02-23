@@ -25,8 +25,8 @@ import ModalMonitoringForm from '../../../components/modal-monitoring-form/Modal
 import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import useProperties from '../../../hooks/useProperties';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
-import { createMonitoring, Monitoring } from '../../../services/monitoringService';
-import { range } from '../../../utils/numberUtils';
+import { createMonitoring, Monitoring, syncMonitoring } from '../../../services/monitoringService';
+import { range, sum } from '../../../utils/numberUtils';
 
 type Props = NativeStackScreenProps<MonitoringStackParamList, 'CreateMonitoring'>;
 
@@ -58,9 +58,15 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
 
   const showForms = showStepper && form.some((value) => value);
 
-  const { quadrantQualification, monitoringQualification } = getQuadrantQualification(form);
-
   const [data, setData] = useState<MonitoringContainer[]>([]);
+
+  const { qualification } = getQuadrantQualification(form);
+  const allQualifications = data.map((value) => {
+    const { qualification } = getQuadrantQualification(value.form);
+    return qualification;
+  });
+  const monitoringQualification =
+    sum([...allQualifications, qualification]) / (allQualifications.length + 1);
 
   const isLastForm =
     currentQuadrant === Number(monitoring.quadrantNumber) &&
@@ -106,14 +112,15 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
         const nowTime = Date.now();
         await createMonitoring({
           ...monitoring,
-          quadrantQualification,
-          monitoringQualification,
+          quadrantQualification: 0,
+          monitoringQualification: 0,
           data: JSON.stringify(filteredData),
           createdAt: nowTime,
           updatedAt: nowTime,
         });
         navigation.navigate('ListMonitoring');
         showNotification('El monitoreo ha sido creado con éxito');
+        syncMonitoring().catch(console.error);
       } else if (isLastPlant) {
         setCurrentPlant(1);
         setCurrentQuadrant(currentQuadrant + 1);
@@ -335,16 +342,12 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             </View>
             <View style={styles.bottomFormDoubleInput}>
               <View style={styles.bottomFormDoubleInputItem}>
-                <InputText
-                  placeholder="##"
-                  value={String(quadrantQualification)}
-                  submitted={submitted}
-                />
+                <InputText placeholder="##" value={String(qualification)} submitted={submitted} />
               </View>
               <View style={styles.bottomFormDoubleInputItem}>
                 <InputText
                   placeholder="##"
-                  value={String(monitoringQualification)}
+                  value={monitoringQualification.toFixed(2)}
                   submitted={submitted}
                 />
               </View>

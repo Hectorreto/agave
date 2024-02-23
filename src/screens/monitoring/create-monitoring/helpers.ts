@@ -150,7 +150,7 @@ export const getQuadrantQualification = (form: (Partial<Monitoring> | undefined)
   }
 
   return {
-    quadrantQualification: qualification,
-    monitoringQualification: Math.round((qualification * 100) / 39),
+    score: qualification,
+    qualification: Number(((qualification * 100) / 39).toFixed(2)),
   };
 };

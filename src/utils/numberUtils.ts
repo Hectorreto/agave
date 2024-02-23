@@ -12,3 +12,11 @@ export const range = (start: number, end: number, step = 1) => {
   }
   return values;
 };
+
+export const sum = (values: number[]) => {
+  let result = 0;
+  for (const value of values) {
+    result += value;
+  }
+  return result;
+};
