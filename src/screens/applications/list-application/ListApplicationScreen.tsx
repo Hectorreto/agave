@@ -4,7 +4,8 @@ import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
-import Create from '../../../../assets/svg/create.svg';
+import IconAlert from '../../../../assets/svg/applications/alert.svg';
+import IconCheck from '../../../../assets/svg/applications/check.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
@@ -59,27 +60,49 @@ const ListApplicationScreen = ({ navigation }: Props) => {
           values: [
             <Text style={styles.dataText}>{value.propertyName}</Text>,
             <Text style={styles.dataText}>{MonthNames[Number(value.applicationMonth)]}</Text>,
-            <View
-              style={[
-                styles.statusContainer,
-                value.state === 'inProcess' && styles.statusInProcess,
-              ]}>
-              {value.state === 'inProcess' && <Text>En proceso</Text>}
-              {value.state === 'finalized' && <Text>Finalizado</Text>}
-              {value.state === 'scheduled' && <Text>Programado</Text>}
-            </View>,
+            <>
+              {value.state === 'scheduled' && (
+                <View style={[styles.statusContainer, styles.statusScheduled]}>
+                  <Text style={styles.statusScheduledText}>Programado</Text>
+                </View>
+              )}
+              {value.state === 'inProcess' && (
+                <View style={[styles.statusContainer, styles.statusInProcess]}>
+                  <Text style={styles.statusInProcessText}>En proceso</Text>
+                </View>
+              )}
+              {value.state === 'finalized' && (
+                <View style={[styles.statusContainer]}>
+                  <Text>Finalizado</Text>
+                </View>
+              )}
+            </>,
             <View style={styles.moreButton}>
+              {value.state === 'scheduled' && (
+                <CustomButton
+                  small
+                  color="white"
+                  Icon={IconAlert}
+                  text="Iniciar"
+                  onPress={() => {
+                    console.log('iniciar');
+                  }}
+                />
+              )}
               {value.state === 'inProcess' && (
                 <CustomButton
+                  small
                   color="white"
-                  Icon={Create}
+                  text="Finalizar"
+                  Icon={IconCheck}
                   onPress={() =>
                     navigation.navigate('FinaliceApplication1', { applicationId: value.id })
                   }
                 />
               )}
-              {value.state === 'finalized' && <CustomButton color="white" Icon={Create} />}
-              {value.state === 'scheduled' && <CustomButton color="white" Icon={Create} />}
+              {value.state === 'finalized' && (
+                <CustomButton small color="white" text="Finalizar" Icon={IconCheck} />
+              )}
             </View>,
           ],
         }))}

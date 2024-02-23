@@ -24,8 +24,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  containerSmall: {
+    paddingVertical: 0,
+    paddingLeft: 8,
+    paddingRight: 8,
+    justifyContent: 'center',
+    height: 32,
+  },
   text: {
     fontWeight: '600',
+  },
+  textSmall: {
+    lineHeight: 18,
   },
   disabled: {
     backgroundColor: Colors.NEUTRAL_200,

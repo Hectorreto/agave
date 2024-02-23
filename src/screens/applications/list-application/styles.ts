@@ -48,13 +48,24 @@ const styles = StyleSheet.create({
     borderColor: Colors.SECONDARY,
     backgroundColor: Colors.SECONDARY_50,
   },
+  statusInProcessText: {
+    color: Colors.SECONDARY_800,
+  },
+  statusScheduled: {
+    borderColor: Colors.ALERT_YELLOW,
+    backgroundColor: '#FDEFCA',
+  },
+  statusScheduledText: {
+    color: '#B08006',
+  },
   formattedDate: {
     textAlign: 'center',
     alignItems: 'center',
     marginHorizontal: 16,
   },
   moreButton: {
-    marginHorizontal: 8,
+    marginHorizontal: 16,
+    width: 95,
   },
   tableTitleText: {
     fontWeight: '600',

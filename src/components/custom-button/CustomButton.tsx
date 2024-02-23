@@ -18,10 +18,40 @@ type Props = {
   onLongPress?: () => void;
   Icon?: React.FC<SvgProps>;
   color: 'blue' | 'white' | 'lightBlue' | 'red' | 'redWhite' | 'blueWhite';
+  small?: boolean;
 };
 
-const CustomButton = ({ text, onPress, Icon, color, onLongPress }: Props) => {
+const allStyles = {
+  blue: blueStyles,
+  blueWhite: blueWhiteStyles,
+  white: whiteStyles,
+  lightBlue: lightBlueStyles,
+  red: redStyles,
+  redWhite: redWhiteStyles,
+};
+
+const iconColors = {
+  blue: { normal: Colors.NEUTRAL, pressed: Colors.NEUTRAL },
+  blueWhite: { normal: Colors.NEUTRAL, pressed: Colors.NEUTRAL },
+  white: { normal: Colors.PRIMARY, pressed: Colors.PRIMARY },
+  lightBlue: { normal: Colors.PRIMARY, pressed: Colors.PRIMARY },
+  red: { normal: Colors.NEUTRAL, pressed: Colors.NEUTRAL },
+  redWhite: { normal: Colors.ALERT_RED, pressed: Colors.NEUTRAL },
+};
+
+const CustomButton = ({ text, onPress, Icon, color, onLongPress, small }: Props) => {
   const disabled = !onPress;
+  const colorStyles = allStyles[color];
+
+  const IconWithColor = ({ pressed }: any) => {
+    if (!Icon) return;
+    if (disabled) {
+      return <Icon fill={Colors.NEUTRAL_500} />;
+    }
+    const iconColor = iconColors[color].normal;
+    const iconColorPressed = iconColors[color].pressed;
+    return <Icon fill={pressed ? iconColorPressed : iconColor} />;
+  };
 
   return (
     <Pressable
@@ -32,53 +62,25 @@ const CustomButton = ({ text, onPress, Icon, color, onLongPress }: Props) => {
         Boolean(text) && styles.containerWithText,
         Boolean(text) && Icon !== undefined && styles.containerWithIcon,
         !text && Icon !== undefined && styles.containerOnlyIcon,
-        color === 'blue' && !pressed && blueStyles.container,
-        color === 'blue' && pressed && blueStyles.pressed,
-        color === 'blueWhite' && !pressed && blueWhiteStyles.container,
-        color === 'blueWhite' && pressed && blueWhiteStyles.pressed,
-        color === 'white' && !pressed && whiteStyles.container,
-        color === 'white' && pressed && whiteStyles.pressed,
-        color === 'lightBlue' && !pressed && lightBlueStyles.container,
-        color === 'lightBlue' && pressed && lightBlueStyles.pressed,
-        color === 'red' && !pressed && redStyles.container,
-        color === 'red' && pressed && redStyles.pressed,
-        color === 'redWhite' && !pressed && redWhiteStyles.container,
-        color === 'redWhite' && pressed && redWhiteStyles.pressed,
+        !pressed && colorStyles.container,
+        pressed && colorStyles.pressed,
         disabled && styles.disabled,
         disabled && !text && Icon && styles.disabledOnlyIcon,
+        small && styles.containerSmall,
       ]}
       onPress={onPress}
       onLongPress={onLongPress}>
       {({ pressed }) => (
         <>
-          {Icon &&
-            (disabled ? (
-              <Icon fill={Colors.NEUTRAL_500} />
-            ) : color === 'blue' ? (
-              <Icon fill={Colors.NEUTRAL} />
-            ) : color === 'blueWhite' ? (
-              <Icon fill={Colors.NEUTRAL} />
-            ) : color === 'white' ? (
-              <Icon fill={Colors.PRIMARY} />
-            ) : color === 'lightBlue' ? (
-              <Icon fill={Colors.PRIMARY} />
-            ) : color === 'red' ? (
-              <Icon fill={Colors.NEUTRAL} />
-            ) : color === 'redWhite' ? (
-              <Icon fill={pressed ? Colors.NEUTRAL : Colors.ALERT_RED} />
-            ) : undefined)}
+          <IconWithColor pressed={pressed} />
 
           {Boolean(text) && (
             <Text
               style={[
                 styles.text,
-                color === 'blue' && blueStyles.text,
-                color === 'blueWhite' && blueWhiteStyles.text,
-                color === 'white' && whiteStyles.text,
-                color === 'lightBlue' && lightBlueStyles.text,
-                color === 'red' && redStyles.text,
-                color === 'redWhite' && redWhiteStyles.text,
+                colorStyles.text,
                 disabled && styles.textDisabled,
+                small && styles.textSmall,
               ]}>
               {text}
             </Text>
