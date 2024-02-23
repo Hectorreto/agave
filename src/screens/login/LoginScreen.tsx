@@ -40,15 +40,18 @@ const LoginScreen = ({ navigation }: Props) => {
     try {
       if (!validateForm()) return;
       const data = await login(email, password);
-      if (data.errorCredentials) {
-        return showNotification('Usuario o contraseña incorrectos', 'incorrect');
-      }
-      if (data.errorRole) {
-        return showNotification('El usuario debe ser de tipo "Operador"', 'incorrect');
-      }
 
       await saveAuthData(data.accessToken, data.guid);
     } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'errorCredentials') {
+          return showNotification('Usuario o contraseña incorrectos', 'incorrect');
+        }
+        if (error.message === 'errorRole') {
+          return showNotification('El usuario debe ser de tipo "Operador"', 'incorrect');
+        }
+      }
+
       console.error(error);
       showNotification('Error al iniciar sesión', 'incorrect');
     }

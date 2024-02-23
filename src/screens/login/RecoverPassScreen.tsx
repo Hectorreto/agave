@@ -31,10 +31,7 @@ const RecoverPassScreen = ({ navigation }: Props) => {
   const handleSendMail = async () => {
     try {
       if (!validateForm()) return;
-      const data = await requestPasswordChange(email);
-      if (!data.success) {
-        return showNotification('Error al solicitar recuperación de contraseña', 'incorrect');
-      }
+      await requestPasswordChange(email);
 
       setSent(true);
     } catch (error) {

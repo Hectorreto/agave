@@ -33,13 +33,18 @@ const changePassword = async ({ newPassword, oldPassword, guid, accessToken }: P
     }),
   });
   const gqlResponse = await response.json();
-  return {
-    errorOldPassword: gqlResponse.errors?.[0]?.message === 'La contraseña actual es érronea.',
-    errorSamePassword:
-      gqlResponse.errors?.[0]?.message ===
-      'La nueva contraseña debe ser diferente que la anterior.',
-    success: gqlResponse.data?.updateUser?.updated_date !== undefined,
-  };
+
+  if (gqlResponse.errors?.[0]?.message === 'La contraseña actual es érronea.') {
+    throw new Error('errorOldPassword');
+  }
+  if (
+    gqlResponse.errors?.[0]?.message === 'La nueva contraseña debe ser diferente que la anterior.'
+  ) {
+    throw new Error('errorSamePassword');
+  }
+  if (!gqlResponse.data.updateUser.updated_date) {
+    throw new Error('updateUser');
+  }
 };
 
 export default changePassword;

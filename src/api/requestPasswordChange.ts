@@ -22,9 +22,10 @@ const requestPasswordChange = async (email: string) => {
     }),
   });
   const gqlResponse = await response.json();
-  return {
-    success: gqlResponse.data.requestPasswordChange.success,
-  };
+
+  if (!gqlResponse.data.requestPasswordChange.success) {
+    throw new Error('requestPasswordChange');
+  }
 };
 
 export default requestPasswordChange;

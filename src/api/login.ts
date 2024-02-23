@@ -27,9 +27,15 @@ const login = async (email: string, password: string) => {
     }),
   });
   const gqlResponse = await response.json();
+
+  if (gqlResponse.errors?.[0].code === 401) {
+    throw new Error('errorCredentials');
+  }
+  if (gqlResponse.data?.login.user.role !== 'OPERATOR') {
+    throw new Error('errorRole');
+  }
+
   return {
-    errorCredentials: gqlResponse.errors?.[0].code === 401,
-    errorRole: gqlResponse.data?.login.user.role !== 'OPERATOR',
     accessToken: gqlResponse.data?.login.access_token,
     guid: gqlResponse.data?.login.user.guid,
   };

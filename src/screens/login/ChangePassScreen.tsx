@@ -55,23 +55,22 @@ const ChangePassScreen = ({ navigation }: Props) => {
   const handleSubmit = async () => {
     try {
       if (!validateForm()) return;
-      const data = await changePassword({ oldPassword, newPassword, guid, accessToken });
-      if (data.errorOldPassword) {
-        return showNotification('Contraseña actual incorrecta', 'incorrect');
-      }
-      if (data.errorSamePassword) {
-        return showNotification(
-          'La nueva contraseña debe ser diferente a la anterior.',
-          'incorrect'
-        );
-      }
-      if (!data.success) {
-        return showNotification('Error al cambiar la contraseña', 'incorrect');
-      }
-
+      await changePassword({ oldPassword, newPassword, guid, accessToken });
       showNotification('Contraseña actualizada con éxito.');
       navigation.goBack();
     } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'errorOldPassword') {
+          return showNotification('Contraseña actual incorrecta', 'incorrect');
+        }
+        if (error.message === 'errorSamePassword') {
+          return showNotification(
+            'La nueva contraseña debe ser diferente a la anterior.',
+            'incorrect'
+          );
+        }
+      }
+
       console.error(error);
       showNotification('Error al cambiar la contraseña', 'incorrect');
     }
