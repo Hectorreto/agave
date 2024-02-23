@@ -9,7 +9,7 @@ import InputCameraVideo from '../../../components/input-camera-video/InputCamera
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
-import { createApplication } from '../../../services/applicationService';
+import { createApplication, syncApplications } from '../../../services/applicationService';
 import { createProducts } from '../../../services/productService';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication4'>;
@@ -29,11 +29,13 @@ const CreateApplication4Screen = ({ navigation, route }: Props) => {
       };
       if (videoUri) {
         data.videoUri = videoUri;
+        data.state = 'inProcess';
       }
       await createApplication(data);
       await createProducts(products);
       showNotification('La aplicación ha sido creada con éxito');
       navigation.navigate('ListApplications');
+      syncApplications().catch(console.error);
     } catch (error) {
       console.error(error);
     }
@@ -63,7 +65,7 @@ const CreateApplication4Screen = ({ navigation, route }: Props) => {
       </View>
 
       <View style={styles.saveCancelButtons}>
-        <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
+        <CustomButton color="lightBlue" text="Anterior" onPress={() => navigation.goBack()} />
         <CustomButton color="blue" text="Crear" onPress={handleOnSave} />
       </View>
     </ScrollView>

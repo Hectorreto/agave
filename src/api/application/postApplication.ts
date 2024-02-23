@@ -1,3 +1,4 @@
+import postVideo from './postVideo';
 import { Application } from '../../services/applicationService';
 import { Product } from '../../services/productService';
 
@@ -9,12 +10,17 @@ type Props = {
   products: Product[];
 };
 
+const conceptTypes: any = {
+  nutrition: 'NUTRITION',
+  undergrowth: 'UNDERGROWTH',
+  phytosanitary: 'PHYTOSANITARY',
+};
+
 const postApplication = async ({ accessToken, application, products }: Props) => {
-  const conceptTypes: any = {
-    nutrition: 'NUTRITION',
-    undergrowth: 'UNDERGROWTH',
-    phytosanitary: 'PHYTOSANITARY',
-  };
+  let videoGuid: any = null;
+  if (application.videoUri) {
+    videoGuid = await postVideo({ accessToken, uri: application.videoUri });
+  }
 
   const response = await fetch(API_URL, {
     method: 'POST',
@@ -45,7 +51,7 @@ const postApplication = async ({ accessToken, application, products }: Props) =>
               dose_per_bottle: Number(value.amount),
             })),
           },
-          start_picture: null,
+          start_picture: videoGuid,
         },
       },
     }),

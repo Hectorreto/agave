@@ -55,11 +55,7 @@ const FinaliceApplication2Screen = ({ navigation, route }: Props) => {
       </View>
 
       <View style={styles.saveCancelButtons}>
-        <CustomButton
-          color="lightBlue"
-          text="Cancelar"
-          onPress={() => navigation.navigate('ListApplications')}
-        />
+        <CustomButton color="lightBlue" text="Anterior" onPress={() => navigation.goBack()} />
         <CustomButton color="blue" text="Crear" onPress={handleCreate} />
       </View>
     </ScrollView>

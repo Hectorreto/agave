@@ -10,12 +10,13 @@ export const newApplication = (): Application => {
     createdBy: '[Usuario]',
     updatedBy: '[Usuario]',
     applicationMonth: '',
-    state: 'inProcess',
+    state: 'scheduled',
     scheduledDate: 0,
     concept: '',
     containerAmount: '',
     notes: '',
     videoUri: '',
+    finalizeVideoUri: '',
     propertyId: '',
   };
 };

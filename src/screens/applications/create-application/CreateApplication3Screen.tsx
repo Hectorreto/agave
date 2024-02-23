@@ -64,7 +64,7 @@ const CreateApplication3Screen = ({ navigation, route }: Props) => {
 
       <View style={{ flex: 1 }} />
       <View style={styles.saveCancelButtons}>
-        <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
+        <CustomButton color="lightBlue" text="Anterior" onPress={() => navigation.goBack()} />
         <CustomButton
           color="blue"
           text="Siguiente"

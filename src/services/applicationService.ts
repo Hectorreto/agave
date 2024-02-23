@@ -102,6 +102,9 @@ export type FindApplicationOptions = {
   filter?: {
     search?: string;
   };
+  sorting?: {
+    createdAt?: 'ASC' | 'DESC';
+  };
 };
 
 export const findApplications = async (options: FindApplicationOptions): Promise<Application[]> => {
@@ -118,6 +121,14 @@ export const findApplications = async (options: FindApplicationOptions): Promise
     whereSql = `WHERE ${where.map((value) => `(${value})`).join(' AND ')}`;
   }
 
+  let orderSql = '';
+  if (options.sorting?.createdAt === 'ASC') {
+    orderSql = 'ORDER BY createdAt ASC';
+  }
+  if (options.sorting?.createdAt === 'DESC') {
+    orderSql = 'ORDER BY createdAt DESC';
+  }
+
   return new Promise((resolve) => {
     database.transaction((transaction) => {
       const sql = `
@@ -125,6 +136,7 @@ export const findApplications = async (options: FindApplicationOptions): Promise
         FROM application
         LEFT JOIN property ON property.id = application.propertyId
         ${whereSql}
+        ${orderSql}
       `;
       transaction.executeSql(sql, args, (_, { rows }) => {
         resolve(rows._array);

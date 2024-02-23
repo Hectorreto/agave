@@ -16,6 +16,9 @@ const useApplications = ({ search }: Props) => {
         filter: {
           search: !search ? undefined : `%${search}%`,
         },
+        sorting: {
+          createdAt: 'DESC',
+        },
       }).then((value) => setData(value));
     }, [search])
   );
