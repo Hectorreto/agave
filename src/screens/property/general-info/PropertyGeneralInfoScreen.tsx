@@ -32,9 +32,25 @@ const getLocation = (property: Property) => {
   }
 };
 
+const getFloorAnalysisFile = (property: Property) => {
+  try {
+    if (!property.floorAnalysis) return null;
+    const data = JSON.parse(property.floorAnalysis);
+    if (data.name && data.url) {
+      return data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 const PropertyGeneralInfoScreen = ({ route }: Props) => {
   const { property } = route.params;
   const location = getLocation(property);
+  const floorAnalysis = getFloorAnalysisFile(property);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -135,10 +151,16 @@ const PropertyGeneralInfoScreen = ({ route }: Props) => {
           <Text style={styles.inputLabel}>Análisis de suelo</Text>
           <View style={styles.inputFileInnerContainer}>
             <CustomButton color="blue" text="Subir archivo" Icon={Upload} />
-            <TouchableOpacity style={styles.inputFileSeeButton}>
-              <Description />
-              <Text style={styles.inputFileSeeText}>Archivo.Pdf</Text>
-            </TouchableOpacity>
+            {floorAnalysis && (
+              <TouchableOpacity
+                style={styles.inputFileSeeButton}
+                onPress={() => {
+                  Linking.openURL(floorAnalysis.url);
+                }}>
+                <Description />
+                <Text style={styles.inputFileSeeText}>{floorAnalysis.name}</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <View style={styles.inputSwitchContainer}>

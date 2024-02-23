@@ -22,7 +22,9 @@ database.transaction((transaction) => {
         registry TEXT,
         internalIdentifier TEXT,
         boardsPerProperty TEXT,
-        active INTEGER
+        active INTEGER,
+        
+        floorAnalysis TEXT
       )
     `,
     [],
@@ -51,6 +53,7 @@ export type Property = {
   internalIdentifier: string;
   boardsPerProperty: string;
   active: number;
+  floorAnalysis?: string;
 };
 
 export const createProperty = (property: Property): Promise<void> => {

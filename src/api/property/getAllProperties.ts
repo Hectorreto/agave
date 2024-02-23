@@ -44,6 +44,10 @@ const getAllProperties = async ({ accessToken, limit, skip }: Props) => {
                 }
                 area
               }
+              floor_analysis {
+                name
+                path
+              }
               planted_plants
               folio
               registry_number
@@ -86,6 +90,11 @@ const getAllProperties = async ({ accessToken, limit, skip }: Props) => {
     internalIdentifier: value.internal_identifier,
     boardsPerProperty: value.tables_by_property,
     active: value.enabled ? 1 : 0,
+
+    floorAnalysis: JSON.stringify({
+      name: value.floor_analysis?.name,
+      url: value.floor_analysis?.path,
+    }),
   }));
 };
 
