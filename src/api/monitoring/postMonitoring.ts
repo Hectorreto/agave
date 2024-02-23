@@ -1,3 +1,4 @@
+import postFile from './postFile';
 import { MonitoringContainer } from '../../screens/monitoring/create-monitoring/CreateMonitoringScreen';
 import { Monitoring } from '../../services/monitoringService';
 
@@ -38,6 +39,8 @@ const getQuality = (value?: string) => {
 
 const postMonitoring = async ({ accessToken, monitoring }: Props) => {
   if (!monitoring.data) return;
+  const imageGuid = await postFile({ monitoring, accessToken }).catch(console.error);
+
   const data: MonitoringContainer[] = JSON.parse(monitoring.data);
 
   const quadrantsData = data.map((value) => {
@@ -234,6 +237,7 @@ const postMonitoring = async ({ accessToken, monitoring }: Props) => {
           scheduled_date: Date.now(),
           quadrantsData,
           comments: monitoring.comments,
+          picture_guid: imageGuid,
         },
       },
     }),

@@ -124,7 +124,6 @@ export const createMonitoring = (monitoring: Monitoring): Promise<void> => {
 };
 
 export const updateMonitoring = async (monitoring: Partial<Monitoring>) => {
-  console.log('hola');
   const { id, ...update } = monitoring;
   const readOnly = false;
 
