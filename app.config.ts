@@ -1,7 +1,7 @@
 const EXPO_PUBLIC_APP_VERSION = process.env.EXPO_PUBLIC_VERSION;
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
-export const config = {
+module.exports = {
   expo: {
     name: 'Bloom',
     slug: 'Bloom',
