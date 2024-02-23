@@ -44,6 +44,8 @@ database.transaction((transaction) => {
       physicalDamageType TEXT,
       physicalDamageIncidence TEXT,
 
+      data TEXT,
+
       FOREIGN KEY(propertyId) REFERENCES property(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE
@@ -93,6 +95,8 @@ export type Monitoring = {
   colorimetryComments?: string;
   physicalDamageType?: string;
   physicalDamageIncidence?: string;
+
+  data?: string;
 };
 
 export const createMonitoring = (monitoring: Monitoring): Promise<void> => {
@@ -120,6 +124,7 @@ export const createMonitoring = (monitoring: Monitoring): Promise<void> => {
 };
 
 export const updateMonitoring = async (monitoring: Partial<Monitoring>) => {
+  console.log('hola');
   const { id, ...update } = monitoring;
   const readOnly = false;
 
@@ -134,7 +139,7 @@ export const updateMonitoring = async (monitoring: Partial<Monitoring>) => {
           SET ${keys.map((key) => `${key} = ?`).join(',')}
           WHERE id = ?
         `,
-        args: [values, id],
+        args: [...values, id],
       },
     ],
     readOnly

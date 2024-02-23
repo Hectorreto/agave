@@ -27,7 +27,6 @@ export const validateMonitoring = (
   if (!monitoring.propertyId) return false;
   if (!monitoring.quadrantNumber) return false;
   if (!monitoring.plantsPerQuadrant) return false;
-  if (!monitoring.imageUri) return false;
 
   if (form[0]) {
     if (!form[0].plantPerformanceKg) return false;

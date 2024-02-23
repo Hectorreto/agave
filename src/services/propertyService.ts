@@ -92,7 +92,7 @@ export const updateProperty = async (property: Property): Promise<void> => {
           SET ${keys.map((key) => `${key} = ?`).join(',')}
           WHERE id = ?
         `,
-        args: [values, id],
+        args: [...values, id],
       },
     ],
     readOnly

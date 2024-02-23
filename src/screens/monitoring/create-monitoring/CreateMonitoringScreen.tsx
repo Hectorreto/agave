@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import Form0 from './Form0';
@@ -26,8 +26,15 @@ import { NotificationContext } from '../../../contexts/notification-context/Noti
 import useProperties from '../../../hooks/useProperties';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
 import { createMonitoring, Monitoring } from '../../../services/monitoringService';
+import { range } from '../../../utils/numberUtils';
 
 type Props = NativeStackScreenProps<MonitoringStackParamList, 'CreateMonitoring'>;
+
+export type MonitoringContainer = {
+  quadrant: number;
+  plant: number;
+  form: (Partial<Monitoring> | undefined)[];
+};
 
 const CreateMonitoringScreen = ({ navigation }: Props) => {
   const { showNotification } = useContext(NotificationContext);
@@ -39,37 +46,109 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
   const [selectedForm, setSelectedForm] = useState({ index: 0, name: '' });
   const { data: properties } = useProperties({});
   const [submitted, setSubmitted] = useState(false);
+  const scrollRef = useRef<ScrollView>(null);
+
+  const [currentQuadrant, setCurrentQuadrant] = useState(1);
+  const [currentPlant, setCurrentPlant] = useState(1);
+
+  const showStepper =
+    Boolean(monitoring.propertyId) &&
+    Number(monitoring.quadrantNumber) > 0 &&
+    Number(monitoring.plantsPerQuadrant) > 0;
+
+  const showForms = showStepper && form.some((value) => value);
 
   const { quadrantQualification, monitoringQualification } = getQuadrantQualification(form);
 
+  const [data, setData] = useState<MonitoringContainer[]>([]);
+
+  const isLastForm =
+    currentQuadrant === Number(monitoring.quadrantNumber) &&
+    currentPlant === Number(monitoring.plantsPerQuadrant);
+
+  const isLastPlant = !isLastForm && currentPlant === Number(monitoring.plantsPerQuadrant);
+
+  useEffect(() => {
+    const currentContainer = data.find(
+      (value) => value.quadrant === currentQuadrant && value.plant === currentPlant
+    );
+    if (currentContainer) {
+      setForm(currentContainer.form);
+    } else {
+      setForm(Array(8).fill(undefined));
+    }
+  }, [currentQuadrant, currentPlant]);
+
   const handleSubmit = async () => {
     try {
-      setSubmitted(true);
-      if (!validateMonitoring(monitoring, form)) return;
-      const nowTime = Date.now();
-      await createMonitoring({
-        ...monitoring,
-        ...form[0],
-        ...form[1],
-        ...form[2],
-        ...form[3],
-        ...form[4],
-        ...form[5],
-        ...form[6],
-        ...form[7],
-        ...{ quadrantQualification, monitoringQualification },
-        createdAt: nowTime,
-        updatedAt: nowTime,
+      if (!validateMonitoring(monitoring, form)) {
+        setSubmitted(true);
+        showNotification('Formulario incompleto', 'incorrect');
+        return;
+      }
+
+      setSubmitted(false);
+      const filteredData = data.filter(
+        (value) => value.quadrant !== currentQuadrant && value.plant !== currentPlant
+      );
+      filteredData.push({
+        quadrant: currentQuadrant,
+        plant: currentPlant,
+        form,
       });
-      navigation.navigate('ListMonitoring');
-      showNotification('El monitoreo ha sido creado con éxito');
+      setData(filteredData);
+
+      if (isLastForm) {
+        if (!monitoring.imageUri) {
+          return showNotification('Agrega una foto', 'incorrect');
+        }
+
+        const nowTime = Date.now();
+        await createMonitoring({
+          ...monitoring,
+          quadrantQualification,
+          monitoringQualification,
+          data: JSON.stringify(filteredData),
+          createdAt: nowTime,
+          updatedAt: nowTime,
+        });
+        navigation.navigate('ListMonitoring');
+        showNotification('El monitoreo ha sido creado con éxito');
+      } else if (isLastPlant) {
+        setCurrentPlant(1);
+        setCurrentQuadrant(currentQuadrant + 1);
+        scrollRef.current?.scrollTo({ y: 0, animated: true });
+      } else {
+        setCurrentPlant(currentPlant + 1);
+        scrollRef.current?.scrollTo({ y: 0, animated: true });
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
+      {showStepper && (
+        <>
+          <Text style={styles.quadrantTitle}>
+            Cuadrante {currentQuadrant} - Planta {currentPlant}
+          </Text>
+
+          <ScrollView horizontal style={styles.stepperContainer}>
+            {range(1, Number(monitoring.plantsPerQuadrant) + 1).map((value, index) => (
+              <View key={value} style={styles.stepperItemContainer}>
+                {index !== 0 && <View style={styles.stepperSeparator} />}
+                <Text
+                  style={[styles.stepperItem, value === currentPlant && styles.stepperItemActive]}>
+                  {value}
+                </Text>
+              </View>
+            ))}
+          </ScrollView>
+        </>
+      )}
+
       <Text style={styles.helper}>Llena el formulario para crear un nuevo monitoreo</Text>
 
       <Expandable label="General" hideLabelAndShowContent={form.every((value) => !value)}>
@@ -92,6 +171,8 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             if (value.match(/^\d*$/g)) {
               setMonitoring({ ...monitoring, quadrantNumber: value });
             }
+            setCurrentQuadrant(1);
+            setCurrentPlant(1);
           }}
           submitted={submitted}
         />
@@ -103,6 +184,8 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             if (value.match(/^\d*$/g)) {
               setMonitoring({ ...monitoring, plantsPerQuadrant: value });
             }
+            setCurrentQuadrant(1);
+            setCurrentPlant(1);
           }}
           submitted={submitted}
         />
@@ -241,7 +324,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
         />
       </View>
 
-      {form.some((value) => value) && (
+      {showForms && (
         <View style={styles.bottomFormContainer}>
           <Divider />
           <View style={styles.bottomFormInputsContainer}>
@@ -285,8 +368,43 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           </View>
 
           <View style={styles.saveCancelButtons}>
-            <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
-            <CustomButton color="blue" text="Guardar" onPress={handleSubmit} />
+            <>
+              {currentPlant === 1 && currentQuadrant === 1 ? (
+                <CustomButton
+                  color="lightBlue"
+                  text="Cancelar"
+                  onPress={() => navigation.goBack()}
+                />
+              ) : currentPlant === 1 ? (
+                <CustomButton
+                  color="lightBlue"
+                  text="Anterior"
+                  onPress={() => {
+                    setCurrentQuadrant(currentQuadrant - 1);
+                    setCurrentPlant(Number(monitoring.plantsPerQuadrant));
+                    scrollRef.current?.scrollTo({ y: 0, animated: true });
+                  }}
+                />
+              ) : (
+                <CustomButton
+                  color="lightBlue"
+                  text="Anterior"
+                  onPress={() => {
+                    setCurrentPlant(currentPlant - 1);
+                    scrollRef.current?.scrollTo({ y: 0, animated: true });
+                  }}
+                />
+              )}
+            </>
+            <>
+              {isLastForm ? (
+                <CustomButton color="blue" text="Guardar" onPress={handleSubmit} />
+              ) : isLastPlant ? (
+                <CustomButton color="blue" text="Siguiente cuadrante" onPress={handleSubmit} />
+              ) : (
+                <CustomButton color="blue" text="Siguiente planta" onPress={handleSubmit} />
+              )}
+            </>
           </View>
         </View>
       )}

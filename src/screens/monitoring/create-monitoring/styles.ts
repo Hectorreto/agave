@@ -58,6 +58,39 @@ const styles = StyleSheet.create({
   modalDeleteTextBold: {
     fontWeight: 'bold',
   },
+  quadrantTitle: {
+    color: Colors.PRIMARY_700,
+    fontWeight: '600',
+    fontSize: 18,
+  },
+  stepperItem: {
+    backgroundColor: Colors.PRIMARY_100,
+    width: 24,
+    height: 24,
+    borderRadius: 16,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    fontWeight: '600',
+    lineHeight: 20,
+    color: Colors.NEUTRAL,
+    marginHorizontal: 2,
+  },
+  stepperItemActive: {
+    backgroundColor: Colors.PRIMARY,
+  },
+  stepperContainer: {
+    flexGrow: 0,
+    height: 40,
+  },
+  stepperSeparator: {
+    height: 1,
+    width: 6.22,
+    backgroundColor: 'green',
+  },
+  stepperItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });
 
 export default styles;

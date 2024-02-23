@@ -45,9 +45,14 @@ export const AuthProvider = ({ children, onLoad }: Props) => {
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      syncDatabase().catch(console.error);
-    }, 5 * 1000);
+    const timeMinutes = 10;
+
+    const interval = setInterval(
+      () => {
+        syncDatabase().catch(console.error);
+      },
+      timeMinutes * 60 * 1000
+    );
 
     return () => {
       clearInterval(interval);
