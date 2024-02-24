@@ -8,6 +8,7 @@ database.transaction((transaction) => {
   const sql = `
     CREATE TABLE IF NOT EXISTS application (
       id TEXT PRIMARY KEY,
+      guid TEXT,
       createdAt INTEGER,
       updatedAt INTEGER,
       createdBy TEXT,
@@ -36,6 +37,7 @@ database.transaction((transaction) => {
 
 export type Application = {
   id: string;
+  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
@@ -150,7 +152,9 @@ export const findApplications = async (options: FindApplicationOptions): Promise
       const sql = `
         SELECT application.*, property.name AS propertyName
         FROM application
-        LEFT JOIN property ON property.id = application.propertyId
+        LEFT JOIN property ON 
+          property.id = application.propertyId OR 
+          property.guid = application.propertyId
         ${whereSql}
         ${orderSql}
       `;
@@ -211,7 +215,7 @@ export const syncApplications = async () => {
 const pullApplications = async (remoteApplications: Application[]) => {
   for (const remoteApplication of remoteApplications) {
     const queryLocalApplication: any = await database.execAsync(
-      [{ sql: 'SELECT * FROM application WHERE id = ?', args: [remoteApplication.id] }],
+      [{ sql: 'SELECT * FROM application WHERE guid = ?', args: [remoteApplication.guid] }],
       true
     );
     const localApplication: Application = queryLocalApplication[0].rows[0];
@@ -219,7 +223,10 @@ const pullApplications = async (remoteApplications: Application[]) => {
     if (!localApplication) {
       await createApplication(remoteApplication);
     } else if (remoteApplication.updatedAt > localApplication.updatedAt) {
-      await updateApplication(remoteApplication);
+      await updateApplication({
+        ...remoteApplication,
+        id: localApplication.id,
+      });
     }
   }
 };
@@ -228,7 +235,7 @@ const pushApplications = async (remoteApplications: Application[], accessToken: 
   const localApplications = await findApplications({});
 
   for (const localApplication of localApplications) {
-    const remoteApplication = remoteApplications.find((v) => v.id === localApplication.id);
+    const remoteApplication = remoteApplications.find((v) => v.guid === localApplication.guid);
 
     if (!remoteApplication) {
       const products = getProducts(localApplication.products);
@@ -240,9 +247,16 @@ const pushApplications = async (remoteApplications: Application[], accessToken: 
       });
 
       await database.execAsync(
-        [{ sql: 'UPDATE application SET id = ? WHERE id = ?', args: [guid, localApplication.id] }],
+        [
+          {
+            sql: 'UPDATE application SET guid = ? WHERE id = ?',
+            args: [guid, localApplication.id],
+          },
+        ],
         false
       );
+    } else if (localApplication.updatedAt > remoteApplication.updatedAt) {
+      console.log('update remote application');
     }
   }
 };

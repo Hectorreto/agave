@@ -94,6 +94,7 @@ const getAllApplications = async ({ accessToken, limit, skip }: Props) => {
 
     return {
       id: value.guid,
+      guid: value.guid,
       createdAt: value.created_date,
       updatedAt: value.updated_date,
       createdBy: JSON.stringify(value.created_by),

@@ -4,6 +4,7 @@ database.transaction((transaction) => {
   const sql = `
     CREATE TABLE IF NOT EXISTS exit (
       id TEXT PRIMARY KEY,
+      guid TEXT,
       createdAt INTEGER,
       updatedAt INTEGER,
       createdBy TEXT,
@@ -30,6 +31,7 @@ database.transaction((transaction) => {
 
 export type Exit = {
   id: string;
+  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
@@ -45,6 +47,7 @@ export type Exit = {
 
 const keys: (keyof Exit)[] = [
   'id',
+  'guid',
   'createdAt',
   'updatedAt',
   'createdBy',

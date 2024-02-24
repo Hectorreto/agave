@@ -8,6 +8,7 @@ database.transaction((transaction) => {
     `
       CREATE TABLE IF NOT EXISTS property (
         id TEXT PRIMARY KEY,
+        guid TEXT,
         createdAt INTEGER,
         updatedAt INTEGER,
         createdBy TEXT,
@@ -38,6 +39,7 @@ database.transaction((transaction) => {
 
 export type Property = {
   id: string;
+  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
@@ -190,7 +192,7 @@ export const syncProperties = async () => {
 export const pullProperties = async (remoteProperties: Property[]) => {
   for (const remoteProperty of remoteProperties) {
     const queryLocalProperty: any = await database.execAsync(
-      [{ sql: 'SELECT * FROM property WHERE id = ?', args: [remoteProperty.id] }],
+      [{ sql: 'SELECT * FROM property WHERE guid = ?', args: [remoteProperty.guid] }],
       true
     );
     const localProperty: Property = queryLocalProperty[0].rows[0];
@@ -198,7 +200,10 @@ export const pullProperties = async (remoteProperties: Property[]) => {
     if (!localProperty) {
       await createProperty(remoteProperty);
     } else if (remoteProperty.updatedAt > localProperty.updatedAt) {
-      await updateProperty(remoteProperty);
+      await updateProperty({
+        ...remoteProperty,
+        id: localProperty.id,
+      });
     }
   }
 };

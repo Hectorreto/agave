@@ -63,6 +63,7 @@ const getAllMonitoring = async ({ accessToken, limit, skip }: Props) => {
 
   return data.map<Monitoring>((value) => ({
     id: value.guid,
+    guid: value.guid,
     createdAt: value.created_date,
     updatedAt: value.updated_date,
     createdBy: JSON.stringify(value.created_by),

@@ -8,6 +8,7 @@ database.transaction((transaction) => {
   const sql = `
     CREATE TABLE IF NOT EXISTS monitoring (
       id TEXT PRIMARY KEY,
+      guid TEXT,
       createdAt INTEGER,
       updatedAt INTEGER,
       createdBy TEXT,
@@ -59,6 +60,7 @@ database.transaction((transaction) => {
 
 export type Monitoring = {
   id: string;
+  guid: string;
   createdAt: number;
   updatedAt: number;
   createdBy: string;
@@ -198,7 +200,9 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
         `
           SELECT monitoring.*, property.name AS propertyName
           FROM monitoring
-          LEFT JOIN property ON property.id = monitoring.propertyId
+          LEFT JOIN property ON 
+            property.id = monitoring.propertyId OR
+            property.guid = monitoring.propertyId
           ${whereSql}
           ${orderSql}
         `,
@@ -237,7 +241,7 @@ export const syncMonitoring = async () => {
 const pullMonitoring = async (remoteMonitoringArray: Monitoring[]) => {
   for (const remoteMonitoring of remoteMonitoringArray) {
     const queryLocalMonitoring: any = await database.execAsync(
-      [{ sql: 'SELECT * FROM monitoring WHERE id = ?', args: [remoteMonitoring.id] }],
+      [{ sql: 'SELECT * FROM monitoring WHERE guid = ?', args: [remoteMonitoring.guid] }],
       true
     );
     const localMonitoring: Monitoring = queryLocalMonitoring[0].rows[0];
@@ -245,7 +249,10 @@ const pullMonitoring = async (remoteMonitoringArray: Monitoring[]) => {
     if (!localMonitoring) {
       await createMonitoring(remoteMonitoring);
     } else if (remoteMonitoring.updatedAt > localMonitoring.updatedAt) {
-      await updateMonitoring(remoteMonitoring);
+      await updateMonitoring({
+        ...remoteMonitoring,
+        id: localMonitoring.id,
+      });
     }
   }
 };
@@ -254,7 +261,7 @@ const pushMonitoring = async (remoteMonitoringArray: Monitoring[], accessToken: 
   const localMonitoringArray = await findMonitoring({});
 
   for (const localMonitoring of localMonitoringArray) {
-    const remoteMonitoring = remoteMonitoringArray.find((v) => v.id === localMonitoring.id);
+    const remoteMonitoring = remoteMonitoringArray.find((v) => v.guid === localMonitoring.guid);
 
     if (!remoteMonitoring) {
       const guid = await postMonitoring({
@@ -263,9 +270,11 @@ const pushMonitoring = async (remoteMonitoringArray: Monitoring[], accessToken: 
       });
 
       await database.execAsync(
-        [{ sql: 'UPDATE monitoring SET id = ? WHERE id = ?', args: [guid, localMonitoring.id] }],
+        [{ sql: 'UPDATE monitoring SET guid = ? WHERE id = ?', args: [guid, localMonitoring.id] }],
         false
       );
+    } else if (localMonitoring.updatedAt > remoteMonitoring.updatedAt) {
+      console.log('update remote monitoring');
     }
   }
 };
