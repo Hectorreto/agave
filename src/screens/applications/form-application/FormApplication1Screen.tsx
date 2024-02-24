@@ -7,37 +7,37 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import InputDate from '../../../components/input-date/InputDate';
 import InputSelect from '../../../components/input-select/InputSelect';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
+import { FormContext } from '../../../contexts/notification-context/FormContext';
 import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import useProperties from '../../../hooks/useProperties';
-import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
+import { ApplicationFormStackParamList } from '../../../navigation/ApplicationFormStack';
+import { Application } from '../../../services/applicationService';
 
-type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication1'>;
+type Props = NativeStackScreenProps<ApplicationFormStackParamList, 'FormApplication1'>;
 
-const CreateApplication1Screen = ({ navigation, route }: Props) => {
+const FormApplication1Screen = ({ navigation }: Props) => {
   const { showNotification } = useContext(NotificationContext);
-  const application = { ...route.params?.application };
-
-  const [propertyId, setPropertyId] = useState(application.propertyId ?? '');
-  const [concept, setConcept] = useState(application.concept ?? '');
-  const [month, setMonth] = useState(application.applicationMonth ?? '');
-  const [date, setDate] = useState<Date | undefined>(
-    application.scheduledDate ? new Date(application.scheduledDate) : undefined
-  );
+  const { formValue, setFormValue } = useContext(FormContext);
+  const application = formValue as Partial<Application>;
+  const setApplication = setFormValue as (value: Partial<Application>) => void;
+  const scheduledDate = application.scheduledDate ? new Date(application.scheduledDate) : undefined;
 
   const [submitted, setSubmitted] = useState(false);
   const { data: properties } = useProperties({});
 
   const handleSubmit = () => {
     setSubmitted(true);
-    if (!propertyId || !concept || !month || !date)
+
+    if (
+      !application.propertyId ||
+      !application.concept ||
+      !application.applicationMonth ||
+      !application.scheduledDate
+    ) {
       return showNotification('Formulario incompleto', 'incorrect');
+    }
 
-    application.propertyId = propertyId;
-    application.concept = concept;
-    application.applicationMonth = month;
-    application.scheduledDate = date.getTime();
-
-    navigation.navigate('CreateApplication2', { application });
+    navigation.navigate('FormApplication2');
   };
 
   return (
@@ -47,8 +47,8 @@ const CreateApplication1Screen = ({ navigation, route }: Props) => {
       <InputSelect
         label="Predio"
         placeholder="Selecciona"
-        value={propertyId}
-        onChange={setPropertyId}
+        value={application.propertyId ?? ''}
+        onChange={(value) => setApplication({ ...application, propertyId: value })}
         items={properties.map((property) => ({
           label: property.name,
           value: property.id,
@@ -58,8 +58,8 @@ const CreateApplication1Screen = ({ navigation, route }: Props) => {
       <InputSelect
         label="Concepto"
         placeholder="Selecciona"
-        value={concept}
-        onChange={setConcept}
+        value={application.concept ?? ''}
+        onChange={(value) => setApplication({ ...application, concept: value })}
         items={[
           { label: 'Nutrición', value: 'nutrition' },
           { label: 'Maleza', value: 'undergrowth' },
@@ -70,8 +70,8 @@ const CreateApplication1Screen = ({ navigation, route }: Props) => {
       <InputSelect
         label="Mes de aplicación"
         placeholder="Selecciona"
-        value={month}
-        onChange={setMonth}
+        value={application.applicationMonth ?? ''}
+        onChange={(value) => setApplication({ ...application, applicationMonth: value })}
         items={[
           { label: 'Enero', value: '0' },
           { label: 'Febrero', value: '1' },
@@ -88,19 +88,20 @@ const CreateApplication1Screen = ({ navigation, route }: Props) => {
         ]}
         submitted={submitted}
       />
-      <InputDate label="Fecha programada" date={date} onChange={setDate} submitted={submitted} />
+      <InputDate
+        label="Fecha programada"
+        date={scheduledDate}
+        onChange={(value) => setApplication({ ...application, scheduledDate: value.getTime() })}
+        submitted={submitted}
+      />
 
       <View style={{ flex: 1 }} />
       <View style={styles.saveCancelButtons}>
-        <CustomButton
-          color="lightBlue"
-          text="Cancelar"
-          onPress={() => navigation.navigate('ListApplications')}
-        />
+        <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
         <CustomButton color="blue" text="Siguiente" onPress={handleSubmit} />
       </View>
     </ScrollView>
   );
 };
 
-export default CreateApplication1Screen;
+export default FormApplication1Screen;

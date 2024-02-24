@@ -84,9 +84,6 @@ const getAllApplications = async ({ accessToken, limit, skip }: Props) => {
     COMPLETED: 'finalized',
   };
 
-  console.log('----------');
-  console.log(data);
-
   return data.map<Application>((value) => {
     const productsRaw: any[] = value.template_recipe?.products ?? [];
     const products = productsRaw.map<Product>((product) => ({

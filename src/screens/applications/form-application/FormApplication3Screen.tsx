@@ -1,4 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useContext } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 
@@ -6,15 +7,18 @@ import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
+import { FormContext } from '../../../contexts/notification-context/FormContext';
 import useGeneratePDF from '../../../hooks/useGeneratePDF';
-import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
-import { getProducts } from '../../../services/applicationService';
+import { ApplicationFormStackParamList } from '../../../navigation/ApplicationFormStack';
+import { Application, getProducts } from '../../../services/applicationService';
 import { Colors } from '../../../themes/theme';
 
-type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication3'>;
+type Props = NativeStackScreenProps<ApplicationFormStackParamList, 'FormApplication3'>;
 
-const CreateApplication3Screen = ({ navigation, route }: Props) => {
-  const { application } = route.params;
+const FormApplication3Screen = ({ navigation }: Props) => {
+  const { formValue } = useContext(FormContext);
+  const application = formValue as Partial<Application>;
+
   const { viewShotRef, loading, generatePDF } = useGeneratePDF();
   const products = application.products ? getProducts(application.products) : [];
 
@@ -70,11 +74,11 @@ const CreateApplication3Screen = ({ navigation, route }: Props) => {
         <CustomButton
           color="blue"
           text="Siguiente"
-          onPress={() => navigation.navigate('CreateApplication4', { application, products })}
+          onPress={() => navigation.navigate('FormApplication4')}
         />
       </View>
     </ScrollView>
   );
 };
 
-export default CreateApplication3Screen;
+export default FormApplication3Screen;

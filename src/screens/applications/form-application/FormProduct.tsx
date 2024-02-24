@@ -6,7 +6,7 @@ import RemoveCircle from '../../../../assets/svg/remove_circle.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputNumber from '../../../components/input-number/InputNumber';
 import InputText from '../../../components/input-text/InputText';
-import { Product } from '../../../services/productService';
+import { Product } from '../../../services/applicationService';
 
 type Props = {
   product: Product;

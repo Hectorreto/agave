@@ -85,7 +85,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
                   Icon={IconAlert}
                   text="Iniciar"
                   onPress={() => {
-                    navigation.navigate('CreateApplication1', { application: value });
+                    navigation.navigate('ApplicationFormStack', { application: value });
                   }}
                 />
               )}
@@ -112,7 +112,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
           text="Nueva aplicación"
           color="blue"
           Icon={AddCircle}
-          onPress={() => navigation.navigate('CreateApplication1')}
+          onPress={() => navigation.navigate('ApplicationFormStack')}
         />
       </View>
     </ScrollView>
