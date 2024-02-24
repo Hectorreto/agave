@@ -1,4 +1,4 @@
-import { Application } from '../../services/applicationService';
+import { Application, Product } from '../../services/applicationService';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
 
@@ -6,6 +6,12 @@ type Props = {
   accessToken: string;
   limit: number;
   skip: number;
+};
+
+const conceptTypes: any = {
+  NUTRITION: 'nutrition',
+  UNDERGROWTH: 'undergrowth',
+  PHYTOSANITARY: 'phytosanitary',
 };
 
 const getAllApplications = async ({ accessToken, limit, skip }: Props) => {
@@ -46,6 +52,13 @@ const getAllApplications = async ({ accessToken, limit, skip }: Props) => {
               land {
                 guid
               }
+              template_recipe {
+                products {
+                  applied_total_dose
+                  dose_per_bottle
+                  product_name
+                }
+              }
             }
           }
         }
@@ -71,22 +84,35 @@ const getAllApplications = async ({ accessToken, limit, skip }: Props) => {
     COMPLETED: 'finalized',
   };
 
-  return data.map<Application>((value) => ({
-    id: value.guid,
-    createdAt: value.created_date,
-    updatedAt: value.updated_date,
-    createdBy: JSON.stringify(value.created_by),
-    updatedBy: JSON.stringify(value.updated_by),
-    applicationMonth: value.month,
-    state: statusTypes[value.status],
-    scheduledDate: value.scheduled_date,
-    concept: value.concept,
-    containerAmount: value.bottles,
-    notes: value.notes,
-    videoUri: value.start_picture?.path,
-    finalizeVideoUri: value.completed_picture?.path,
-    propertyId: value.land?.guid,
-  }));
+  console.log('----------');
+  console.log(data);
+
+  return data.map<Application>((value) => {
+    const productsRaw: any[] = value.template_recipe?.products ?? [];
+    const products = productsRaw.map<Product>((product) => ({
+      name: product.product_name,
+      amount: String(product.dose_per_bottle),
+      realAmount: String(product.applied_total_dose),
+    }));
+
+    return {
+      id: value.guid,
+      createdAt: value.created_date,
+      updatedAt: value.updated_date,
+      createdBy: JSON.stringify(value.created_by),
+      updatedBy: JSON.stringify(value.updated_by),
+      applicationMonth: `${Number(value.month)}`,
+      state: statusTypes[value.status],
+      scheduledDate: value.scheduled_date,
+      concept: conceptTypes[value.concept],
+      containerAmount: `${Number(value.bottles)}`,
+      notes: value.notes,
+      videoUri: value.start_picture?.path,
+      products: JSON.stringify(products),
+      finalizeVideoUri: value.completed_picture?.path,
+      propertyId: value.land?.guid,
+    };
+  });
 };
 
 export default getAllApplications;

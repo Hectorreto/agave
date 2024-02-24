@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { findProducts } from './productService';
 import database from '../../database';
 import getAllApplications from '../api/application/getAllApplications';
 import postApplication from '../api/application/postApplication';
@@ -21,6 +20,7 @@ database.transaction((transaction) => {
       notes TEXT,
       videoUri TEXT,
       finalizeVideoUri TEXT,
+      products TEXT,
       propertyId TEXT,
       
       FOREIGN KEY(propertyId) REFERENCES property(id)
@@ -48,8 +48,24 @@ export type Application = {
   notes: string;
   videoUri: string;
   finalizeVideoUri: string;
+  products: string;
   propertyId: string;
   propertyName?: string;
+};
+
+export type Product = {
+  name: string;
+  amount: string;
+  realAmount?: string;
+};
+
+export const getProducts = (value: string): Product[] => {
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 };
 
 export const createApplication = (application: Application): Promise<void> => {
@@ -210,13 +226,12 @@ const pullApplications = async (remoteApplications: Application[]) => {
 
 const pushApplications = async (remoteApplications: Application[], accessToken: string) => {
   const localApplications = await findApplications({});
-  const localProducts = await findProducts({});
 
   for (const localApplication of localApplications) {
     const remoteApplication = remoteApplications.find((v) => v.id === localApplication.id);
 
     if (!remoteApplication) {
-      const products = localProducts.filter((v) => v.applicationId === localApplication.id);
+      const products = getProducts(localApplication.products);
 
       const guid = await postApplication({
         accessToken,

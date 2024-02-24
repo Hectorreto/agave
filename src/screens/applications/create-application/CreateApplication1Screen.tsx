@@ -1,39 +1,43 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { newApplication } from './helpers';
 import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputDate from '../../../components/input-date/InputDate';
 import InputSelect from '../../../components/input-select/InputSelect';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
+import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import useProperties from '../../../hooks/useProperties';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication1'>;
 
-const CreateApplication1Screen = ({ navigation }: Props) => {
-  const [propertyId, setPropertyId] = useState('');
-  const [concept, setConcept] = useState('');
-  const [month, setMonth] = useState('');
-  const [date, setDate] = useState<Date>();
+const CreateApplication1Screen = ({ navigation, route }: Props) => {
+  const { showNotification } = useContext(NotificationContext);
+  const application = { ...route.params?.application };
+
+  const [propertyId, setPropertyId] = useState(application.propertyId ?? '');
+  const [concept, setConcept] = useState(application.concept ?? '');
+  const [month, setMonth] = useState(application.applicationMonth ?? '');
+  const [date, setDate] = useState<Date | undefined>(
+    application.scheduledDate ? new Date(application.scheduledDate) : undefined
+  );
+
   const [submitted, setSubmitted] = useState(false);
   const { data: properties } = useProperties({});
 
   const handleSubmit = () => {
     setSubmitted(true);
-    if (!propertyId || !concept || !month || !date) return;
+    if (!propertyId || !concept || !month || !date)
+      return showNotification('Formulario incompleto', 'incorrect');
 
-    navigation.navigate('CreateApplication2', {
-      application: {
-        ...newApplication(),
-        propertyId,
-        concept,
-        applicationMonth: month,
-        scheduledDate: date.getTime(),
-      },
-    });
+    application.propertyId = propertyId;
+    application.concept = concept;
+    application.applicationMonth = month;
+    application.scheduledDate = date.getTime();
+
+    navigation.navigate('CreateApplication2', { application });
   };
 
   return (

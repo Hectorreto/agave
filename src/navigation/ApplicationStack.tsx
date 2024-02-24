@@ -10,16 +10,15 @@ import CreateApplication4Screen from '../screens/applications/create-application
 import FinaliceApplication1Screen from '../screens/applications/finalice-application/FinaliceApplication1Screen';
 import FinaliceApplication2Screen from '../screens/applications/finalice-application/FinaliceApplication2Screen';
 import ListApplicationScreen from '../screens/applications/list-application/ListApplicationScreen';
-import { Application } from '../services/applicationService';
-import { Product } from '../services/productService';
+import { Application, Product } from '../services/applicationService';
 import { Colors } from '../themes/theme';
 
 export type ApplicationStackParamList = {
   ListApplications: undefined;
-  CreateApplication1: undefined;
-  CreateApplication2: { application: Application };
-  CreateApplication3: { application: Application; products: Product[] };
-  CreateApplication4: { application: Application; products: Product[] };
+  CreateApplication1: { application: Partial<Application> } | undefined;
+  CreateApplication2: { application: Partial<Application> };
+  CreateApplication3: { application: Partial<Application> };
+  CreateApplication4: { application: Partial<Application> };
   FinaliceApplication1: { applicationId: string };
   FinaliceApplication2: { applicationId: string; products: Product[] };
 };
@@ -68,29 +67,37 @@ const ApplicationStack = () => {
       <Stack.Screen
         name="CreateApplication1"
         component={CreateApplication1Screen}
-        options={{
-          title: 'Nueva aplicación',
+        options={({ route }) => {
+          return {
+            title: route.params?.application.id ? 'Ver aplicación' : 'Nueva aplicación',
+          };
         }}
       />
       <Stack.Screen
         name="CreateApplication2"
         component={CreateApplication2Screen}
-        options={{
-          title: 'Nueva aplicación',
+        options={({ route }) => {
+          return {
+            title: route.params?.application.id ? 'Ver aplicación' : 'Nueva aplicación',
+          };
         }}
       />
       <Stack.Screen
         name="CreateApplication3"
         component={CreateApplication3Screen}
-        options={{
-          title: 'Nueva aplicación',
+        options={({ route }) => {
+          return {
+            title: route.params?.application.id ? 'Ver aplicación' : 'Nueva aplicación',
+          };
         }}
       />
       <Stack.Screen
         name="CreateApplication4"
         component={CreateApplication4Screen}
-        options={{
-          title: 'Nueva aplicación',
+        options={({ route }) => {
+          return {
+            title: route.params?.application.id ? 'Ver aplicación' : 'Nueva aplicación',
+          };
         }}
       />
     </Stack.Navigator>

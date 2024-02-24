@@ -7,14 +7,14 @@ import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
-import useProducts from '../../../hooks/useProducts';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplication1'>;
 
 const FinaliceApplication1Screen = ({ navigation, route }: Props) => {
   const { applicationId } = route.params;
-  const { data } = useProducts({ applicationId });
+  const data: any[] = []; // TODO
+  // const { data } = useProducts({ applicationId });
   const [amounts, setAmounts] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
 

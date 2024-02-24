@@ -10,21 +10,29 @@ import { Product } from '../../../services/productService';
 
 type Props = {
   product: Product;
-  canDelete: boolean;
-  onChange: (product: Product) => void;
-  onPressAdd: () => void;
-  onPressDelete: () => void;
+  onChange?: (product: Product) => void;
+  onPressAdd?: () => void;
+  onPressDelete?: () => void;
   submitted: boolean;
 };
 
-const FormProduct = ({
-  product,
-  canDelete,
-  onChange,
-  onPressAdd,
-  onPressDelete,
-  submitted,
-}: Props) => {
+const FormProduct = ({ product, onChange, onPressAdd, onPressDelete, submitted }: Props) => {
+  const handleChangeName = () => {
+    if (!onChange) return;
+    return (value: string) => {
+      onChange({ ...product, name: value });
+    };
+  };
+
+  const handleChangeAmount = () => {
+    if (!onChange) return;
+    return (value: string) => {
+      if (value.match(/^\d*$/g)) {
+        onChange({ ...product, amount: value });
+      }
+    };
+  };
+
   return (
     <View style={styles.formContainer}>
       <View style={styles.formTopContainer}>
@@ -33,17 +41,16 @@ const FormProduct = ({
             label="Nombre del producto"
             placeholder="Nombre"
             value={product.name}
-            onChange={(name) => {
-              onChange({ ...product, name });
-            }}
+            onChange={handleChangeName()}
             submitted={submitted}
           />
         </View>
         <View style={styles.formTopButtonContainer}>
-          {canDelete ? (
-            <CustomButton color="red" onPress={onPressDelete} Icon={RemoveCircle} />
-          ) : (
+          {onPressAdd !== undefined && (
             <CustomButton color="blue" onPress={onPressAdd} Icon={AddCircle} />
+          )}
+          {onPressDelete !== undefined && (
+            <CustomButton color="red" onPress={onPressDelete} Icon={RemoveCircle} />
           )}
         </View>
       </View>
@@ -52,11 +59,7 @@ const FormProduct = ({
           label="Dosis por tambo (en litros)"
           placeholder="Dosis"
           value={product.amount}
-          onChange={(value) => {
-            if (value.match(/^\d*$/g)) {
-              onChange({ ...product, amount: value });
-            }
-          }}
+          onChange={handleChangeAmount()}
           submitted={submitted}
         />
       </View>

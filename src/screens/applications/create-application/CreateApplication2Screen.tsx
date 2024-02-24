@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import uuid from 'react-native-uuid';
 import ViewShot from 'react-native-view-shot';
@@ -12,49 +12,68 @@ import InputText from '../../../components/input-text/InputText';
 import ModalDelete from '../../../components/modal-delete/ModalDelete';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
+import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import useGeneratePDF from '../../../hooks/useGeneratePDF';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
-import { Product } from '../../../services/productService';
+import { Application, Product, getProducts } from '../../../services/applicationService';
 import { Colors } from '../../../themes/theme';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication2'>;
 
-const newProduct = (applicationId: string): Product => {
+type ProductContainer = {
+  id: string;
+  product: Product;
+};
+
+const createProductContainer = (): ProductContainer => {
   return {
     id: uuid.v4() as string,
-    name: '',
-    amount: '',
-    applicationId,
+    product: {
+      name: '',
+      amount: '',
+    },
   };
 };
 
+const getProductContainers = (application: Partial<Application>) => {
+  if (!application.products) return [];
+  const products = getProducts(application.products);
+  return products.map((value) => ({
+    id: uuid.v4() as string,
+    product: value,
+  }));
+};
+
 const CreateApplication2Screen = ({ navigation, route }: Props) => {
+  const { showNotification } = useContext(NotificationContext);
   const { application } = route.params;
-  const [amount, setAmount] = useState('');
-  const [notes, setNotes] = useState('');
-  const [products, setProducts] = useState([newProduct(application.id)]);
+
+  const [amount, setAmount] = useState(application.containerAmount ?? '');
+  const [notes, setNotes] = useState(application.notes ?? '');
+  const [productContainers, setProductContainers] = useState<ProductContainer[]>(
+    getProductContainers(application)
+  );
+
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product>();
+  const [selectedProduct, setSelectedProduct] = useState<ProductContainer>();
   const [submitted, setSubmitted] = useState(false);
   const { viewShotRef, loading, generatePDF } = useGeneratePDF();
 
   const handleSubmit = () => {
     setSubmitted(true);
-    if (!amount || !notes) return;
-    const productsCopy = [...products];
-    const lastProduct = productsCopy[productsCopy.length - 1];
-    if (!lastProduct.name && !lastProduct.amount) productsCopy.pop();
-    if (productsCopy.length === 0) return;
-    if (productsCopy.some((product) => !product.name || !product.amount)) return;
 
-    navigation.navigate('CreateApplication3', {
-      application: {
-        ...application,
-        containerAmount: amount,
-        notes,
-      },
-      products: productsCopy,
-    });
+    if (!amount || !notes) return showNotification('Formulario incompleto', 'incorrect');
+    if (productContainers.length === 0)
+      return showNotification('Agrega al menos un producto', 'incorrect');
+    if (productContainers.some((value) => !value.product.name || !value.product.amount))
+      return showNotification('Formulario incompleto 2', 'incorrect');
+
+    const products = productContainers.map((value) => value.product);
+    application.containerAmount = amount;
+    application.notes = notes;
+    application.products = JSON.stringify(products);
+
+    navigation.navigate('CreateApplication3', { application });
   };
 
   if (loading) {
@@ -67,11 +86,11 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
             <Text style={[styles.tableTitleText]}>Producto</Text>,
             <Text style={styles.tableTitleText}>Cantidad total</Text>,
           ]}
-          rows={products.map((value) => ({
+          rows={productContainers.map((value) => ({
             id: value.id,
             values: [
-              <Text style={styles.dataText}>{value.name}</Text>,
-              <Text style={styles.dataText}>{value.amount}</Text>,
+              <Text style={styles.dataText}>{value.product.name}</Text>,
+              <Text style={styles.dataText}>{value.product.amount}</Text>,
             ],
           }))}
         />
@@ -103,26 +122,30 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
         submitted={submitted}
       />
 
-      {products.map((product, index) => (
+      {productContainers.map((value, index) => (
         <FormProduct
-          key={product.id}
-          product={product}
-          canDelete={index < products.length - 1}
+          key={value.id}
+          product={value.product}
           onChange={(product) => {
-            const copyProducts = [...products];
-            copyProducts[index] = product;
-            setProducts(copyProducts);
-          }}
-          onPressAdd={() => {
-            setProducts([...products, newProduct(application.id)]);
+            const copyContainers = [...productContainers];
+            copyContainers[index].product = product;
+            setProductContainers(copyContainers);
           }}
           onPressDelete={() => {
             setIsModalVisible(true);
-            setSelectedProduct(product);
+            setSelectedProduct(value);
           }}
           submitted={submitted}
         />
       ))}
+
+      <FormProduct
+        product={createProductContainer()}
+        onPressAdd={() => {
+          setProductContainers([...productContainers, createProductContainer()]);
+        }}
+        submitted={false}
+      />
 
       <View style={styles.pdfButton}>
         <CustomButton color="white" text="Ver receta en PDF" onPress={generatePDF} />
@@ -146,8 +169,8 @@ const CreateApplication2Screen = ({ navigation, route }: Props) => {
         }
         onCancel={() => setIsModalVisible(false)}
         onConfirm={() => {
-          const copyProducts = products.filter((value) => value !== selectedProduct);
-          setProducts(copyProducts);
+          const copyContainers = productContainers.filter((value) => value !== selectedProduct);
+          setProductContainers(copyContainers);
           setIsModalVisible(false);
         }}
       />

@@ -8,13 +8,15 @@ import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import useGeneratePDF from '../../../hooks/useGeneratePDF';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
+import { getProducts } from '../../../services/applicationService';
 import { Colors } from '../../../themes/theme';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication3'>;
 
 const CreateApplication3Screen = ({ navigation, route }: Props) => {
-  const { application, products } = route.params;
+  const { application } = route.params;
   const { viewShotRef, loading, generatePDF } = useGeneratePDF();
+  const products = application.products ? getProducts(application.products) : [];
 
   if (loading) {
     return (
@@ -26,8 +28,8 @@ const CreateApplication3Screen = ({ navigation, route }: Props) => {
             <Text style={[styles.tableTitleText]}>Producto</Text>,
             <Text style={styles.tableTitleText}>Cantidad total</Text>,
           ]}
-          rows={products.map((value) => ({
-            id: value.id,
+          rows={products.map((value, index) => ({
+            id: `${index}`,
             values: [
               <Text style={styles.dataText}>{value.name}</Text>,
               <Text style={styles.dataText}>{value.amount}</Text>,
@@ -49,8 +51,8 @@ const CreateApplication3Screen = ({ navigation, route }: Props) => {
           <Text style={[styles.tableTitleText]}>Producto</Text>,
           <Text style={styles.tableTitleText}>Cantidad total</Text>,
         ]}
-        rows={products.map((value) => ({
-          id: value.id,
+        rows={products.map((value, index) => ({
+          id: `${index}`,
           values: [
             <Text style={styles.dataText}>{value.name}</Text>,
             <Text style={styles.dataText}>{value.amount}</Text>,

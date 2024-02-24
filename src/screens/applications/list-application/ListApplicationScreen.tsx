@@ -85,7 +85,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
                   Icon={IconAlert}
                   text="Iniciar"
                   onPress={() => {
-                    console.log('iniciar');
+                    navigation.navigate('CreateApplication1', { application: value });
                   }}
                 />
               )}

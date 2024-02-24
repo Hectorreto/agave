@@ -17,6 +17,7 @@ export const newApplication = (): Application => {
     notes: '',
     videoUri: '',
     finalizeVideoUri: '',
+    products: '',
     propertyId: '',
   };
 };

@@ -10,12 +10,11 @@ import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 import { finalizeApplication } from '../../../services/applicationService';
-import { finalizeProducts } from '../../../services/productService';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplication2'>;
 
 const FinaliceApplication2Screen = ({ navigation, route }: Props) => {
-  const { applicationId, products } = route.params;
+  const { applicationId } = route.params;
   const { showNotification } = useContext(NotificationContext);
   const [videoUri, setVideoUri] = useState('');
 
@@ -23,7 +22,7 @@ const FinaliceApplication2Screen = ({ navigation, route }: Props) => {
     try {
       if (!videoUri) return;
       await finalizeApplication(applicationId, videoUri);
-      await finalizeProducts(products);
+      console.log('await finalizeProducts(products)'); // TODO
       showNotification('La aplicación ha sido finalizada con éxito');
       navigation.navigate('ListApplications');
     } catch (error) {

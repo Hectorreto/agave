@@ -11,7 +11,6 @@ export const dropAllTables = () => {
     transaction.executeSql('DELETE FROM application');
     transaction.executeSql('DELETE FROM exit');
     transaction.executeSql('DELETE FROM monitoring');
-    transaction.executeSql('DELETE FROM product');
     transaction.executeSql('DELETE FROM property');
   });
 };

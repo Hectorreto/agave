@@ -3,36 +3,42 @@ import { ResizeMode, Video } from 'expo-av';
 import { useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
+import { newApplication } from './helpers';
 import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputCameraVideo from '../../../components/input-camera-video/InputCameraVideo';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
-import { createApplication, syncApplications } from '../../../services/applicationService';
-import { createProducts } from '../../../services/productService';
+import {
+  Application,
+  createApplication,
+  syncApplications,
+} from '../../../services/applicationService';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'CreateApplication4'>;
 
 const CreateApplication4Screen = ({ navigation, route }: Props) => {
-  const { application, products } = route.params;
+  const { application } = route.params;
   const { showNotification } = useContext(NotificationContext);
   const [videoUri, setVideoUri] = useState('');
 
   const handleOnSave = async () => {
     try {
       const nowTime = Date.now();
-      const data = {
+      const data: Application = {
+        ...newApplication(),
         ...application,
         createdAt: nowTime,
         updatedAt: nowTime,
+        state: 'scheduled',
       };
       if (videoUri) {
         data.videoUri = videoUri;
         data.state = 'inProcess';
       }
       await createApplication(data);
-      await createProducts(products);
+
       showNotification('La aplicación ha sido creada con éxito');
       navigation.navigate('ListApplications');
       syncApplications().catch(console.error);
