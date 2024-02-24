@@ -1,6 +1,5 @@
 import postVideo from './postVideo';
-import { Application } from '../../services/applicationService';
-import { Product } from '../../services/productService';
+import { Application, Product } from '../../services/applicationService';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
 

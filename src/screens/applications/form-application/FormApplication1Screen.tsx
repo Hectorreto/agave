@@ -48,7 +48,11 @@ const FormApplication1Screen = ({ navigation }: Props) => {
         label="Predio"
         placeholder="Selecciona"
         value={application.propertyId ?? ''}
-        onChange={(value) => setApplication({ ...application, propertyId: value })}
+        onChange={
+          application.id
+            ? undefined
+            : (value) => setApplication({ ...application, propertyId: value })
+        }
         items={properties.map((property) => ({
           label: property.name,
           value: property.id,
@@ -59,7 +63,9 @@ const FormApplication1Screen = ({ navigation }: Props) => {
         label="Concepto"
         placeholder="Selecciona"
         value={application.concept ?? ''}
-        onChange={(value) => setApplication({ ...application, concept: value })}
+        onChange={
+          application.id ? undefined : (value) => setApplication({ ...application, concept: value })
+        }
         items={[
           { label: 'Nutrición', value: 'nutrition' },
           { label: 'Maleza', value: 'undergrowth' },
@@ -71,7 +77,11 @@ const FormApplication1Screen = ({ navigation }: Props) => {
         label="Mes de aplicación"
         placeholder="Selecciona"
         value={application.applicationMonth ?? ''}
-        onChange={(value) => setApplication({ ...application, applicationMonth: value })}
+        onChange={
+          application.id
+            ? undefined
+            : (value) => setApplication({ ...application, applicationMonth: value })
+        }
         items={[
           { label: 'Enero', value: '0' },
           { label: 'Febrero', value: '1' },
@@ -91,7 +101,11 @@ const FormApplication1Screen = ({ navigation }: Props) => {
       <InputDate
         label="Fecha programada"
         date={scheduledDate}
-        onChange={(value) => setApplication({ ...application, scheduledDate: value.getTime() })}
+        onChange={
+          application.id
+            ? undefined
+            : (value) => setApplication({ ...application, scheduledDate: value.getTime() })
+        }
         submitted={submitted}
       />
 

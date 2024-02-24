@@ -22,7 +22,7 @@ type Props = NativeStackScreenProps<ApplicationFormStackParamList, 'FormApplicat
 
 const FormApplication4Screen = ({ navigation }: Props) => {
   const { showNotification } = useContext(NotificationContext);
-  const { formValue, setFormValue, onSubmit } = useContext(FormContext);
+  const { formValue, setFormValue } = useContext(FormContext);
   const application = formValue as Partial<Application>;
   const setApplication = setFormValue as (value: Partial<Application>) => void;
 
@@ -37,6 +37,7 @@ const FormApplication4Screen = ({ navigation }: Props) => {
           updatedAt: nowTime,
           state: application.videoUri ? 'inProcess' : 'scheduled',
         });
+        showNotification('La aplicación ha sido creada con éxito');
       } else {
         const nowTime = Date.now();
         await updateApplication({
@@ -45,10 +46,10 @@ const FormApplication4Screen = ({ navigation }: Props) => {
           updatedAt: nowTime,
           state: application.videoUri ? 'inProcess' : 'scheduled',
         });
+        showNotification('La aplicación ha sido actualizada con éxito');
       }
 
-      showNotification('La aplicación ha sido creada con éxito');
-      onSubmit();
+      navigation.getParent()?.goBack();
       syncApplications().catch(console.error);
     } catch (error) {
       console.error(error);

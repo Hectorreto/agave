@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator<ApplicationFormStackParamList>();
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'ApplicationFormStack'>;
 
-const ApplicationFormStack = ({ navigation, route }: Props) => {
+const ApplicationFormStack = ({ route }: Props) => {
   const [application, setApplication] = useState<Partial<Application>>({
     ...route.params?.application,
   });
@@ -30,7 +30,6 @@ const ApplicationFormStack = ({ navigation, route }: Props) => {
       value={{
         formValue: application,
         setFormValue: setApplication,
-        onSubmit: () => navigation.goBack(),
       }}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="FormApplication1" component={FormApplication1Screen} />

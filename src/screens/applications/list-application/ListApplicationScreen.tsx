@@ -1,3 +1,4 @@
+import { CommonActions } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
@@ -85,7 +86,35 @@ const ListApplicationScreen = ({ navigation }: Props) => {
                   Icon={IconAlert}
                   text="Iniciar"
                   onPress={() => {
-                    navigation.navigate('ApplicationFormStack', { application: value });
+                    const application = { ...value };
+                    delete application.propertyName;
+
+                    navigation.dispatch((state) => {
+                      return CommonActions.reset({
+                        ...state,
+                        index: 1,
+                        routes: [
+                          {
+                            key: state.routes[0].key,
+                            name: 'ListApplications',
+                          },
+                          {
+                            key: 'ApplicationFormStack-StartApplication',
+                            name: 'ApplicationFormStack',
+                            params: { application },
+                            state: {
+                              index: 3,
+                              routes: [
+                                { name: 'FormApplication1' },
+                                { name: 'FormApplication2' },
+                                { name: 'FormApplication3' },
+                                { name: 'FormApplication4' },
+                              ],
+                            },
+                          },
+                        ],
+                      });
+                    });
                   }}
                 />
               )}

@@ -80,11 +80,15 @@ const FormApplication2Screen = ({ navigation }: Props) => {
         label="No. de tambos a aplicar"
         placeholder="Número"
         value={application.containerAmount ?? ''}
-        onChange={(value) => {
-          if (value.match(/^\d*$/g)) {
-            setApplication({ ...application, containerAmount: value });
-          }
-        }}
+        onChange={
+          application.id
+            ? undefined
+            : (value) => {
+                if (value.match(/^\d*$/g)) {
+                  setApplication({ ...application, containerAmount: value });
+                }
+              }
+        }
         submitted={submitted}
       />
       <InputText
@@ -92,7 +96,9 @@ const FormApplication2Screen = ({ navigation }: Props) => {
         label="Notas"
         placeholder="Escribe una nota"
         value={application.notes ?? ''}
-        onChange={(value) => setApplication({ ...application, notes: value })}
+        onChange={
+          application.id ? undefined : (value) => setApplication({ ...application, notes: value })
+        }
         submitted={submitted}
       />
 
@@ -100,29 +106,39 @@ const FormApplication2Screen = ({ navigation }: Props) => {
         <FormProduct
           key={index}
           product={product}
-          onChange={(newProduct) => {
-            const copyProducts = [...products];
-            copyProducts[index] = newProduct;
-            setProducts(copyProducts);
-            setApplication({ ...application, products: JSON.stringify(copyProducts) });
-          }}
-          onPressDelete={() => {
-            setIsModalVisible(true);
-            setSelectedProduct(product);
-          }}
+          onChange={
+            application.id
+              ? undefined
+              : (newProduct) => {
+                  const copyProducts = [...products];
+                  copyProducts[index] = newProduct;
+                  setProducts(copyProducts);
+                  setApplication({ ...application, products: JSON.stringify(copyProducts) });
+                }
+          }
+          onPressDelete={
+            application.id
+              ? undefined
+              : () => {
+                  setIsModalVisible(true);
+                  setSelectedProduct(product);
+                }
+          }
           submitted={submitted}
         />
       ))}
 
-      <FormProduct
-        product={{ name: '', amount: '' }}
-        onPressAdd={() => {
-          const listProducts = [...products, { name: '', amount: '' }];
-          setProducts(listProducts);
-          setApplication({ ...application, products: JSON.stringify(listProducts) });
-        }}
-        submitted={false}
-      />
+      {application.id ? undefined : (
+        <FormProduct
+          product={{ name: '', amount: '' }}
+          onPressAdd={() => {
+            const listProducts = [...products, { name: '', amount: '' }];
+            setProducts(listProducts);
+            setApplication({ ...application, products: JSON.stringify(listProducts) });
+          }}
+          submitted={false}
+        />
+      )}
 
       <View style={styles.pdfButton}>
         <CustomButton color="white" text="Ver receta en PDF" onPress={generatePDF} />

@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import database from '../../database';
 import getAllApplications from '../api/application/getAllApplications';
 import postApplication from '../api/application/postApplication';
+import startApplication from '../api/application/startApplication';
 
 database.transaction((transaction) => {
   const sql = `
@@ -255,6 +256,8 @@ const pushApplications = async (remoteApplications: Application[], accessToken: 
         ],
         false
       );
+    } else if (localApplication.videoUri && !remoteApplication.videoUri) {
+      await startApplication({ accessToken, application: localApplication });
     } else if (localApplication.updatedAt > remoteApplication.updatedAt) {
       console.log('update remote application');
     }
