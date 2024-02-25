@@ -9,7 +9,11 @@ type Props = {
 };
 
 const startApplication = async ({ application, accessToken }: Props) => {
-  const videoGuid = await postVideo({ accessToken, uri: application.videoUri });
+  const videoGuid = await postVideo({
+    accessToken,
+    uri: application.videoUri,
+    category: 'APPLICATION_START',
+  });
 
   const response = await fetch(API_URL, {
     method: 'POST',

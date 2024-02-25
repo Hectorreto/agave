@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import database from '../../database';
+import finalizeApplication from '../api/application/finalizeApplication';
 import getAllApplications from '../api/application/getAllApplications';
 import postApplication from '../api/application/postApplication';
 import startApplication from '../api/application/startApplication';
@@ -166,34 +167,6 @@ export const findApplications = async (options: FindApplicationOptions): Promise
   });
 };
 
-export const finalizeApplication = (
-  applicationId: string,
-  finalizeVideoUri: string
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    database.transaction((transaction) => {
-      transaction.executeSql(
-        `
-          UPDATE application
-          SET 
-            state = 'finalized',
-            finalizeVideoUri = ?,
-            updatedAt = ?
-          WHERE id = ?
-        `,
-        [finalizeVideoUri, new Date().getTime(), applicationId],
-        () => {
-          resolve();
-        },
-        (_, error) => {
-          reject(error);
-          return true;
-        }
-      );
-    });
-  });
-};
-
 export const syncApplications = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
@@ -258,6 +231,9 @@ const pushApplications = async (remoteApplications: Application[], accessToken: 
       );
     } else if (localApplication.videoUri && !remoteApplication.videoUri) {
       await startApplication({ accessToken, application: localApplication });
+    } else if (localApplication.finalizeVideoUri && !remoteApplication.finalizeVideoUri) {
+      const products = getProducts(localApplication.products);
+      await finalizeApplication({ accessToken, application: localApplication, products });
     } else if (localApplication.updatedAt > remoteApplication.updatedAt) {
       console.log('update remote application');
     }

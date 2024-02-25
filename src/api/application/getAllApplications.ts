@@ -86,11 +86,17 @@ const getAllApplications = async ({ accessToken, limit, skip }: Props) => {
 
   return data.map<Application>((value) => {
     const productsRaw: any[] = value.template_recipe?.products ?? [];
-    const products = productsRaw.map<Product>((product) => ({
-      name: product.product_name,
-      amount: String(product.dose_per_bottle),
-      realAmount: String(product.applied_total_dose),
-    }));
+    const products = productsRaw.map<Product>((product) => {
+      const data: Product = {
+        name: product.product_name,
+        amount: String(product.dose_per_bottle),
+      };
+      if (product.applied_total_dose) {
+        data.realAmount = String(product.applied_total_dose);
+      }
+
+      return data;
+    });
 
     return {
       id: value.guid,

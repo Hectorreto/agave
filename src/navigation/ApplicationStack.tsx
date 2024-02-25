@@ -1,20 +1,18 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
+import ApplicationFinalizeFormStack from './ApplicationFinalizeFormStack';
 import ApplicationFormStack from './ApplicationFormStack';
 import HeaderBackButton from '../components/header-back-button/HeaderBackButton';
 import HeaderOpenDrawerButton from '../components/header-open-drawer-button/HeaderOpenDrawerButton';
-import FinaliceApplication1Screen from '../screens/applications/finalice-application/FinaliceApplication1Screen';
-import FinaliceApplication2Screen from '../screens/applications/finalice-application/FinaliceApplication2Screen';
 import ListApplicationScreen from '../screens/applications/list-application/ListApplicationScreen';
-import { Application, Product } from '../services/applicationService';
+import { Application } from '../services/applicationService';
 import { Colors } from '../themes/theme';
 
 export type ApplicationStackParamList = {
   ApplicationFormStack: { application: Partial<Application> } | undefined;
   ListApplications: undefined;
-  FinaliceApplication1: { applicationId: string };
-  FinaliceApplication2: { applicationId: string; products: Product[] };
+  ApplicationFinalizeFormStack: { application: Application };
 };
 
 const Stack = createNativeStackNavigator<ApplicationStackParamList>();
@@ -45,15 +43,8 @@ const ApplicationStack = () => {
         }}
       />
       <Stack.Screen
-        name="FinaliceApplication1"
-        component={FinaliceApplication1Screen}
-        options={{
-          title: 'Finalizar aplicación',
-        }}
-      />
-      <Stack.Screen
-        name="FinaliceApplication2"
-        component={FinaliceApplication2Screen}
+        name="ApplicationFinalizeFormStack"
+        component={ApplicationFinalizeFormStack}
         options={{
           title: 'Finalizar aplicación',
         }}

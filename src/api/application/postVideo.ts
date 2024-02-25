@@ -5,9 +5,10 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
 type Props = {
   accessToken: string;
   uri: string;
+  category: 'APPLICATION_START' | 'APPLICATION_COMPLETED';
 };
 
-const postVideo = async ({ uri, accessToken }: Props) => {
+const postVideo = async ({ uri, accessToken, category }: Props) => {
   const asset = Asset.fromURI(uri);
   const name = 'uploadFileName';
   const mimeType = `video/${asset.type}`;
@@ -28,7 +29,7 @@ const postVideo = async ({ uri, accessToken }: Props) => {
       `,
       variables: {
         uploadFileArgs: {
-          category: 'APPLICATION_START',
+          category,
           name,
           file: null,
         },

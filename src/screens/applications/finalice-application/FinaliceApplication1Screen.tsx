@@ -1,35 +1,35 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
-import InputText from '../../../components/input-text/InputText';
+import InputNumber from '../../../components/input-number/InputNumber';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
 import TabIndicator from '../../../components/tab-indicator/TabIndicator';
-import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
+import { FormContext } from '../../../contexts/notification-context/FormContext';
+import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
+import { ApplicationFinalizeFormStackParamList } from '../../../navigation/ApplicationFinalizeFormStack';
+import { Application, getProducts } from '../../../services/applicationService';
 
-type Props = NativeStackScreenProps<ApplicationStackParamList, 'FinaliceApplication1'>;
+type Props = NativeStackScreenProps<ApplicationFinalizeFormStackParamList, 'FinaliceApplication1'>;
 
 const FinaliceApplication1Screen = ({ navigation, route }: Props) => {
-  const { applicationId } = route.params;
-  const data: any[] = []; // TODO
-  // const { data } = useProducts({ applicationId });
-  const [amounts, setAmounts] = useState<string[]>([]);
+  const { showNotification } = useContext(NotificationContext);
+  const { formValue, setFormValue } = useContext(FormContext);
+  const application = formValue as Application;
+  const setApplication = setFormValue as (value: Application) => void;
+
+  const products = getProducts(application.products);
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = () => {
     setSubmitted(true);
-    for (let i = 0; i < data.length; i++) {
-      if (!amounts[i]) return;
+    if (products.some((product) => !product.realAmount)) {
+      return showNotification('Formulario incompleto', 'incorrect');
     }
 
-    const products = data.map((product, index) => ({
-      ...product,
-      realAmount: amounts[index],
-    }));
-
-    navigation.navigate('FinaliceApplication2', { applicationId, products });
+    navigation.navigate('FinaliceApplication2');
   };
 
   return (
@@ -43,19 +43,21 @@ const FinaliceApplication1Screen = ({ navigation, route }: Props) => {
           <Text style={styles.tableTitleText}>Cant. total</Text>,
           <Text style={styles.tableTitleText}>Cant. real</Text>,
         ]}
-        rows={data.map((value, index) => ({
-          id: value.id,
+        rows={products.map((value, index) => ({
+          id: `${index}`,
           values: [
             <Text style={styles.tableText}>{value.name}</Text>,
             <Text style={styles.tableText}>{value.amount}</Text>,
             <View style={styles.tableInput}>
-              <InputText
+              <InputNumber
                 placeholder="###"
-                value={amounts[index]}
-                onChange={(text) => {
-                  const copyAmounts = [...amounts];
-                  copyAmounts[index] = text;
-                  setAmounts(copyAmounts);
+                value={products[index].realAmount ?? ''}
+                onChange={(value) => {
+                  if (value.match(/^\d*$/g)) {
+                    const copyProducts = [...products];
+                    copyProducts[index].realAmount = value;
+                    setApplication({ ...application, products: JSON.stringify(copyProducts) });
+                  }
                 }}
                 submitted={submitted}
               />
@@ -67,11 +69,7 @@ const FinaliceApplication1Screen = ({ navigation, route }: Props) => {
         <CustomButton color="white" text="Ver receta en PDF" onPress={() => {}} />
       </View>
       <View style={styles.saveCancelButtons}>
-        <CustomButton
-          color="lightBlue"
-          text="Cancelar"
-          onPress={() => navigation.navigate('ListApplications')}
-        />
+        <CustomButton color="lightBlue" text="Cancelar" onPress={() => navigation.goBack()} />
         <CustomButton color="blue" text="Siguiente" onPress={handleSubmit} />
       </View>
     </ScrollView>

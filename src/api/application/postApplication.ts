@@ -18,7 +18,11 @@ const conceptTypes: any = {
 const postApplication = async ({ accessToken, application, products }: Props) => {
   let videoGuid: any = null;
   if (application.videoUri) {
-    videoGuid = await postVideo({ accessToken, uri: application.videoUri });
+    videoGuid = await postVideo({
+      accessToken,
+      uri: application.videoUri,
+      category: 'APPLICATION_START',
+    });
   }
 
   const response = await fetch(API_URL, {

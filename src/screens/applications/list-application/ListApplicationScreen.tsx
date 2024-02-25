@@ -124,9 +124,11 @@ const ListApplicationScreen = ({ navigation }: Props) => {
                   color="white"
                   text="Finalizar"
                   Icon={IconCheck}
-                  onPress={() =>
-                    navigation.navigate('FinaliceApplication1', { applicationId: value.id })
-                  }
+                  onPress={() => {
+                    const application = { ...value };
+                    delete application.propertyName;
+                    navigation.navigate('ApplicationFinalizeFormStack', { application });
+                  }}
                 />
               )}
               {value.state === 'finalized' && (
