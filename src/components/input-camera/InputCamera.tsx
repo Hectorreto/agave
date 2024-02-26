@@ -23,6 +23,7 @@ type Props = {
 const InputCamera = ({ value, onChange }: Props) => {
   const [height, setHeight] = useState(IMAGE_MAX_SIZE);
   const [width, setWidth] = useState(IMAGE_MAX_SIZE);
+  const [loadingCamera, setLoadingCamera] = useState(false);
 
   useEffect(() => {
     if (value) {
@@ -84,10 +85,12 @@ const InputCamera = ({ value, onChange }: Props) => {
   };
 
   const handleOnPress = () => {
-    if (!onChange) return undefined;
+    if (!onChange) return;
+    if (loadingCamera) return;
 
     return async () => {
       try {
+        setLoadingCamera(true);
         await handleCameraPermissions();
         await handleLocationPermissions();
         const location = await getCurrentPositionAsync();
@@ -97,6 +100,8 @@ const InputCamera = ({ value, onChange }: Props) => {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoadingCamera(false);
       }
     };
   };

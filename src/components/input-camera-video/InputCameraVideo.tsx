@@ -4,6 +4,7 @@ import {
   MediaTypeOptions,
   requestCameraPermissionsAsync,
 } from 'expo-image-picker';
+import { useState } from 'react';
 import { Linking, Platform, View } from 'react-native';
 
 import CameraAlt from '../../../assets/svg/camera_alt.svg';
@@ -16,6 +17,8 @@ type Props = {
 };
 
 const InputCameraVideo = ({ onChange, text }: Props) => {
+  const [loadingCamera, setLoadingCamera] = useState(false);
+
   const handleCameraPermissions = async () => {
     let permissions = await getCameraPermissionsAsync();
     if (permissions.status !== 'granted') {
@@ -40,10 +43,12 @@ const InputCameraVideo = ({ onChange, text }: Props) => {
   };
 
   const handleOnPress = () => {
-    if (!onChange) return undefined;
+    if (!onChange) return;
+    if (loadingCamera) return;
 
     return async () => {
       try {
+        setLoadingCamera(true);
         await handleCameraPermissions();
         const result = await launchCameraAsync({ mediaTypes: MediaTypeOptions.Videos });
         if (!result.canceled) {
@@ -51,6 +56,8 @@ const InputCameraVideo = ({ onChange, text }: Props) => {
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoadingCamera(false);
       }
     };
   };

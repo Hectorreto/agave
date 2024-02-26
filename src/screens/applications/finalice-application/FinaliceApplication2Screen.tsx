@@ -27,7 +27,7 @@ const FinaliceApplication2Screen = ({ navigation }: Props) => {
   const handleCreate = async () => {
     try {
       if (!application.finalizeVideoUri) {
-        return showNotification('Formulario incorrecto', 'incorrect');
+        return showNotification('Formulario incompleto', 'incorrect');
       }
       const data: any = {
         ...application,
