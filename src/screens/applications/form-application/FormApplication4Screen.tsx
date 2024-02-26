@@ -2,8 +2,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ResizeMode, Video } from 'expo-av';
 import { useContext } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import uuid from 'react-native-uuid';
 
-import { newApplication } from './helpers';
 import styles from './styles';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputCameraVideo from '../../../components/input-camera-video/InputCameraVideo';
@@ -31,21 +31,24 @@ const FormApplication4Screen = ({ navigation }: Props) => {
       if (!application.id) {
         const nowTime = Date.now();
         await createApplication({
-          ...newApplication(),
           ...application,
+          id: uuid.v4() as string,
           createdAt: nowTime,
           updatedAt: nowTime,
+          createdBy: '[Usuario]',
+          updatedBy: '[Usuario]',
           state: application.videoUri ? 'inProcess' : 'scheduled',
-        });
+        } as Application);
         showNotification('La aplicación ha sido creada con éxito');
       } else {
         const nowTime = Date.now();
-        await updateApplication({
-          ...newApplication(),
+        const data: any = {
           ...application,
           updatedAt: nowTime,
           state: application.videoUri ? 'inProcess' : 'scheduled',
-        });
+        };
+        delete data.guid;
+        await updateApplication(data);
         showNotification('La aplicación ha sido actualizada con éxito');
       }
 

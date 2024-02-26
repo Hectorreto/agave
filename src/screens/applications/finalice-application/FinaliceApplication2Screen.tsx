@@ -29,11 +29,13 @@ const FinaliceApplication2Screen = ({ navigation }: Props) => {
       if (!application.finalizeVideoUri) {
         return showNotification('Formulario incorrecto', 'incorrect');
       }
-      await updateApplication({
+      const data: any = {
         ...application,
         updatedAt: Date.now(),
         state: 'finalized',
-      });
+      };
+      delete data.guid;
+      await updateApplication(data);
 
       showNotification('La aplicación ha sido finalizada con éxito');
       navigation.getParent()?.goBack();

@@ -39,7 +39,11 @@ const useApplications = ({ search }: Props) => {
       const filteredData = result.filter((value) => {
         const month = MonthNames[Number(value.applicationMonth)].toLocaleLowerCase();
         const state = ApplicationStates[value.state].toLocaleLowerCase();
-        return value.propertyName?.includes(s) || month.includes(s) || state.includes(s);
+        return (
+          value.propertyName?.toLocaleLowerCase().includes(s) ||
+          month.toLocaleLowerCase().includes(s) ||
+          state.toLocaleLowerCase().includes(s)
+        );
       });
       setData(filteredData);
     }
