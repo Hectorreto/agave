@@ -62,7 +62,7 @@ const DrawerContent = ({ navigation }: Props) => {
           label="Agregar nueva aplicación"
           onPress={() =>
             navigation.navigate('ApplicationStack', {
-              screen: 'CreateApplication1',
+              screen: 'ApplicationFormStack',
               initial: false,
             })
           }

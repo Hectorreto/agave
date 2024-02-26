@@ -171,7 +171,7 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
   }
 
   if (options.filter?.createdAt) {
-    where.push('createdAt BETWEEN ? AND ?');
+    where.push('monitoring.createdAt BETWEEN ? AND ?');
     args.push(options.filter.createdAt.lower.getTime());
     args.push(options.filter.createdAt.upper.getTime());
   }

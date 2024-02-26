@@ -32,12 +32,18 @@ const ListPropertyScreen = ({ navigation }: Props) => {
         </View>
       </View>
       <PaginatedTable
-        flex={[1, 0]}
-        titles={[<Text style={styles.tableTitleText}>Predio</Text>, <></>]}
+        titles={[
+          <Text style={styles.tableTitleText}>Predio</Text>,
+          <Text style={styles.tableTitleText}>Registro</Text>,
+          <Text style={styles.tableTitleText}>Identificador</Text>,
+          <></>,
+        ]}
         rows={data.map((value) => ({
           id: value.id,
           values: [
             <Text style={styles.dataText}>{value.name}</Text>,
+            <Text style={styles.dataText}>{value.registry}</Text>,
+            <Text style={styles.dataText}>{value.internalIdentifier}</Text>,
             <View style={styles.moreButton}>
               <CustomButton
                 color="blueWhite"

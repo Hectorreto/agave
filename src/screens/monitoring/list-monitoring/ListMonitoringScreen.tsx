@@ -65,7 +65,7 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
         <FilterAlt />
         <View style={{ width: 270 }}>
           <InputText
-            placeholder="Predio o lugar..."
+            placeholder="Predio o fecha..."
             value={search}
             onChange={setSearch}
             iconRight={<Search />}

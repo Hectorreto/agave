@@ -12,25 +12,10 @@ import Search from '../../../../assets/svg/search.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import InputText from '../../../components/input-text/InputText';
 import PaginatedTable from '../../../components/paginated-table/PaginatedTable';
-import useApplications from '../../../hooks/useApplications';
+import useApplications, { MonthNames } from '../../../hooks/useApplications';
 import { ApplicationStackParamList } from '../../../navigation/ApplicationStack';
 
 type Props = NativeStackScreenProps<ApplicationStackParamList, 'ListApplications'>;
-
-const MonthNames = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
 
 const ListApplicationScreen = ({ navigation }: Props) => {
   const [search, setSearch] = useState('');
@@ -42,7 +27,7 @@ const ListApplicationScreen = ({ navigation }: Props) => {
         <FilterAlt />
         <View style={{ width: 270 }}>
           <InputText
-            placeholder="Predio o lugar..."
+            placeholder="Predio, mes o estado..."
             value={search}
             onChange={setSearch}
             iconRight={<Search />}

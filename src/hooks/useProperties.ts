@@ -12,17 +12,32 @@ type Props = {
 const useProperties = ({ id, search, createdAtSort }: Props) => {
   const [data, setData] = useState<Property[]>([]);
 
+  const handleSearch = (result: Property[]) => {
+    if (!search) {
+      setData(result);
+    } else {
+      const s = search.toLocaleLowerCase();
+      const filteredData = result.filter((value) => {
+        return (
+          value.name.toLocaleLowerCase().includes(s) ||
+          value.registry.toLocaleLowerCase().includes(s) ||
+          value.internalIdentifier.toLocaleLowerCase().includes(s)
+        );
+      });
+      setData(filteredData);
+    }
+  };
+
   useFocusEffect(
     useCallback(() => {
       findProperties({
         filter: {
           id,
-          search: !search ? undefined : `%${search}%`,
         },
         sorting: {
           createdAt: createdAtSort,
         },
-      }).then((value) => setData(value));
+      }).then(handleSearch);
     }, [id, search, createdAtSort])
   );
 
