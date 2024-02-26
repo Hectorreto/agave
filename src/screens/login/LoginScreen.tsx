@@ -23,6 +23,7 @@ const LoginScreen = ({ navigation }: Props) => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<any>({});
   const refInput2 = useRef<TextInput>(null);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const validateForm = () => {
     const errors: any = {};
@@ -38,6 +39,7 @@ const LoginScreen = ({ navigation }: Props) => {
 
   const handleLogin = async () => {
     try {
+      setLoadingSubmit(true);
       if (!validateForm()) return;
       const data = await login(email, password);
 
@@ -54,6 +56,8 @@ const LoginScreen = ({ navigation }: Props) => {
 
       console.error(error);
       showNotification('Error al iniciar sesión', 'incorrect');
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
@@ -89,7 +93,11 @@ const LoginScreen = ({ navigation }: Props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <CustomButton color="blue" text="Iniciar sesión" onPress={handleLogin} />
+      <CustomButton
+        color="blue"
+        text="Iniciar sesión"
+        onPress={loadingSubmit ? undefined : handleLogin}
+      />
       <Versioning />
     </View>
   );

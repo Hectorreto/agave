@@ -22,6 +22,7 @@ const ChangePassScreen = ({ navigation }: Props) => {
   const [errors, setErrors] = useState<any>({});
   const refInput2 = useRef<TextInput>(null);
   const refInput3 = useRef<TextInput>(null);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
   const validateForm = () => {
     const errors: any = {};
@@ -54,6 +55,7 @@ const ChangePassScreen = ({ navigation }: Props) => {
 
   const handleSubmit = async () => {
     try {
+      setLoadingSubmit(true);
       if (!validateForm()) return;
       await changePassword({ oldPassword, newPassword, guid, accessToken });
       showNotification('Contraseña actualizada con éxito.');
@@ -73,6 +75,8 @@ const ChangePassScreen = ({ navigation }: Props) => {
 
       console.error(error);
       showNotification('Error al cambiar la contraseña', 'incorrect');
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
@@ -111,7 +115,11 @@ const ChangePassScreen = ({ navigation }: Props) => {
           errorMessage={errors.newPassword2}
         />
       </View>
-      <CustomButton color="blue" text="Cambiar contraseña" onPress={handleSubmit} />
+      <CustomButton
+        color="blue"
+        text="Cambiar contraseña"
+        onPress={loadingSubmit ? undefined : handleSubmit}
+      />
       <Versioning />
     </ScrollView>
   );

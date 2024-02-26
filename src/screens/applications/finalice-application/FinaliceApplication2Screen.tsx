@@ -18,7 +18,7 @@ import {
 
 type Props = NativeStackScreenProps<ApplicationFinalizeFormStackParamList, 'FinaliceApplication2'>;
 
-const FinaliceApplication2Screen = ({ navigation, route }: Props) => {
+const FinaliceApplication2Screen = ({ navigation }: Props) => {
   const { showNotification } = useContext(NotificationContext);
   const { formValue, setFormValue } = useContext(FormContext);
   const application = formValue as Application;
