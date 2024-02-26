@@ -43,9 +43,29 @@ const postMonitoring = async ({ accessToken, monitoring }: Props) => {
 
   const data: MonitoringContainer[] = JSON.parse(monitoring.data);
 
-  const quadrantsData = data.map((value) => {
-    const formData = [];
+  const quadrantsData: any[] = [];
 
+  data.forEach((value) => {
+    // create quadrant if doesn't exist
+    const quadrantId = value.quadrant - 1;
+    if (!quadrantsData[quadrantId]) {
+      quadrantsData[quadrantId] = {
+        quadrantId,
+        plants: [],
+      };
+    }
+
+    // create plant if doesn't exist
+    const plantId = value.plant - 1;
+    if (!quadrantsData[quadrantId].plants[plantId]) {
+      quadrantsData[quadrantId].plants[plantId] = {
+        plantId,
+        formData: [],
+      };
+    }
+
+    // fill form
+    const formData = quadrantsData[quadrantId].plants[plantId].formData;
     if (value.form[0]) {
       formData.push({
         type: 'PERFORMANCE',
@@ -202,16 +222,6 @@ const postMonitoring = async ({ accessToken, monitoring }: Props) => {
         ],
       });
     }
-
-    return {
-      quadrantId: value.quadrant - 1,
-      plants: [
-        {
-          plantId: value.plant - 1,
-          formData,
-        },
-      ],
-    };
   });
 
   const response = await fetch(API_URL, {

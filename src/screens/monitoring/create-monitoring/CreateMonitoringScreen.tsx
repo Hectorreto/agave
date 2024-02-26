@@ -95,7 +95,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
 
       setSubmitted(false);
       const filteredData = data.filter(
-        (value) => value.quadrant !== currentQuadrant && value.plant !== currentPlant
+        (value) => value.quadrant !== currentQuadrant || value.plant !== currentPlant
       );
       filteredData.push({
         quadrant: currentQuadrant,

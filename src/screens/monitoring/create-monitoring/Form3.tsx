@@ -1,6 +1,7 @@
 import Delete from '../../../../assets/svg/delete.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Expandable from '../../../components/expandable/Expandable';
+import InputNumber from '../../../components/input-number/InputNumber';
 import InputRadioGroup from '../../../components/input-radio-group/InputRadioGroup';
 import InputText from '../../../components/input-text/InputText';
 import { Monitoring } from '../../../services/monitoringService';
@@ -42,7 +43,7 @@ const Form3 = ({ monitoring, onChange, onPressDelete, submitted }: Props) => {
         onChange={handleOnChange('undergrowthLeafType')}
         submitted={submitted}
       />
-      <InputText
+      <InputNumber
         label="Altura aproximada en cm"
         placeholder="Altura"
         value={monitoring.undergrowthHeight || ''}

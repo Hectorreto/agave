@@ -6,11 +6,11 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useMapData } from './helpers';
 import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
-import Create from '../../../../assets/svg/create.svg';
 import ExpandLess from '../../../../assets/svg/expand_less.svg';
 import ExpandMore from '../../../../assets/svg/expand_more.svg';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import Search from '../../../../assets/svg/search.svg';
+import IconMoreVert from '../../../../assets/svg/table/more_vert.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
 import FilterDate from '../../../components/filter-date/FilterDate';
@@ -108,7 +108,7 @@ const ListMonitoringScreen = ({ navigation }: Props) => {
             <View style={styles.moreButton}>
               <CustomButton
                 color="white"
-                Icon={Create}
+                Icon={IconMoreVert}
                 onPress={() => navigation.navigate('SeeMonitoring', { monitoringId: value.id })}
               />
             </View>,
