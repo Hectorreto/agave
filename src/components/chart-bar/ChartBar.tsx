@@ -5,9 +5,9 @@ import { Colors } from '../../themes/theme';
 
 type Props = {
   data: { value: number }[];
+  xAxisLabels: string[];
   frontColor: string;
   borderColor: string;
-  xAxisLabels: string[];
 };
 
 const ChartBar = ({ data, frontColor, borderColor, xAxisLabels }: Props) => {

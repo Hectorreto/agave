@@ -3,7 +3,7 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
 type Props = {
   accessToken: string;
   propertyGuid: string;
-  dashboardType: 'PLANTS' | 'ACRES' | 'CROPS';
+  dashboardType: 'PLANTS' | 'ACRES' | 'CROPS' | 'GRADES' | 'AVG_WEIGHT';
 };
 
 export type GraphData = {

@@ -33,6 +33,8 @@ const PropertyBoardScreen = ({ route }: Props) => {
   const [plantData, setPlantData] = useState<GraphData>();
   const [hectareData, setHectareData] = useState<GraphData>();
   const [cropData, setCropData] = useState<GraphData>();
+  const [gradesData, setGradesData] = useState<GraphData>();
+  const [weightData, setWeightData] = useState<GraphData>();
 
   useEffect(() => {
     getAlerts({ accessToken, propertyGuid })
@@ -58,15 +60,17 @@ const PropertyBoardScreen = ({ route }: Props) => {
       .catch((error) => console.error(error));
   }, []);
 
-  const lineData = [
-    { value: 34 },
-    { value: 80, label: '2018' },
-    { value: 65, label: '2019' },
-    { value: 110, label: '2020' },
-    { value: 95, label: '2021' },
-    { value: 135, label: '2022' },
-    { value: 65, label: '2023' },
-  ];
+  useEffect(() => {
+    getPropertyGraph({ accessToken, propertyGuid, dashboardType: 'GRADES' })
+      .then((data) => setGradesData(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    getPropertyGraph({ accessToken, propertyGuid, dashboardType: 'AVG_WEIGHT' })
+      .then((data) => setWeightData(data))
+      .catch((error) => console.error(error));
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -171,8 +175,22 @@ const PropertyBoardScreen = ({ route }: Props) => {
           </View>
         </View>
 
-        <ChartLine data={lineData} color={Colors.CHART_E1} text="peso promedio en kg" />
-        <ChartLine data={lineData} color={Colors.CHART_B1} text="calificación promedio" />
+        {weightData && (
+          <ChartLine
+            data={weightData.yAxisValues.map((value) => ({ value }))}
+            xAxisLabels={weightData.xAxisLabels}
+            color={Colors.CHART_E1}
+            text="peso promedio en kg"
+          />
+        )}
+        {gradesData && (
+          <ChartLine
+            data={gradesData.yAxisValues.map((value) => ({ value }))}
+            xAxisLabels={gradesData.xAxisLabels}
+            color={Colors.CHART_B1}
+            text="calificación promedio"
+          />
+        )}
       </View>
     </ScrollView>
   );

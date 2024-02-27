@@ -4,17 +4,19 @@ import { LineChart } from 'react-native-gifted-charts';
 import { Colors } from '../../themes/theme';
 
 type Props = {
-  data: any[];
+  data: { value: number }[];
+  xAxisLabels: string[];
   color: string;
   text: string;
 };
 
-const ChartLine = ({ data, color, text }: Props) => {
+const ChartLine = ({ data, color, text, xAxisLabels }: Props) => {
   return (
     <View style={{ marginTop: 25 }}>
       <View style={{ overflow: 'hidden', marginLeft: 10, marginRight: 20 }}>
         <LineChart
           data={data}
+          xAxisLabelTexts={xAxisLabels}
           color={color}
           thickness={2}
           hideDataPoints
