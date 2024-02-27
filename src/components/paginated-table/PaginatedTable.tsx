@@ -40,7 +40,7 @@ const PaginatedTable = ({ titles, rows, maxRows = 5, showFooter = true, flex }: 
         {flex ? (
           <View style={styles.content}>{children}</View>
         ) : (
-          <ScrollView horizontal style={styles.content}>
+          <ScrollView horizontal style={styles.content} persistentScrollbar>
             {children}
           </ScrollView>
         )}
