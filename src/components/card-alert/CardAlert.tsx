@@ -29,7 +29,7 @@ type Props = {
 
 const CardAlert = ({ title, time, type }: Props) => {
   const days = daysBetween(time, Date.now());
-  const message = days === 1 ? 'en el último día' : `en los últimos ${days} días`;
+  const message = days === 1 ? 'hace un día' : `en los últimos ${days} días`;
   const Icon = alertIcons[type];
 
   return (

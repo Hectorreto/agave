@@ -30,7 +30,7 @@ const InputSelectMultiple = ({
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const text = values.join(', ');
-  const disabled = !onChange;
+  const disabled = !onChange || !items.length;
   const isValid = values.length > 0;
   const showError = submitted && !isValid;
 

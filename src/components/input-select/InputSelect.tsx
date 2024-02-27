@@ -30,7 +30,7 @@ const InputSelect = ({
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const text = items.find((item) => item.value === value)?.label;
-  const disabled = !onChange;
+  const disabled = !onChange || !items.length;
   const isValid = Boolean(value);
   const showError = submitted && !isValid;
 
