@@ -13,7 +13,9 @@ import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
 import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { PropertyStackParamList } from '../../../navigation/PropertyStack';
+import { CropType } from '../../../services/monitoringService';
 import { createProperty, Property } from '../../../services/propertyService';
+import { parseArray } from '../../../utils/arrayUtils';
 
 type Props = NativeStackScreenProps<PropertyStackParamList, 'CreateProperty'>;
 
@@ -72,7 +74,11 @@ const CreatePropertyScreen = ({ navigation }: Props) => {
         <InputSelectMultiple
           label="Tipo de cultivos"
           placeholder="Tipo de cultivos"
-          values={property.cropType ? property.cropType.split(',') : []}
+          values={
+            property.cropType
+              ? parseArray(property.cropType).map((value: CropType) => value.name)
+              : []
+          }
           onChange={(values) => setProperty({ ...property, cropType: values.join(',') })}
           items={[
             { label: 'Agave', value: 'Agave' },

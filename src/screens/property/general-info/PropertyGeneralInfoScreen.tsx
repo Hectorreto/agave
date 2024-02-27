@@ -18,7 +18,9 @@ import InputSelectMultiple from '../../../components/input-select-multiple/Input
 import InputSwitch from '../../../components/input-switch/InputSwitch';
 import InputText from '../../../components/input-text/InputText';
 import { PropertyTabsParamList } from '../../../navigation/PropertyTabs';
+import { CropType } from '../../../services/monitoringService';
 import { Property } from '../../../services/propertyService';
+import { parseArray } from '../../../utils/arrayUtils';
 
 type Props = MaterialTopTabScreenProps<PropertyTabsParamList, 'PropertyGeneralInfo'>;
 
@@ -51,6 +53,7 @@ const PropertyGeneralInfoScreen = ({ route }: Props) => {
   const { property } = route.params;
   const location = getLocation(property);
   const floorAnalysis = getFloorAnalysisFile(property);
+  const cropTypes: CropType[] = parseArray(property.cropType);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -76,28 +79,11 @@ const PropertyGeneralInfoScreen = ({ route }: Props) => {
         <InputSelectMultiple
           label="Tipo de cultivos"
           placeholder="Tipo de cultivos"
-          values={property.cropType ? property.cropType.split(',') : []}
-          items={[
-            { label: 'Agave', value: 'Agave' },
-            { label: 'Maíz', value: 'Maíz' },
-            { label: 'Trigo', value: 'Trigo' },
-            { label: 'Soya', value: 'Soya' },
-            { label: 'Caña de Azúcar', value: 'Caña de Azúcar' },
-            { label: 'Frijol', value: 'Frijol' },
-            { label: 'Tomate', value: 'Tomate' },
-            { label: 'Pimiento', value: 'Pimiento' },
-            { label: 'Aguacate', value: 'Aguacate' },
-            { label: 'Limón', value: 'Limón' },
-            { label: 'Naranja', value: 'Naranja' },
-            { label: 'Arándano', value: 'Arándano' },
-            { label: 'Fresa', value: 'Fresa' },
-            { label: 'Frambuesa', value: 'Frambuesa' },
-            { label: 'Zarzamora', value: 'Zarzamora' },
-            { label: 'Café', value: 'Café' },
-            { label: 'Uva', value: 'Uva' },
-            { label: 'Cebolla', value: 'Cebolla' },
-            { label: 'Chile', value: 'Chile' },
-          ]}
+          values={cropTypes.map((cropType) => cropType.guid)}
+          items={cropTypes.map((cropType) => ({
+            label: cropType.name,
+            value: cropType.guid,
+          }))}
         />
         <Pressable
           onPress={() => {

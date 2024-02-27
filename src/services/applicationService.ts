@@ -5,6 +5,7 @@ import finalizeApplication from '../api/application/finalizeApplication';
 import getAllApplications from '../api/application/getAllApplications';
 import postApplication from '../api/application/postApplication';
 import startApplication from '../api/application/startApplication';
+import { parseArray } from '../utils/arrayUtils';
 
 database.transaction((transaction) => {
   const sql = `
@@ -61,15 +62,6 @@ export type Product = {
   name: string;
   amount: string;
   realAmount?: string;
-};
-
-export const getProducts = (value: string): Product[] => {
-  try {
-    return JSON.parse(value);
-  } catch (error) {
-    console.error(error);
-    return [];
-  }
 };
 
 export const createApplication = (application: Application): Promise<void> => {
@@ -212,7 +204,7 @@ const pushApplications = async (remoteApplications: Application[], accessToken: 
     const remoteApplication = remoteApplications.find((v) => v.guid === localApplication.guid);
 
     if (!remoteApplication) {
-      const products = getProducts(localApplication.products);
+      const products: Product[] = parseArray(localApplication.products);
 
       const guid = await postApplication({
         accessToken,
@@ -232,7 +224,7 @@ const pushApplications = async (remoteApplications: Application[], accessToken: 
     } else if (localApplication.videoUri && !remoteApplication.videoUri) {
       await startApplication({ accessToken, application: localApplication });
     } else if (localApplication.finalizeVideoUri && !remoteApplication.finalizeVideoUri) {
-      const products = getProducts(localApplication.products);
+      const products: Product[] = parseArray(localApplication.products);
       await finalizeApplication({ accessToken, application: localApplication, products });
     } else if (localApplication.updatedAt > remoteApplication.updatedAt) {
       console.log('update remote application');

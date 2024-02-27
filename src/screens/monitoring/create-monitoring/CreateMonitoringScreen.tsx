@@ -26,7 +26,7 @@ import { NotificationContext } from '../../../contexts/notification-context/Noti
 import useProperties from '../../../hooks/useProperties';
 import { MonitoringStackParamList } from '../../../navigation/MonitoringStack';
 import { createMonitoring, Monitoring, syncMonitoring } from '../../../services/monitoringService';
-import { range, sum } from '../../../utils/numberUtils';
+import { range, sum } from '../../../utils/arrayUtils';
 
 type Props = NativeStackScreenProps<MonitoringStackParamList, 'CreateMonitoring'>;
 

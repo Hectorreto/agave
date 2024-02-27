@@ -10,7 +10,8 @@ import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { FormContext } from '../../../contexts/notification-context/FormContext';
 import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import { ApplicationFinalizeFormStackParamList } from '../../../navigation/ApplicationFinalizeFormStack';
-import { Application, getProducts } from '../../../services/applicationService';
+import { Application, Product } from '../../../services/applicationService';
+import { parseArray } from '../../../utils/arrayUtils';
 
 type Props = NativeStackScreenProps<ApplicationFinalizeFormStackParamList, 'FinaliceApplication1'>;
 
@@ -20,7 +21,7 @@ const FinaliceApplication1Screen = ({ navigation, route }: Props) => {
   const application = formValue as Application;
   const setApplication = setFormValue as (value: Application) => void;
 
-  const products = getProducts(application.products);
+  const products: Product[] = parseArray(application.products);
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = () => {

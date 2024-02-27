@@ -15,8 +15,9 @@ import { FormContext } from '../../../contexts/notification-context/FormContext'
 import { NotificationContext } from '../../../contexts/notification-context/NotificationContext';
 import useGeneratePDF from '../../../hooks/useGeneratePDF';
 import { ApplicationFormStackParamList } from '../../../navigation/ApplicationFormStack';
-import { Application, Product, getProducts } from '../../../services/applicationService';
+import { Application, Product } from '../../../services/applicationService';
 import { Colors } from '../../../themes/theme';
+import { parseArray } from '../../../utils/arrayUtils';
 
 type Props = NativeStackScreenProps<ApplicationFormStackParamList, 'FormApplication2'>;
 
@@ -26,7 +27,7 @@ const FormApplication2Screen = ({ navigation }: Props) => {
   const application = formValue as Partial<Application>;
   const setApplication = setFormValue as (value: Partial<Application>) => void;
   const [products, setProducts] = useState<Product[]>(
-    application.products ? getProducts(application.products) : []
+    application.products ? parseArray(application.products) : []
   );
 
   const [isModalVisible, setIsModalVisible] = useState(false);

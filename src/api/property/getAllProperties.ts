@@ -1,3 +1,4 @@
+import { CropType } from '../../services/monitoringService';
 import { Property } from '../../services/propertyService';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL as string;
@@ -73,30 +74,41 @@ const getAllProperties = async ({ accessToken, limit, skip }: Props) => {
   const gqlResponse = await response.json();
   const data: any[] = gqlResponse.data.lands.data;
 
-  return data.map<Property>((value) => ({
-    id: value.guid,
-    guid: value.guid,
-    createdAt: value.created_date,
-    updatedAt: value.updated_date,
-    createdBy: JSON.stringify(value.created_by),
-    updatedBy: JSON.stringify(value.updated_by),
-    name: value.name,
-    plantingYear: value.plantation_year,
-    cropType: value.crop_types.map((value: any) => value.name).join(','),
-    location: JSON.stringify(value.place),
-    hectareNumber: value.place.area,
-    plantsPlantedNumber: value.planted_plants,
-    invoice: value.folio,
-    registry: value.registry_number,
-    internalIdentifier: value.internal_identifier,
-    boardsPerProperty: value.tables_by_property,
-    active: value.enabled ? 1 : 0,
+  return data.map<Property>((value) => {
+    const cropTypes: CropType[] = (value.crop_types as any[]).map((value) => ({
+      name: value.name,
+      guid: value.guid,
+    }));
+    cropTypes.sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
+    return {
+      id: value.guid,
+      guid: value.guid,
+      createdAt: value.created_date,
+      updatedAt: value.updated_date,
+      createdBy: JSON.stringify(value.created_by),
+      updatedBy: JSON.stringify(value.updated_by),
+      name: value.name,
+      plantingYear: value.plantation_year,
+      cropType: JSON.stringify(cropTypes),
+      location: JSON.stringify(value.place),
+      hectareNumber: value.place.area,
+      plantsPlantedNumber: value.planted_plants,
+      invoice: value.folio,
+      registry: value.registry_number,
+      internalIdentifier: value.internal_identifier,
+      boardsPerProperty: value.tables_by_property,
+      active: value.enabled ? 1 : 0,
 
-    floorAnalysis: JSON.stringify({
-      name: value.floor_analysis?.name,
-      url: value.floor_analysis?.path,
-    }),
-  }));
+      floorAnalysis: JSON.stringify({
+        name: value.floor_analysis?.name,
+        url: value.floor_analysis?.path,
+      }),
+    };
+  });
 };
 
 export default getAllProperties;

@@ -10,8 +10,9 @@ import TabIndicator from '../../../components/tab-indicator/TabIndicator';
 import { FormContext } from '../../../contexts/notification-context/FormContext';
 import useGeneratePDF from '../../../hooks/useGeneratePDF';
 import { ApplicationFormStackParamList } from '../../../navigation/ApplicationFormStack';
-import { Application, getProducts } from '../../../services/applicationService';
+import { Application, Product } from '../../../services/applicationService';
 import { Colors } from '../../../themes/theme';
+import { parseArray } from '../../../utils/arrayUtils';
 
 type Props = NativeStackScreenProps<ApplicationFormStackParamList, 'FormApplication3'>;
 
@@ -20,7 +21,7 @@ const FormApplication3Screen = ({ navigation }: Props) => {
   const application = formValue as Partial<Application>;
 
   const { viewShotRef, loading, generatePDF } = useGeneratePDF();
-  const products = application.products ? getProducts(application.products) : [];
+  const products: Product[] = application.products ? parseArray(application.products) : [];
 
   if (loading) {
     return (

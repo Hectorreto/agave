@@ -101,6 +101,11 @@ export type Monitoring = {
   data?: string;
 };
 
+export type CropType = {
+  name: string;
+  guid: string;
+};
+
 export const createMonitoring = (monitoring: Monitoring): Promise<void> => {
   const keys = Object.keys(monitoring);
   const values = Object.values(monitoring);

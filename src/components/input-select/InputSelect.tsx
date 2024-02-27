@@ -17,6 +17,7 @@ type Props = {
   }[];
   iconLeft?: ReactElement;
   submitted?: boolean;
+  onPressOut?: () => void;
 };
 
 const InputSelect = ({
@@ -27,6 +28,7 @@ const InputSelect = ({
   items,
   iconLeft,
   submitted,
+  onPressOut,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const text = items.find((item) => item.value === value)?.label;
@@ -72,7 +74,13 @@ const InputSelect = ({
         visible={Boolean(isOpen && onChange)}
         animationType="fade">
         <View style={styles.backgroundContainer}>
-          <Pressable style={styles.modalOutside} onPress={() => setIsOpen(false)} />
+          <Pressable
+            style={styles.modalOutside}
+            onPress={() => {
+              setIsOpen(false);
+              if (onPressOut) onPressOut();
+            }}
+          />
           <ScrollView style={styles.modal}>
             {items.map((item) => (
               <Pressable

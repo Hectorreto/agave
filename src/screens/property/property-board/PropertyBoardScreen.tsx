@@ -13,11 +13,13 @@ import ChartLine from '../../../components/chart-line/ChartLine';
 import ChartPie from '../../../components/chart-pie/ChartPie';
 import Divider from '../../../components/divider/Divider';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
-import InputSelectMultiple from '../../../components/input-select-multiple/InputSelectMultiple';
+import InputSelect from '../../../components/input-select/InputSelect';
 import { AuthContext } from '../../../contexts/notification-context/AuthContext';
 import { PropertyTabsParamList } from '../../../navigation/PropertyTabs';
+import { CropType } from '../../../services/monitoringService';
 import { Colors } from '../../../themes/theme';
-import { formatNumber, zip } from '../../../utils/numberUtils';
+import { parseArray, zip } from '../../../utils/arrayUtils';
+import { formatNumber } from '../../../utils/numberUtils';
 
 type Props = MaterialTopTabScreenProps<PropertyTabsParamList, 'PropertyBoard'>;
 
@@ -26,8 +28,8 @@ const PropertyBoardScreen = ({ route }: Props) => {
   const propertyGuid = route.params.property.guid;
 
   const { property } = route.params;
-  const cropTypes = property.cropType.split(',');
-  const [cropTypeFilter, setCropTypeFilter] = useState<string[]>([]);
+  const cropTypes: CropType[] = parseArray(property.cropType);
+  const [cropTypeFilter, setCropTypeFilter] = useState('');
 
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [plantData, setPlantData] = useState<GraphData>();
@@ -61,16 +63,26 @@ const PropertyBoardScreen = ({ route }: Props) => {
   }, []);
 
   useEffect(() => {
-    getPropertyGraph({ accessToken, propertyGuid, dashboardType: 'GRADES' })
+    getPropertyGraph({
+      accessToken,
+      propertyGuid,
+      dashboardType: 'GRADES',
+      cropTypeGuid: cropTypeFilter,
+    })
       .then((data) => setGradesData(data))
       .catch((error) => console.error(error));
-  }, []);
+  }, [cropTypeFilter]);
 
   useEffect(() => {
-    getPropertyGraph({ accessToken, propertyGuid, dashboardType: 'AVG_WEIGHT' })
+    getPropertyGraph({
+      accessToken,
+      propertyGuid,
+      dashboardType: 'AVG_WEIGHT',
+      cropTypeGuid: cropTypeFilter,
+    })
       .then((data) => setWeightData(data))
       .catch((error) => console.error(error));
-  }, []);
+  }, [cropTypeFilter]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -150,13 +162,14 @@ const PropertyBoardScreen = ({ route }: Props) => {
 
         <View style={{ alignItems: 'center' }}>
           <View style={{ width: 200 }}>
-            <InputSelectMultiple
+            <InputSelect
+              onPressOut={() => setCropTypeFilter('')}
               placeholder="Tipo de cultivo"
-              values={cropTypeFilter}
+              value={cropTypeFilter}
               onChange={setCropTypeFilter}
               items={cropTypes.map((value) => ({
-                label: value,
-                value,
+                label: value.name,
+                value: value.guid,
               }))}
               iconLeft={<FilterAlt style={styles.leftIcon} />}
             />

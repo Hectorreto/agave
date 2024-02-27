@@ -4,6 +4,7 @@ type Props = {
   accessToken: string;
   propertyGuid: string;
   dashboardType: 'PLANTS' | 'ACRES' | 'CROPS' | 'GRADES' | 'AVG_WEIGHT';
+  cropTypeGuid?: string;
 };
 
 export type GraphData = {
@@ -16,7 +17,12 @@ export type GraphData = {
   yAxisValues: number[];
 };
 
-const getPropertyGraph = async ({ accessToken, propertyGuid, dashboardType }: Props) => {
+const getPropertyGraph = async ({
+  accessToken,
+  propertyGuid,
+  dashboardType,
+  cropTypeGuid,
+}: Props) => {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
@@ -43,6 +49,7 @@ const getPropertyGraph = async ({ accessToken, propertyGuid, dashboardType }: Pr
         getDashboardInput: {
           land_guid: propertyGuid,
           dashboard_type: dashboardType,
+          crop_type_guid: cropTypeGuid || undefined,
         },
       },
     }),
