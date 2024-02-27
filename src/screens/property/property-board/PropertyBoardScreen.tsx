@@ -2,7 +2,6 @@ import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { useContext, useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
-import { usePropertyBarData } from './helpers';
 import styles from './styles';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import getAlerts, { Alert } from '../../../api/property/getAlerts';
@@ -18,7 +17,7 @@ import InputSelectMultiple from '../../../components/input-select-multiple/Input
 import { AuthContext } from '../../../contexts/notification-context/AuthContext';
 import { PropertyTabsParamList } from '../../../navigation/PropertyTabs';
 import { Colors } from '../../../themes/theme';
-import { formatNumber } from '../../../utils/numberUtils';
+import { formatNumber, zip } from '../../../utils/numberUtils';
 
 type Props = MaterialTopTabScreenProps<PropertyTabsParamList, 'PropertyBoard'>;
 
@@ -27,12 +26,13 @@ const PropertyBoardScreen = ({ route }: Props) => {
   const propertyGuid = route.params.property.guid;
 
   const { property } = route.params;
-  const { hectareData } = usePropertyBarData();
   const cropTypes = property.cropType.split(',');
   const [cropTypeFilter, setCropTypeFilter] = useState<string[]>([]);
 
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [plantData, setPlantData] = useState<GraphData>();
+  const [hectareData, setHectareData] = useState<GraphData>();
+  const [cropData, setCropData] = useState<GraphData>();
 
   useEffect(() => {
     getAlerts({ accessToken, propertyGuid })
@@ -43,6 +43,18 @@ const PropertyBoardScreen = ({ route }: Props) => {
   useEffect(() => {
     getPropertyGraph({ accessToken, propertyGuid, dashboardType: 'PLANTS' })
       .then((data) => setPlantData(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    getPropertyGraph({ accessToken, propertyGuid, dashboardType: 'ACRES' })
+      .then((data) => setHectareData(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    getPropertyGraph({ accessToken, propertyGuid, dashboardType: 'CROPS' })
+      .then((data) => setCropData(data))
       .catch((error) => console.error(error));
   }, []);
 
@@ -78,22 +90,32 @@ const PropertyBoardScreen = ({ route }: Props) => {
           ))}
         </View>
       )}
-      <View style={styles.cardContainer}>
-        <View style={styles.cardTitleContainer}>
-          <Text style={styles.cardTitle}>Hectáreas</Text>
+      {hectareData && (
+        <View style={styles.cardContainer}>
+          <View style={styles.cardTitleContainer}>
+            <Text style={styles.cardTitle}>Hectáreas</Text>
+          </View>
+          <View style={styles.cardDataContainer}>
+            <CardSmall
+              left={formatNumber(hectareData.indicators[0].value)}
+              right="hectáreas totales"
+            />
+          </View>
+          <ChartBar
+            data={hectareData.yAxisValues.map((value) => ({ value }))}
+            xAxisLabels={hectareData.xAxisLabels}
+            frontColor={Colors.CHART_C}
+            borderColor={Colors.CHART_C1}
+          />
         </View>
-        <View style={styles.cardDataContainer}>
-          <CardSmall left={formatNumber(property.hectareNumber)} right="hectáreas totales" />
-        </View>
-        <ChartBar data={hectareData} frontColor={Colors.CHART_C} borderColor={Colors.CHART_C1} />
-      </View>
+      )}
       {plantData && (
         <View style={styles.cardContainer}>
           <View style={styles.cardTitleContainer}>
             <Text style={styles.cardTitle}>Plantas</Text>
           </View>
           <View style={styles.cardDataContainer}>
-            <CardSmall left={formatNumber(property.plantsPlantedNumber)} right="plantas totales" />
+            <CardSmall left={formatNumber(plantData.indicators[0].value)} right="plantas totales" />
           </View>
           <ChartBar
             data={plantData.yAxisValues.map((value) => ({ value }))}
@@ -104,15 +126,19 @@ const PropertyBoardScreen = ({ route }: Props) => {
         </View>
       )}
       <View style={[styles.cardContainer, styles.cardContainerGap16, { paddingBottom: 30 }]}>
-        <View style={styles.cardTitleContainer}>
-          <Text style={styles.cardTitle}>Cultivos</Text>
-        </View>
-        <ChartPie
-          data={cropTypes.map((value) => ({
-            label: value,
-            value: 1,
-          }))}
-        />
+        {cropData && (
+          <>
+            <View style={styles.cardTitleContainer}>
+              <Text style={styles.cardTitle}>Cultivos</Text>
+            </View>
+            <ChartPie
+              data={zip(cropData.xAxisLabels, cropData.yAxisValues).map(([label, value]) => ({
+                label,
+                value,
+              }))}
+            />
+          </>
+        )}
 
         <View style={{ marginHorizontal: 24 }}>
           <Divider />

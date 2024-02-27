@@ -3,12 +3,8 @@ import { BarChart } from 'react-native-gifted-charts';
 
 import { Colors } from '../../themes/theme';
 
-type ItemType = {
-  value: number;
-};
-
 type Props = {
-  data: ItemType[];
+  data: { value: number }[];
   frontColor: string;
   borderColor: string;
   xAxisLabels: string[];
