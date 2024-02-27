@@ -3,16 +3,22 @@ import { BarChart } from 'react-native-gifted-charts';
 
 import { Colors } from '../../themes/theme';
 
-type Props = {
-  data: any[];
-  frontColor: string;
-  borderColor: string;
+type ItemType = {
+  value: number;
 };
 
-const ChartBar = ({ data, frontColor, borderColor }: Props) => {
+type Props = {
+  data: ItemType[];
+  frontColor: string;
+  borderColor: string;
+  xAxisLabels: string[];
+};
+
+const ChartBar = ({ data, frontColor, borderColor, xAxisLabels }: Props) => {
   return (
     <View style={{ marginLeft: 20, marginTop: 30, marginBottom: 40 }}>
       <BarChart
+        xAxisLabelTexts={xAxisLabels}
         data={data}
         frontColor={frontColor}
         barWidth={13.69}

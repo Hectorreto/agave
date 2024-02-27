@@ -6,6 +6,7 @@ import { usePropertyBarData } from './helpers';
 import styles from './styles';
 import FilterAlt from '../../../../assets/svg/filter_alt.svg';
 import getAlerts, { Alert } from '../../../api/property/getAlerts';
+import getPropertyGraph, { GraphData } from '../../../api/property/getPropertyGraph';
 import CardAlert from '../../../components/card-alert/CardAlert';
 import CardSmall from '../../../components/card-small/CardSmall';
 import ChartBar from '../../../components/chart-bar/ChartBar';
@@ -26,14 +27,22 @@ const PropertyBoardScreen = ({ route }: Props) => {
   const propertyGuid = route.params.property.guid;
 
   const { property } = route.params;
-  const { hectareData, plantData } = usePropertyBarData();
+  const { hectareData } = usePropertyBarData();
   const cropTypes = property.cropType.split(',');
   const [cropTypeFilter, setCropTypeFilter] = useState<string[]>([]);
+
   const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [plantData, setPlantData] = useState<GraphData>();
 
   useEffect(() => {
     getAlerts({ accessToken, propertyGuid })
       .then((data) => setAlerts(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    getPropertyGraph({ accessToken, propertyGuid, dashboardType: 'PLANTS' })
+      .then((data) => setPlantData(data))
       .catch((error) => console.error(error));
   }, []);
 
@@ -78,15 +87,22 @@ const PropertyBoardScreen = ({ route }: Props) => {
         </View>
         <ChartBar data={hectareData} frontColor={Colors.CHART_C} borderColor={Colors.CHART_C1} />
       </View>
-      <View style={styles.cardContainer}>
-        <View style={styles.cardTitleContainer}>
-          <Text style={styles.cardTitle}>Plantas</Text>
+      {plantData && (
+        <View style={styles.cardContainer}>
+          <View style={styles.cardTitleContainer}>
+            <Text style={styles.cardTitle}>Plantas</Text>
+          </View>
+          <View style={styles.cardDataContainer}>
+            <CardSmall left={formatNumber(property.plantsPlantedNumber)} right="plantas totales" />
+          </View>
+          <ChartBar
+            data={plantData.yAxisValues.map((value) => ({ value }))}
+            xAxisLabels={plantData.xAxisLabels}
+            frontColor={Colors.CHART_D}
+            borderColor={Colors.CHART_D1}
+          />
         </View>
-        <View style={styles.cardDataContainer}>
-          <CardSmall left={formatNumber(property.plantsPlantedNumber)} right="plantas totales" />
-        </View>
-        <ChartBar data={plantData} frontColor={Colors.CHART_D} borderColor={Colors.CHART_D1} />
-      </View>
+      )}
       <View style={[styles.cardContainer, styles.cardContainerGap16, { paddingBottom: 30 }]}>
         <View style={styles.cardTitleContainer}>
           <Text style={styles.cardTitle}>Cultivos</Text>
