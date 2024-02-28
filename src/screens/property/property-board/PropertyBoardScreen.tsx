@@ -142,7 +142,7 @@ const PropertyBoardScreen = ({ route }: Props) => {
       )}
 
       {!graphData2 && <ActivityIndicator size="large" />}
-      {graphData1 && graphData2 && (
+      {graphData1 !== undefined && graphData2 !== undefined && (
         <View style={[styles.cardContainer, styles.cardContainerGap16, { paddingBottom: 30 }]}>
           <View style={styles.cardTitleContainer}>
             <Text style={styles.cardTitle}>Cultivos</Text>
@@ -174,7 +174,6 @@ const PropertyBoardScreen = ({ route }: Props) => {
               />
             </View>
           </View>
-
           <View
             style={{
               flexDirection: 'row',
@@ -183,7 +182,7 @@ const PropertyBoardScreen = ({ route }: Props) => {
               justifyContent: 'center',
             }}>
             <View style={{ minWidth: 140 }}>
-              {averageGrade && (
+              {averageGrade !== undefined && (
                 <CardSmall left={formatNumber(averageGrade)} right={'calificación\npromedio'} />
               )}
             </View>
@@ -200,7 +199,6 @@ const PropertyBoardScreen = ({ route }: Props) => {
               />
             </View>
           </View>
-
           <ChartLine
             data={graphData2.avgWeight.yAxisValues.map((value) => ({ value }))}
             xAxisLabels={graphData2.avgWeight.xAxisLabels}

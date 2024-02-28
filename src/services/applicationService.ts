@@ -162,16 +162,17 @@ export const findApplications = async (options: FindApplicationOptions): Promise
 export const syncApplications = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
+  const chunkSize = 10;
 
   const remoteApplications: Application[] = [];
-  for (let skip = 0; true; skip += 50) {
+  for (let skip = 0; true; skip += chunkSize) {
     const data: any[] = await getAllApplications({
       accessToken,
-      limit: 50,
+      limit: chunkSize,
       skip,
     });
     remoteApplications.push(...data);
-    if (data.length < 50) break;
+    if (data.length < chunkSize) break;
   }
 
   await pullApplications(remoteApplications);

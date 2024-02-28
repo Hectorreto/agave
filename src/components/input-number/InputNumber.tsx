@@ -12,6 +12,7 @@ type Props = {
   multiline?: boolean;
   iconRight?: ReactElement;
   submitted?: boolean;
+  maxLength?: number;
 };
 
 const InputNumber = ({
@@ -22,6 +23,7 @@ const InputNumber = ({
   multiline,
   iconRight,
   submitted,
+  maxLength = 15,
 }: Props) => {
   const disabled = !onChange;
   const ref = useRef<TextInput>(null);
@@ -73,7 +75,7 @@ const InputNumber = ({
           multiline={multiline}
           keyboardType="numeric"
           onEndEditing={handleOnEndEditing()}
-          maxLength={15}
+          maxLength={maxLength}
         />
         {iconRight && (
           <Pressable onPress={() => ref.current?.focus()} style={styles.rightIcon}>

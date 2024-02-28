@@ -83,7 +83,7 @@ export type Monitoring = {
   diseaseIncidence?: string;
   undergrowthName?: string;
   undergrowthHeight?: string;
-  undergrowthLeafType?: string;
+  undergrowthLeafType?: 'wide' | 'narrow' | 'woody';
   phytotoxicDamageHerbicideIncidence?: string;
   phytotoxicDamagePesticideIncidence?: string;
   phytotoxicDamageExcessSaltIncidence?: string;
@@ -227,16 +227,17 @@ export const findMonitoring = (options: FindMonitoringOptions): Promise<Monitori
 export const syncMonitoring = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
+  const chunkSize = 10;
 
   const remoteMonitoring: Monitoring[] = [];
-  for (let skip = 0; true; skip += 50) {
+  for (let skip = 0; true; skip += chunkSize) {
     const data: any[] = await getAllMonitoring({
       accessToken,
-      limit: 50,
+      limit: chunkSize,
       skip,
     });
     remoteMonitoring.push(...data);
-    if (data.length < 50) break;
+    if (data.length < chunkSize) break;
   }
 
   await pullMonitoring(remoteMonitoring);

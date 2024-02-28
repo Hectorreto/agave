@@ -173,6 +173,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
         <InputNumber
           label="Número de cuadrantes"
           placeholder="Número"
+          maxLength={2}
           value={monitoring.quadrantNumber}
           onChange={(value) => {
             if (value.match(/^\d*$/g)) {
@@ -186,6 +187,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
         <InputNumber
           label="Número de plantas por cuadrante"
           placeholder="Número"
+          maxLength={2}
           value={monitoring.plantsPerQuadrant}
           onChange={(value) => {
             if (value.match(/^\d*$/g)) {

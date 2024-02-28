@@ -89,6 +89,7 @@ const InputCamera = ({ value, onChange }: Props) => {
     if (loadingCamera) return;
 
     return async () => {
+      const timeout = setTimeout(() => setLoadingCamera(false), 5 * 1000);
       try {
         setLoadingCamera(true);
         await handleCameraPermissions();
@@ -102,6 +103,7 @@ const InputCamera = ({ value, onChange }: Props) => {
         console.error(error);
       } finally {
         setLoadingCamera(false);
+        clearTimeout(timeout);
       }
     };
   };

@@ -174,16 +174,17 @@ export const findProperties = (options: FindPropertyOptions): Promise<Property[]
 export const syncProperties = async () => {
   const accessToken = await AsyncStorage.getItem('accessToken');
   if (!accessToken) return;
+  const chunkSize = 10;
 
   const remoteProperties: Property[] = [];
-  for (let skip = 0; true; skip += 50) {
+  for (let skip = 0; true; skip += chunkSize) {
     const data = await getAllProperties({
       accessToken,
-      limit: 50,
+      limit: chunkSize,
       skip,
     });
     remoteProperties.push(...data);
-    if (data.length < 50) break;
+    if (data.length < chunkSize) break;
   }
 
   await pullProperties(remoteProperties);
