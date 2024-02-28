@@ -18,9 +18,10 @@ const IMAGE_MAX_SIZE = 300;
 type Props = {
   value: string;
   onChange?: (imageUri: string, latitude: number, longitude: number) => void;
+  hideButton?: boolean;
 };
 
-const InputCamera = ({ value, onChange }: Props) => {
+const InputCamera = ({ value, onChange, hideButton }: Props) => {
   const [height, setHeight] = useState(IMAGE_MAX_SIZE);
   const [width, setWidth] = useState(IMAGE_MAX_SIZE);
   const [loadingCamera, setLoadingCamera] = useState(false);
@@ -110,14 +111,16 @@ const InputCamera = ({ value, onChange }: Props) => {
 
   return (
     <View style={{ gap: 10 }}>
-      <View style={{ alignItems: 'flex-start' }}>
-        <CustomButton
-          color="blue"
-          text={value ? 'Cambiar foto' : 'Subir foto'}
-          Icon={CameraAlt}
-          onPress={handleOnPress()}
-        />
-      </View>
+      {!hideButton && (
+        <View style={{ alignItems: 'flex-start' }}>
+          <CustomButton
+            color="blue"
+            text={value ? 'Cambiar foto' : 'Subir foto'}
+            Icon={CameraAlt}
+            onPress={handleOnPress()}
+          />
+        </View>
+      )}
       {Boolean(value && height && width) && (
         <Image source={{ uri: value }} height={height} width={width} />
       )}

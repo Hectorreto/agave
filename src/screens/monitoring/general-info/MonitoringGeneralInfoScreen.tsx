@@ -1,31 +1,20 @@
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import TabQuadrants from './TabQuadrants';
+import TabQualifications from './TabQualifications';
 import styles from './styles';
-import AddCircle from '../../../../assets/svg/add_circle.svg';
-import CustomButton from '../../../components/custom-button/CustomButton';
-import Divider from '../../../components/divider/Divider';
-import Expandable from '../../../components/expandable/Expandable';
 import HeaderTabIndicator from '../../../components/header-tab-indicator/HeaderTabIndicator';
-import InputCamera from '../../../components/input-camera/InputCamera';
-import InputSelect from '../../../components/input-select/InputSelect';
-import InputText from '../../../components/input-text/InputText';
-import useProperties from '../../../hooks/useProperties';
 import { MonitoringTabsParamList } from '../../../navigation/MonitoringTabs';
-import Form0 from '../create-monitoring/Form0';
-import Form1 from '../create-monitoring/Form1';
-import Form2 from '../create-monitoring/Form2';
-import Form3 from '../create-monitoring/Form3';
-import Form4 from '../create-monitoring/Form4';
-import Form5 from '../create-monitoring/Form5';
-import Form6 from '../create-monitoring/Form6';
-import Form7 from '../create-monitoring/Form7';
 
 type Props = MaterialTopTabScreenProps<MonitoringTabsParamList, 'MonitoringGeneralInfo'>;
+type Tabs = 'qualifications' | 'quadrants';
 
 const MonitoringGeneralInfoScreen = ({ route }: Props) => {
   const { monitoring } = route.params;
-  const { data: properties } = useProperties({});
+  const [tab, setTab] = useState<Tabs>('qualifications');
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -37,75 +26,40 @@ const MonitoringGeneralInfoScreen = ({ route }: Props) => {
         active="MonitoringGeneralInfo"
       />
 
-      <Expandable label="General">
-        <InputSelect
-          label="Predio"
-          placeholder="Selecciona"
-          value={monitoring.propertyId}
-          items={properties.map((property) => ({
-            label: property.name,
-            value: property.id,
-          }))}
-        />
-        <InputText
-          label="Número de cuadrantes"
-          placeholder="Número"
-          value={monitoring.quadrantNumber}
-        />
-        <InputText
-          label="Número de plantas por cuadrante"
-          placeholder="Número"
-          value={monitoring.plantsPerQuadrant}
-        />
-      </Expandable>
-
-      {monitoring.plantPerformanceKg ? <Form0 monitoring={monitoring} /> : null}
-
-      {monitoring.plagueType && monitoring.plagueIncidence ? (
-        <Form1 monitoring={monitoring} />
-      ) : null}
-
-      {monitoring.diseaseType && monitoring.diseaseIncidence ? (
-        <Form2 monitoring={monitoring} />
-      ) : null}
-
-      {monitoring.undergrowthName &&
-      monitoring.undergrowthLeafType &&
-      monitoring.undergrowthHeight ? (
-        <Form3 monitoring={monitoring} />
-      ) : null}
-
-      {monitoring.phytotoxicDamageHerbicideIncidence &&
-      monitoring.phytotoxicDamagePesticideIncidence &&
-      monitoring.phytotoxicDamageExcessSaltIncidence ? (
-        <Form4 monitoring={monitoring} />
-      ) : null}
-
-      {monitoring.environmentalDamageFrostIncidence &&
-      monitoring.environmentalDamageStressIncidence &&
-      monitoring.environmentalDamageFloodIncidence &&
-      monitoring.environmentalDamageFireIncidence &&
-      monitoring.environmentalDamageHailIncidence &&
-      monitoring.environmentalDamageOtherIncidence ? (
-        <Form5 monitoring={monitoring} />
-      ) : null}
-
-      {monitoring.colorimetryIncidence && monitoring.colorimetryComments ? (
-        <Form6 monitoring={monitoring} />
-      ) : null}
-
-      {monitoring.physicalDamageType && monitoring.physicalDamageIncidence ? (
-        <Form7 monitoring={monitoring} />
-      ) : null}
-
-      <Text style={styles.helper2}>¿Hay una planta dañada?</Text>
-      <View style={styles.newItemContainer}>
-        <CustomButton color="blue" text="Agregar formulario" Icon={AddCircle} />
+      <View style={styles.buttonToggleContainer}>
+        <TouchableOpacity
+          onPress={() => setTab('qualifications')}
+          disabled={tab === 'qualifications'}
+          style={[
+            styles.buttonToggle,
+            styles.buttonToggleLeft,
+            tab === 'qualifications' && styles.buttonToggleActive,
+          ]}>
+          <Text
+            style={[
+              styles.buttonToggleText,
+              tab === 'qualifications' && styles.buttonToggleTextActive,
+            ]}>
+            Calificación
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => setTab('quadrants')}
+          disabled={tab === 'quadrants'}
+          style={[
+            styles.buttonToggle,
+            styles.buttonToggleRight,
+            tab === 'quadrants' && styles.buttonToggleActive,
+          ]}>
+          <Text
+            style={[styles.buttonToggleText, tab === 'quadrants' && styles.buttonToggleTextActive]}>
+            Cuadrantes
+          </Text>
+        </TouchableOpacity>
       </View>
-      <Divider />
-      <View style={styles.bottomFormUploadImageButton}>
-        <InputCamera value={monitoring.imageUri} />
-      </View>
+
+      {tab === 'qualifications' && <TabQualifications monitoring={monitoring} />}
+      {tab === 'quadrants' && <TabQuadrants monitoring={monitoring} />}
     </ScrollView>
   );
 };

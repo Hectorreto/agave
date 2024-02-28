@@ -1,4 +1,4 @@
-const EXPO_PUBLIC_APP_VERSION = process.env.EXPO_PUBLIC_VERSION;
+const EXPO_PUBLIC_APP_VERSION = process.env.EXPO_PUBLIC_APP_VERSION;
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
 module.exports = {

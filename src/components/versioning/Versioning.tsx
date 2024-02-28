@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import styles from './styles';
 import useKeyboardVisible from '../../hooks/useKeyboardVisible';
 
-const EXPO_PUBLIC_APP_VERSION = process.env.EXPO_PUBLIC_VERSION;
+const EXPO_PUBLIC_APP_VERSION = process.env.EXPO_PUBLIC_APP_VERSION;
 
 const Versioning = () => {
   const keyboardVisible = useKeyboardVisible();

@@ -5,6 +5,7 @@ import { Monitoring } from '../../../services/monitoringService';
 export const newMonitoring = (): Monitoring => {
   return {
     id: uuid.v4() as string,
+    guid: '',
     createdAt: 0,
     updatedAt: 0,
     createdBy: '[Usuario]',
