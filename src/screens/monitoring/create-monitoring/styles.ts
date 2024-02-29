@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   bottomFormTitle: {
-    color: Colors.PRIMARY_600,
-    fontSize: 16,
+    color: Colors.PRIMARY_700,
+    fontSize: 18,
     fontWeight: '600',
   },
   bottomFormDoubleInput: {

@@ -15,7 +15,7 @@ import styles from './styles';
 import AddCircle from '../../../../assets/svg/add_circle.svg';
 import CustomButton from '../../../components/custom-button/CustomButton';
 import Divider from '../../../components/divider/Divider';
-import Expandable from '../../../components/expandable/Expandable';
+import ControlledExpandable from '../../../components/expandable/ControlledExpandable';
 import InputCamera from '../../../components/input-camera/InputCamera';
 import InputNumber from '../../../components/input-number/InputNumber';
 import InputSelect from '../../../components/input-select/InputSelect';
@@ -39,6 +39,8 @@ export type MonitoringContainer = {
 const CreateMonitoringScreen = ({ navigation }: Props) => {
   const { showNotification } = useContext(NotificationContext);
   const [monitoring, setMonitoring] = useState(newMonitoring());
+  const [isGeneralOpen, setIsGeneralOpen] = useState(true);
+  const [showQualifications, setShowQualifications] = useState(false);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form, setForm] = useState<(Partial<Monitoring> | undefined)[]>(Array(8).fill(undefined));
@@ -60,13 +62,11 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
 
   const [data, setData] = useState<MonitoringContainer[]>([]);
 
-  const { qualification } = getQuadrantQualification(form);
   const allQualifications = data.map((value) => {
     const { qualification } = getQuadrantQualification(value.form);
     return qualification;
   });
-  const monitoringQualification =
-    sum([...allQualifications, qualification]) / (allQualifications.length + 1);
+  const monitoringQualification = sum(allQualifications) / allQualifications.length;
 
   const isLastForm =
     currentQuadrant === Number(monitoring.quadrantNumber) &&
@@ -81,7 +81,25 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
     if (currentContainer) {
       setForm(currentContainer.form);
     } else {
-      setForm(Array(8).fill(undefined));
+      let prevQuadrant: number;
+      let prevPlant: number;
+
+      if (currentPlant > 1) {
+        prevQuadrant = currentQuadrant;
+        prevPlant = currentPlant - 1;
+      } else {
+        prevQuadrant = currentQuadrant - 1;
+        prevPlant = Number(monitoring.plantsPerQuadrant);
+      }
+
+      const prevContainer = data.find(
+        (value) => value.quadrant === prevQuadrant && value.plant === prevPlant
+      );
+      if (prevContainer) {
+        setForm(prevContainer.form.map((value) => (value ? {} : undefined)));
+      } else {
+        setForm(Array(8).fill(undefined));
+      }
     }
   }, [currentQuadrant, currentPlant]);
 
@@ -105,22 +123,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
       setData(filteredData);
 
       if (isLastForm) {
-        if (!monitoring.imageUri) {
-          return showNotification('Agrega una foto', 'incorrect');
-        }
-
-        const nowTime = Date.now();
-        await createMonitoring({
-          ...monitoring,
-          quadrantQualification: 0,
-          monitoringQualification: 0,
-          data: JSON.stringify(filteredData),
-          createdAt: nowTime,
-          updatedAt: nowTime,
-        });
-        navigation.navigate('ListMonitoring');
-        showNotification('El monitoreo ha sido creado con éxito');
-        syncMonitoring().catch(console.error);
+        setShowQualifications(true);
       } else if (isLastPlant) {
         setCurrentPlant(1);
         setCurrentQuadrant(currentQuadrant + 1);
@@ -133,6 +136,105 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
       console.error(error);
     }
   };
+
+  if (showQualifications) {
+    return (
+      <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
+        <Text style={styles.helper}>Llena el formulario para crear un nuevo monitoreo</Text>
+        <>
+          {showQualifications && (
+            <>
+              <View style={styles.bottomFormInputsContainer}>
+                <Text style={styles.bottomFormTitle}>Calificación</Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-between',
+                  }}>
+                  {allQualifications.map((value, index) => (
+                    <View key={index} style={{ width: '49%', marginBottom: 4 }}>
+                      <InputNumber
+                        placeholder="###"
+                        label={`Cuadrante ${index + 1}`}
+                        value={String(value)}
+                      />
+                    </View>
+                  ))}
+                </View>
+
+                <InputNumber
+                  label="De monitoreo"
+                  placeholder="###"
+                  value={String(monitoringQualification)}
+                />
+
+                <InputText
+                  multiline
+                  label="Comentarios (Opcional)"
+                  placeholder="Escribe tus comentarios"
+                  value={monitoring.comments || ''}
+                  onChange={(comments) => setMonitoring({ ...monitoring, comments })}
+                />
+              </View>
+
+              <View style={styles.bottomFormUploadImageButton}>
+                <InputCamera
+                  value={monitoring.imageUri}
+                  onChange={(imageUri, latitude, longitude) => {
+                    setMonitoring({ ...monitoring, imageUri, latitude, longitude });
+                  }}
+                />
+              </View>
+            </>
+          )}
+        </>
+        <View style={styles.saveCancelButtons}>
+          <CustomButton
+            color="lightBlue"
+            text="Anterior"
+            onPress={() => {
+              setShowQualifications(false);
+              scrollRef.current?.scrollTo({ y: 0, animated: true });
+            }}
+          />
+          <CustomButton
+            color="blue"
+            text="Crear"
+            onPress={async () => {
+              try {
+                if (!monitoring.imageUri) {
+                  return showNotification('Agrega una foto', 'incorrect');
+                }
+
+                const filteredData = data.filter((value) => {
+                  if (value.quadrant > Number(monitoring.quadrantNumber)) return false;
+                  if (value.plant > Number(monitoring.plantsPerQuadrant)) return false;
+                  return true;
+                });
+
+                const nowTime = Date.now();
+                await createMonitoring({
+                  ...monitoring,
+                  quadrantQualification: 0,
+                  monitoringQualification: 0,
+                  data: JSON.stringify(filteredData),
+                  createdAt: nowTime,
+                  updatedAt: nowTime,
+                });
+                navigation.navigate('ListMonitoring');
+                showNotification('El monitoreo ha sido creado con éxito');
+                syncMonitoring().catch(console.error);
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+          />
+        </View>
+      </ScrollView>
+    );
+  }
 
   return (
     <ScrollView ref={scrollRef} contentContainerStyle={styles.container}>
@@ -158,7 +260,11 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
 
       <Text style={styles.helper}>Llena el formulario para crear un nuevo monitoreo</Text>
 
-      <Expandable label="General" hideLabelAndShowContent={form.every((value) => !value)}>
+      <ControlledExpandable
+        isOpen={isGeneralOpen}
+        setIsOpen={setIsGeneralOpen}
+        label="General"
+        hideLabelAndShowContent={form.every((value) => !value)}>
         <InputSelect
           label="Predio"
           placeholder="Selecciona"
@@ -198,7 +304,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           }}
           submitted={submitted}
         />
-      </Expandable>
+      </ControlledExpandable>
 
       {form[0] && (
         <Form0
@@ -327,50 +433,20 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
           color="blue"
           text="Agregar formulario"
           Icon={AddCircle}
-          onPress={() => {
-            setIsModalVisible(true);
-          }}
+          onPress={
+            monitoring.quadrantNumber && monitoring.plantsPerQuadrant
+              ? () => {
+                  setIsModalVisible(true);
+                  setIsGeneralOpen(false);
+                }
+              : undefined
+          }
         />
       </View>
 
       {showForms && (
         <View style={styles.bottomFormContainer}>
           <Divider />
-          <View style={styles.bottomFormInputsContainer}>
-            <Text style={styles.bottomFormTitle}>Calificación</Text>
-            <View style={styles.bottomFormDoubleInput}>
-              <Text style={styles.doubleInputLabels}>De cuadrante</Text>
-              <Text style={styles.doubleInputLabels}>De monitoreo</Text>
-            </View>
-            <View style={styles.bottomFormDoubleInput}>
-              <View style={styles.bottomFormDoubleInputItem}>
-                <InputText placeholder="##" value={String(qualification)} submitted={submitted} />
-              </View>
-              <View style={styles.bottomFormDoubleInputItem}>
-                <InputText
-                  placeholder="##"
-                  value={monitoringQualification.toFixed(2)}
-                  submitted={submitted}
-                />
-              </View>
-            </View>
-            <InputText
-              multiline
-              label="Comentarios (Opcional)"
-              placeholder="Escribe tus comentarios"
-              value={monitoring.comments || ''}
-              onChange={(comments) => setMonitoring({ ...monitoring, comments })}
-            />
-          </View>
-
-          <View style={styles.bottomFormUploadImageButton}>
-            <InputCamera
-              value={monitoring.imageUri}
-              onChange={(imageUri, latitude, longitude) => {
-                setMonitoring({ ...monitoring, imageUri, latitude, longitude });
-              }}
-            />
-          </View>
 
           <View style={styles.saveCancelButtons}>
             <>
@@ -403,7 +479,7 @@ const CreateMonitoringScreen = ({ navigation }: Props) => {
             </>
             <>
               {isLastForm ? (
-                <CustomButton color="blue" text="Guardar" onPress={handleSubmit} />
+                <CustomButton color="blue" text="Siguiente" onPress={handleSubmit} />
               ) : isLastPlant ? (
                 <CustomButton color="blue" text="Siguiente cuadrante" onPress={handleSubmit} />
               ) : (

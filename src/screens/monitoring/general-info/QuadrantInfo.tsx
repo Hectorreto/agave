@@ -1,5 +1,3 @@
-import { Text } from 'react-native';
-
 import { Monitoring } from '../../../services/monitoringService';
 import Form0 from '../create-monitoring/Form0';
 import Form1 from '../create-monitoring/Form1';
@@ -17,7 +15,6 @@ type Props = {
 const QuadrantInfo = ({ forms }: Props) => {
   return (
     <>
-      <Text>monitoring</Text>
       {forms[0]?.plantPerformanceKg ? <Form0 monitoring={forms[0]} /> : null}
 
       {forms[1]?.plagueType && forms[1]?.plagueIncidence ? <Form1 monitoring={forms[1]} /> : null}

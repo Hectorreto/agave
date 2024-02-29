@@ -46,7 +46,7 @@ const TabQuadrants = ({ monitoring }: Props) => {
   return (
     <View>
       {range(1, quadrantLength + 1).map((value) => (
-        <View style={{ marginTop: 20 }}>
+        <View key={value} style={{ marginTop: 20 }}>
           <ControlledExpandable
             key={value}
             label={`Cuadrante ${value}`}
