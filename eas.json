@@ -10,10 +10,20 @@
     },
     "preview": {
       "distribution": "internal",
-      "channel": "preview"
+      "channel": "preview",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://bloom-backend-api.fdklgcvuifh3g.us-east-2.cs.amazonlightsail.com/graphql",
+        "EXPO_PUBLIC_APP_VERSION": "1.0.0",
+        "GOOGLE_MAPS_API_KEY": "AIzaSyBkvqTyQoxrPzgaByCKI_ymjpR6CfbUWF0"
+      }
     },
     "production": {
-      "channel": "production"
+      "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://bloom-backend-api.fdklgcvuifh3g.us-east-2.cs.amazonlightsail.com/graphql",
+        "EXPO_PUBLIC_APP_VERSION": "1.0.0",
+        "GOOGLE_MAPS_API_KEY": "AIzaSyBkvqTyQoxrPzgaByCKI_ymjpR6CfbUWF0"
+      }
     }
   },
   "submit": {

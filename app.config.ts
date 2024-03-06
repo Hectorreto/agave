@@ -45,5 +45,13 @@ module.exports = {
     updates: {
       url: 'https://u.expo.dev/337fa667-fb10-4066-95dd-7cf0521905c5',
     },
+    plugins: [
+      [
+        'expo-updates',
+        {
+          username: 'hectoraleate',
+        },
+      ],
+    ],
   },
 };

@@ -7,6 +7,7 @@ import { View } from 'react-native';
 
 import { AuthProvider } from './src/contexts/notification-context/AuthContext';
 import { NotificationProvider } from './src/contexts/notification-context/NotificationContext';
+import useFetchUpdate from './src/hooks/useFetchUpdate';
 import RootStack from './src/navigation/RootStack';
 import { NavigationTheme } from './src/themes/theme';
 
@@ -14,6 +15,9 @@ SplashScreen.preventAutoHideAsync().catch(console.error);
 
 const App = () => {
   const [appIsReady, setAppIsReady] = useState(false);
+
+  const { loading: loadingUpdate } = useFetchUpdate();
+  if (loadingUpdate) return;
 
   return (
     <NotificationProvider>
